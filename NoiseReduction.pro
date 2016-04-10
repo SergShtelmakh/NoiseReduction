@@ -11,12 +11,18 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = NoiseReduction
 TEMPLATE = app
 
+CONFIG += C++11
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    AudioEngine.cpp
+        AudioEngine.cpp
 
 HEADERS  += mainwindow.h \
-    AudioEngine.h
+        AudioEngine.h
 
 FORMS    += mainwindow.ui
+
+LIBS += $$PWD/libs/libAquila.a
+
+INCLUDEPATH += $$PWD/libs
+DEPENDPATH += $$PWD/libs
