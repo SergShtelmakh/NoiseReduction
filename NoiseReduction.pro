@@ -26,5 +26,13 @@ LIBS += $$PWD/libs/libAquila.a\
         $$PWD/libs/libfftw3-3.dll\
         $$PWD/libs/wavelet2d.dll
 
+CONFIG( debug, debug|release ) {
+    # debug
+    LIBS += $$PWD/libs/qcustomplotd1.dll
+} else {
+    # release
+    LIBS += $$PWD/libs/qcustomplot1.dll
+}
+
 INCLUDEPATH += $$PWD/libs
 DEPENDPATH += $$PWD/libs
