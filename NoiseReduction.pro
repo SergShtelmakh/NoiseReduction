@@ -15,10 +15,12 @@ CONFIG += C++11
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-        AudioEngine.cpp
+        AudioEngine.cpp \
+    Wavelet.cpp
 
 HEADERS  += mainwindow.h \
-        AudioEngine.h
+        AudioEngine.h \
+    Wavelet.h
 
 FORMS    += mainwindow.ui
 

@@ -63,7 +63,7 @@ void MainWindow::on_pbStart_clicked()
     {
       x[i] = static_cast<double>(i)/size;
       y[i] = original[i*10];
-      qDebug() << "X:" << x[i] << "  Y:" << y[i];
+//      qDebug() << "X:" << x[i] << "  Y:" << y[i];
     }
 
     customPlot->addGraph();
