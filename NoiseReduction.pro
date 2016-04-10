@@ -22,7 +22,9 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
-LIBS += $$PWD/libs/libAquila.a
+LIBS += $$PWD/libs/libAquila.a\
+        $$PWD/libs/libfftw3-3.dll\
+        $$PWD/libs/wavelet2d.dll
 
 INCLUDEPATH += $$PWD/libs
 DEPENDPATH += $$PWD/libs
