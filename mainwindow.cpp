@@ -6,8 +6,6 @@
 
 #include <wavelet2d/wavelet2d.h>
 
-#include <qcustomplot/qcustomplot.h>
-
 #include <QFileDialog>
 #include <QDebug>
 #include <QTime>
@@ -15,6 +13,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
+  , m_plotManager(new PlotManager)
 {
     ui->setupUi(this);
 }
@@ -54,28 +53,11 @@ void MainWindow::on_pbStart_clicked()
     qDebug() << "Done";
     qDebug() << QTime::currentTime();
 
-    QCustomPlot *customPlot = new QCustomPlot();
+    m_plotManager->setData(QVector<double>::fromStdVector(samples));
+    m_plotManager->setMinX(0);
+    m_plotManager->setMaxX(waveFile.getAudioLength());
+    m_plotManager->plot();
 
-    int size = 1000;
-
-    QVector<double> x(size), y(size);
-    for (int i=0; i<size; ++i)
-    {
-      x[i] = static_cast<double>(i)/size;
-      y[i] = original[i*10];
-//      qDebug() << "X:" << x[i] << "  Y:" << y[i];
-    }
-
-    customPlot->addGraph();
-    customPlot->graph(0)->setData(x, y);
-
-    customPlot->xAxis->setLabel("x");
-    customPlot->yAxis->setLabel("y");
-
-    customPlot->xAxis->setRange(0, 1);
-    customPlot->yAxis->setRange(-200, 200);
-    customPlot->replot();
-    customPlot->show();
 }
 
 void MainWindow::on_pbStop_clicked()

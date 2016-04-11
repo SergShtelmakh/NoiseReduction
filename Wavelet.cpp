@@ -1,7 +1,5 @@
 #include "Wavelet.h"
 
-#include <type_traits>
-
 #include <QHash>
 
 using WaveletType = Wavelet::WaveletType;

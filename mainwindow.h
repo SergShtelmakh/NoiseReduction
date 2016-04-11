@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include <PlotManager.h>
+
 namespace Ui {
 class MainWindow;
 }
@@ -22,6 +24,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QScopedPointer<PlotManager> m_plotManager;
 };
 
 #endif // MAINWINDOW_H
