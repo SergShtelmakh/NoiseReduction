@@ -77,3 +77,13 @@ Wavelet::Wavelet()
 {
 
 }
+
+void Wavelet::makeTransform()
+{
+
+}
+
+void Wavelet::makeInverseTransform()
+{
+
+}

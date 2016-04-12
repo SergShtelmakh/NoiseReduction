@@ -37,6 +37,7 @@ void PlotManager::plot()
 
     m_plot->xAxis->setRange(m_minX, m_maxX);
     m_plot->yAxis->setRange(minY, maxY);
+    m_plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
     m_plot->replot();
     m_plot->show();
 }

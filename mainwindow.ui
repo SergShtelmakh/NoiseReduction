@@ -31,6 +31,28 @@
     </item>
    </layout>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>252</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuRecord">
+    <property name="title">
+     <string>Util</string>
+    </property>
+    <addaction name="actionRecorder"/>
+   </widget>
+   <addaction name="menuRecord"/>
+  </widget>
+  <action name="actionRecorder">
+   <property name="text">
+    <string>Recorder</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

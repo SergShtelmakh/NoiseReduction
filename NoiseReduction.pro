@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,15 +16,18 @@ CONFIG += C++11
 SOURCES += main.cpp\
         mainwindow.cpp \
         AudioEngine.cpp \
-    Wavelet.cpp \
-    PlotManager.cpp
+        Wavelet.cpp \
+        PlotManager.cpp \
+    AudioRecordWidget.cpp
 
 HEADERS  += mainwindow.h \
         AudioEngine.h \
-    Wavelet.h \
-    PlotManager.h
+        Wavelet.h \
+        PlotManager.h \
+    AudioRecordWidget.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    AudioRecordWidget.ui
 
 LIBS += $$PWD/libs/libAquila.a\
         $$PWD/libs/libfftw3-3.dll\

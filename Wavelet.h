@@ -58,7 +58,24 @@ public:
         Symmlet10 = 45
     };
 
+    enum class WaveletTransformType {
+        DiscretePeriodic1D,
+        DiscreteSymmetric1D,
+        Stationary1D,
+
+        DiscretePeriodic2D,
+        DiscreteSymmetric2D,
+        Stationary2D
+    };
+
     Wavelet();
+
+public:
+    void makeTransform();
+    void makeInverseTransform();
+
+private:
+    WaveletTransformType m_transformType;
 };
 
 #endif // WAVELET_H

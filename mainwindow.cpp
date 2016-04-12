@@ -10,10 +10,11 @@
 #include <QDebug>
 #include <QTime>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
-  , m_plotManager(new PlotManager)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
+    , m_plotManager(new PlotManager)
+    , m_recordWidget(new AudioRecordWidget)
 {
     ui->setupUi(this);
 }
@@ -43,8 +44,8 @@ void MainWindow::on_pbStart_clicked()
 
     vector<double> original;
     original = samples;
-    std::string nm = "db1";
-    int J = 10;
+    std::string nm = "db2";
+    int J = 3;
 
     vector<double> swt_output;
     int length;
@@ -53,7 +54,7 @@ void MainWindow::on_pbStart_clicked()
     qDebug() << "Done";
     qDebug() << QTime::currentTime();
 
-    m_plotManager->setData(QVector<double>::fromStdVector(samples));
+    m_plotManager->setData(QVector<double>::fromStdVector(swt_output));
     m_plotManager->setMinX(0);
     m_plotManager->setMaxX(waveFile.getAudioLength());
     m_plotManager->plot();
@@ -63,4 +64,9 @@ void MainWindow::on_pbStart_clicked()
 void MainWindow::on_pbStop_clicked()
 {
 
+}
+
+void MainWindow::on_actionRecorder_triggered()
+{
+    m_recordWidget->show();
 }

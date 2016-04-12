@@ -3,7 +3,8 @@
 
 #include <QMainWindow>
 
-#include <PlotManager.h>
+#include "PlotManager.h"
+#include "AudioRecordWidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,9 +23,12 @@ private slots:
 
     void on_pbStop_clicked();
 
+    void on_actionRecorder_triggered();
+
 private:
     Ui::MainWindow *ui;
     QScopedPointer<PlotManager> m_plotManager;
+    QScopedPointer<AudioRecordWidget> m_recordWidget;
 };
 
 #endif // MAINWINDOW_H
