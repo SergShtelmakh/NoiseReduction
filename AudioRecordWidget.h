@@ -27,10 +27,19 @@ private slots:
     void on_leFilePath_textChanged(const QString &arg1);
 
 private:
+    enum class State {
+        Record,
+        Play,
+        Stop,
+        Invalid = -1
+    };
+
+
     Ui::AudioRecordWidget *ui;
     QString m_fileName;
     QScopedPointer<QAudioRecorder> m_recorder;
     QScopedPointer<QAudioOutput> m_player;
+    State m_state;
 };
 
 #endif // AUDIORECORDWIDGET_H

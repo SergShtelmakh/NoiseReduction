@@ -1,6 +1,7 @@
 #include "AudioEngine.h"
 
-AudioEngine::AudioEngine(QObject *parent) : QObject(parent)
+AudioEngine::AudioEngine(QObject *parent)
+    : QObject(parent)
 {
 
 }

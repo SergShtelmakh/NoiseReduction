@@ -18,16 +18,17 @@ SOURCES += main.cpp\
         AudioEngine.cpp \
         Wavelet.cpp \
         PlotManager.cpp \
-    AudioRecordWidget.cpp
+        AudioRecordWidget.cpp
 
 HEADERS  += mainwindow.h \
         AudioEngine.h \
         Wavelet.h \
         PlotManager.h \
-    AudioRecordWidget.h
+        AudioRecordWidget.h \
+        Audio.h
 
 FORMS    += mainwindow.ui \
-    AudioRecordWidget.ui
+        AudioRecordWidget.ui
 
 LIBS += $$PWD/libs/libAquila.a\
         $$PWD/libs/libfftw3-3.dll\

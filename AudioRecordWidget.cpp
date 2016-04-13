@@ -5,19 +5,18 @@
 #include <QAudioRecorder>
 #include <QAudioOutput>
 
+#include "Audio.h"
+
 AudioRecordWidget::AudioRecordWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::AudioRecordWidget)
     , m_recorder(new QAudioRecorder)
     , m_player(new QAudioOutput)
+    , m_state(State::Stop)
 {
     ui->setupUi(this);
 
-    QAudioEncoderSettings audioSettings;
-    audioSettings.setCodec("audio/pcm");
-    audioSettings.setQuality(QMultimedia::HighQuality);
-
-    m_recorder->setEncodingSettings(audioSettings);
+    m_recorder->setEncodingSettings(Audio::encoderSettings());
 }
 
 AudioRecordWidget::~AudioRecordWidget()
@@ -33,23 +32,17 @@ void AudioRecordWidget::on_pbBrowse_clicked()
 void AudioRecordWidget::on_pbRecord_clicked()
 {
     m_recorder->record();
+    m_state = State::Record;
 }
 
 void AudioRecordWidget::on_pbPlay_clicked()
-{
+{  
     QFile sourceFile;
     sourceFile.setFileName(m_fileName);
     sourceFile.open(QIODevice::ReadOnly);
 
-    QAudioFormat format;
-    format.setSampleRate(8000);
-    format.setChannelCount(1);
-    format.setSampleSize(8);
-    format.setCodec("audio/pcm");
-    format.setByteOrder(QAudioFormat::LittleEndian);
-    format.setSampleType(QAudioFormat::UnSignedInt);
-
     QAudioDeviceInfo info(QAudioDeviceInfo::defaultOutputDevice());
+    auto format = Audio::format();
     if (!info.isFormatSupported(format)) {
         qWarning() << "Raw audio format not supported by backend, cannot play audio.";
         return;
@@ -57,12 +50,20 @@ void AudioRecordWidget::on_pbPlay_clicked()
 
     m_player.reset(new QAudioOutput(info, format));
     m_player->start(&sourceFile);
+    m_state == State::Play;
 }
 
 void AudioRecordWidget::on_pbStop_clicked()
 {
-    m_recorder->stop();
-    m_player->stop();
+    if (m_state == State::Record) {
+        m_recorder->stop();
+    }
+
+    if (m_state == State::Play) {
+        m_player->stop();
+    }
+
+    m_state == State::Stop;
 }
 
 void AudioRecordWidget::on_leFilePath_textChanged(const QString &arg1)
