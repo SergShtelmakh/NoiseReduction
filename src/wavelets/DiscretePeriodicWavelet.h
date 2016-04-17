@@ -12,8 +12,11 @@ public:
     void makeTransform(const Signal& signal) override;
     void makeInverseTransform() override;
     QString resultText() override;
+    void denoising() override;
 
 private:
+    double denoise(double a, double lvl);
+
     std::vector<double> m_flag;
     std::vector<int> m_length;
 };

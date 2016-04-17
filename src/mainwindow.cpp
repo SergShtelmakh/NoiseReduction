@@ -61,7 +61,13 @@ void MainWindow::on_pbStart_clicked()
     makeTransform(SignalForTransform::Input, makeSignal(testFile));
     makeTransform(SignalForTransform::Noise, makeSignal(noiseFile));
 
-//    Aquila::WaveFile::save(Aquila::SignalSource(result), "result.wav");
+    m_signalWavelet->denoising();
+    m_signalWavelet->makeInverseTransform();
+    makePlot(PlotType::ResultSignal, m_signalWavelet->resultSignal());
+
+    auto fileName = qApp->applicationDirPath() + QString("/res%1.wav").arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
+    qDebug() << fileName;
+    Aquila::WaveFile::save(Aquila::SignalSource(m_signalWavelet->resultSignal(), testFile.getSampleFrequency()), fileName.toStdString());
 
 }
 
@@ -99,6 +105,7 @@ void MainWindow::makeTransform(MainWindow::SignalForTransform sigType, const Sig
     }
 
     log(m_signalWavelet->resultText());
+    log(m_noiseWavelet->resultText());
 }
 
 QCustomPlot *MainWindow::getWidgetForPlot(MainWindow::PlotType type)

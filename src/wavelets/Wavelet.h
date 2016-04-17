@@ -86,6 +86,7 @@ public:
     virtual void makeTransform(const Signal& signal) = 0;
     virtual void makeInverseTransform() = 0;
     virtual QString resultText() = 0;
+    virtual void denoising() = 0;
 
     void setWaveletFunction(WaveletFunction function);
     void setLevel(int level);
@@ -100,6 +101,7 @@ protected:
 
     WaveletFunction m_waveletFunction;
     int m_level;
+    Signal m_inputSignal;
     Signal m_transformedSignal;
     Signal m_resultSignal;
 
