@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include <src/mainwindow.h>
 #include "ui_mainwindow.h"
 
 #include <aquila/global.h>
@@ -148,6 +148,6 @@ void MainWindow::on_leLevel_textChanged(const QString &arg1)
     m_noiseWavelet->setLevel(ok ? result : 1);
 }
 
-void MainWindow::on_cbTransformType_currentIndexChanged(int index)
+void MainWindow::on_cbTransformType_currentIndexChanged(int)
 {
 }

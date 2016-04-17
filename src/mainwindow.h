@@ -7,7 +7,8 @@
 #include "AudioRecordWidget.h"
 
 #include <aquila/source/WaveFile.h>
-#include "Wavelet.h"
+
+#include <src/wavelets/Wavelet.h>
 
 using Signal = std::vector<Aquila::SampleType>;
 

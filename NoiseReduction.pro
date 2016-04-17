@@ -8,33 +8,33 @@ QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = NoiseReduction
+TARGET   = NoiseReduction
 TEMPLATE = app
 
-CONFIG += C++11
+CONFIG   += C++11
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-        AudioEngine.cpp \
-        Wavelet.cpp \
-        PlotManager.cpp \
-        AudioRecordWidget.cpp \
-        DiscretePeriodicWavelet.cpp
+SOURCES  += $$PWD/src/main.cpp\
+            $$PWD/src/mainwindow.cpp \
+            $$PWD/src/AudioEngine.cpp \
+            $$PWD/src/wavelets/Wavelet.cpp \
+            $$PWD/src/PlotManager.cpp \
+            $$PWD/src/AudioRecordWidget.cpp \
+            $$PWD/src/wavelets/DiscretePeriodicWavelet.cpp
 
-HEADERS  += mainwindow.h \
-        AudioEngine.h \
-        Wavelet.h \
-        PlotManager.h \
-        AudioRecordWidget.h \
-        Audio.h \
-        DiscretePeriodicWavelet.h
+HEADERS  += $$PWD/src/mainwindow.h \
+            $$PWD/src/AudioEngine.h \
+            $$PWD/src/wavelets/Wavelet.h \
+            $$PWD/src/PlotManager.h \
+            $$PWD/src/AudioRecordWidget.h \
+            $$PWD/src/Audio.h \
+            $$PWD/src/wavelets/DiscretePeriodicWavelet.h
 
-FORMS    += mainwindow.ui \
-        AudioRecordWidget.ui
+FORMS    += $$PWD/src/mainwindow.ui \
+            $$PWD/src/AudioRecordWidget.ui
 
-LIBS += $$PWD/libs/libAquila.a\
-        $$PWD/libs/libfftw3-3.dll\
-        $$PWD/libs/wavelet2d.dll
+LIBS     += $$PWD/libs/libAquila.a\
+            $$PWD/libs/libfftw3-3.dll\
+            $$PWD/libs/wavelet2d.dll
 
 CONFIG( debug, debug|release ) {
     # debug
@@ -45,4 +45,4 @@ CONFIG( debug, debug|release ) {
 }
 
 INCLUDEPATH += $$PWD/libs
-DEPENDPATH += $$PWD/libs
+DEPENDPATH  += $$PWD/libs
