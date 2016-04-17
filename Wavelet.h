@@ -61,17 +61,16 @@ public:
         Symmlet10 = 45,
 
         First = WaveletType::Haar,
-        Last = WaveletType::Symmlet10
+        Last  = WaveletType::Symmlet10
     };
 
     enum class WaveletTransformType {
-        DiscretePeriodic1D,
-        DiscreteSymmetric1D,
-        Stationary1D,
+        DiscretePeriodic1D  = 0,
+        DiscreteSymmetric1D = 1,
+        Stationary1D        = 2,
 
-        DiscretePeriodic2D,
-        DiscreteSymmetric2D,
-        Stationary2D
+        First = WaveletTransformType::DiscretePeriodic1D,
+        Last  = WaveletTransformType::Stationary1D
     };
 
     Wavelet();
@@ -84,7 +83,8 @@ public:
     void makeTransform(std::vector<double> signal);
     void makeInverseTransform();
 
-    static QList<QString> makeNames();
+    static QList<QString> makeWaveletNames();
+    static QList<QString> makeTransformNames();
     QString resultText();
 
     std::vector<double> input() const;

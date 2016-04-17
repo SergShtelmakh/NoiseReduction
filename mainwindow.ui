@@ -68,7 +68,7 @@
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>TextLabel</string>
+            <string>Wavelet type</string>
            </property>
           </widget>
          </item>
@@ -78,11 +78,25 @@
         </layout>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Transform type</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="cbTransformType"/>
+         </item>
+        </layout>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Level</string>
+            <string>Decomposition levels</string>
            </property>
           </widget>
          </item>

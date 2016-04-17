@@ -6,8 +6,14 @@
 
 using WaveletType = Wavelet::WaveletType;
 using WaveletHash = QHash<WaveletType, std::string>;
+using TransformType = Wavelet::WaveletTransformType;
+using TransformTypeHash = QHash<TransformType, QString>;
 
 uint qHash(WaveletType type, uint seed) {
+    return qHash(static_cast<int>(type), seed);
+}
+
+uint qHash(TransformType type, uint seed) {
     return qHash(static_cast<int>(type), seed);
 }
 
@@ -78,6 +84,20 @@ QString toString(WaveletType type) {
     return QString::fromStdString(toStdString(type));
 }
 
+TransformTypeHash makeTransformNameHash() {
+    TransformTypeHash names;
+    names[TransformType::DiscretePeriodic1D] = "Discrete Periodic";
+    names[TransformType::DiscreteSymmetric1D] = "Discrete Symmetric";
+    names[TransformType::Stationary1D] = "Stationary";
+
+    return names;
+}
+
+QString toString(TransformType type) {
+    static auto names = makeTransformNameHash();
+    return names.value(type, "");
+}
+
 }
 
 Wavelet::Wavelet()
@@ -105,25 +125,20 @@ void Wavelet::setLevel(int level)
 void Wavelet::makeTransform(std::vector<double> signal)
 {
     m_input = signal;
+    m_flag.clear();
+    m_length.clear();
+    m_transform.clear();
+    m_result.clear();
 
     switch (m_transformType) {
     case WaveletTransformType::DiscretePeriodic1D:
         dwt(m_input, m_level, toStdString(m_waveletType), m_transform, m_flag, m_length);
         break;
     case WaveletTransformType::DiscreteSymmetric1D:
-
+        dwt_sym(m_input, m_level, toStdString(m_waveletType), m_transform, m_flag, m_length);
         break;
     case WaveletTransformType::Stationary1D:
-
-        break;
-    case WaveletTransformType::DiscretePeriodic2D:
-
-        break;
-    case WaveletTransformType::DiscreteSymmetric2D:
-
-        break;
-    case WaveletTransformType::Stationary2D:
-
+        swt(m_input, m_level, toStdString(m_waveletType), m_transform, m_length[0]);
         break;
     default:
         Q_ASSERT(false);
@@ -135,22 +150,13 @@ void Wavelet::makeInverseTransform()
 {
     switch (m_transformType) {
     case WaveletTransformType::DiscretePeriodic1D:
-
+        idwt(m_transform, m_flag, toStdString(m_waveletType), m_result, m_length);
         break;
     case WaveletTransformType::DiscreteSymmetric1D:
-
+        idwt_sym(m_transform, m_flag, toStdString(m_waveletType), m_result, m_length);
         break;
     case WaveletTransformType::Stationary1D:
-
-        break;
-    case WaveletTransformType::DiscretePeriodic2D:
-
-        break;
-    case WaveletTransformType::DiscreteSymmetric2D:
-
-        break;
-    case WaveletTransformType::Stationary2D:
-
+        iswt(m_transform, m_level, toStdString(m_waveletType), m_result);
         break;
     default:
         Q_ASSERT(false);
@@ -158,13 +164,25 @@ void Wavelet::makeInverseTransform()
     }
 }
 
-QList<QString> Wavelet::makeNames()
+QList<QString> Wavelet::makeWaveletNames()
 {
     auto first = static_cast<int>(WaveletType::First);
     auto last = static_cast<int>(WaveletType::Last);
     QList<QString> names;
     for (auto i = first; i <= last; i++) {
         auto currentType = static_cast<WaveletType>(i);
+        names << toString(currentType);
+    }
+    return names;
+}
+
+QList<QString> Wavelet::makeTransformNames()
+{
+    auto first = static_cast<int>(TransformType::First);
+    auto last = static_cast<int>(TransformType::Last);
+    QList<QString> names;
+    for (auto i = first; i <= last; i++) {
+        auto currentType = static_cast<TransformType>(i);
         names << toString(currentType);
     }
     return names;

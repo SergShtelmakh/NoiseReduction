@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 
 #include <aquila/global.h>
-#include <aquila/source/WaveFile.h>
 
 #include <wavelet2d/wavelet2d.h>
 
@@ -10,7 +9,7 @@
 #include <QDebug>
 #include <QTime>
 
-using Signal = std::vector<Aquila::SampleType>;
+
 
 namespace {
     const QString cTestFile  = "test.wav";
@@ -23,6 +22,10 @@ namespace {
         }
         return result;
     }
+
+    QVector<double> makeQVector (const Aquila::WaveFile &wave) {
+        return QVector<double>::fromStdVector(makeSignal(wave));
+    }
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -33,7 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
     , m_wavelet(new Wavelet)
 {
     ui->setupUi(this);
-    ui->cbWaveletType->addItems(Wavelet::makeNames());
+    ui->cbWaveletType->addItems(Wavelet::makeWaveletNames());
+    ui->cbTransformType->addItems(Wavelet::makeTransformNames());
 }
 
 MainWindow::~MainWindow()
@@ -48,28 +52,14 @@ void MainWindow::on_pbStart_clicked()
     //auto fileName = QFileDialog::getOpenFileName(this, tr("Open wave file"), "", tr("Wave Files (*.wav)"));
 
     auto testFile = Aquila::WaveFile(QString(cTestFile).toStdString());
-    auto testSignal = makeSignal(testFile);
-    PlotManager::makePlot(ui->inpSignPlot, QVector<double>::fromStdVector(testSignal), 0, testFile.getAudioLength());
+    makePlot(PlotType::InputSignal, testFile);
 
-    m_wavelet->makeTransform(testSignal);
-
-    log("Test signal");
-    log(m_wavelet->resultText());
-
-    PlotManager::makePlot(ui->inpSignTransPlot, QVector<double>::fromStdVector(m_wavelet->transform()), 0, testFile.getAudioLength());
 
     auto noiseFile = Aquila::WaveFile(QString(cNoiseFile).toStdString());
-    auto noiseSignal = makeSignal(noiseFile);
-    PlotManager::makePlot(ui->noisePlot, QVector<double>::fromStdVector(noiseSignal), 0, noiseFile.getAudioLength());
+    makePlot(PlotType::NoiseSignal, noiseFile);
 
-    m_wavelet->makeTransform(noiseSignal);
-
-    log("Noise signal");
-    log(m_wavelet->resultText());
-
-    PlotManager::makePlot(ui->noiseTransPlot, QVector<double>::fromStdVector(m_wavelet->transform()), 0, noiseFile.getAudioLength());
-
-//    ui->inpSignPlot = plot3->getPlot();
+    makeTransform(SignalForTransform::Input, makeSignal(testFile));
+    makeTransform(SignalForTransform::Noise, makeSignal(noiseFile));
 
 //    Aquila::WaveFile::save(Aquila::SignalSource(result), "result.wav");
 
@@ -90,6 +80,61 @@ void MainWindow::log(const QString &str)
     ui->tbResult->append(QString("[%1] %2\n").arg(QTime::currentTime().toString(), str));
 }
 
+void MainWindow::makeTransform(MainWindow::SignalForTransform sigType, const Signal &signal)
+{
+    switch (sigType) {
+    case SignalForTransform::Input:
+        log("Prepare to input transform");
+        m_wavelet->makeTransform(signal);
+        log("Transform done");
+        makePlot(PlotType::InputSignalTransformed, m_wavelet->transform());
+        break;
+    case SignalForTransform::Noise:
+        log("Prepare to noise transform");
+        m_wavelet->makeTransform(signal);
+        log("Transform done");
+        makePlot(PlotType::NoiseSignalTransformed, m_wavelet->transform());
+        break;
+    default:
+        Q_ASSERT(false);
+        break;
+    }
+
+    log(m_wavelet->resultText());
+}
+
+QCustomPlot *MainWindow::getWidgetForPlot(MainWindow::PlotType type)
+{
+    switch (type) {
+    case PlotType::InputSignal:
+        return ui->inpSignPlot;
+    case PlotType::InputSignalTransformed:
+        return ui->inpSignTransPlot;
+    case PlotType::NoiseSignal:
+        return ui->noisePlot;
+    case PlotType::NoiseSignalTransformed:
+        return ui->noiseTransPlot;
+    case PlotType::ResultSignal:
+        return ui->resultPlot;
+    default:
+        Q_ASSERT(false);
+        break;
+    }
+
+    return nullptr;
+}
+
+void MainWindow::makePlot(MainWindow::PlotType type, const Aquila::WaveFile &file)
+{
+    auto vect = makeQVector(file);
+    PlotManager::makePlot(getWidgetForPlot(type), vect , 0, vect.size());
+}
+
+void MainWindow::makePlot(MainWindow::PlotType type, const Signal &signal)
+{
+    PlotManager::makePlot(getWidgetForPlot(type), QVector<double>::fromStdVector(signal), 0, signal.size());
+}
+
 void MainWindow::on_cbWaveletType_currentIndexChanged(int index)
 {
     m_wavelet->setWaveletType(static_cast<Wavelet::WaveletType>(index));
@@ -100,4 +145,9 @@ void MainWindow::on_leLevel_textChanged(const QString &arg1)
     bool ok;
     int result = QString(arg1).toInt(&ok);
     m_wavelet->setLevel(ok ? result : 1);
+}
+
+void MainWindow::on_cbTransformType_currentIndexChanged(int index)
+{
+    m_wavelet->setTransformType(static_cast<Wavelet::WaveletTransformType>(index));
 }

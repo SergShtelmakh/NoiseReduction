@@ -6,7 +6,10 @@
 #include "PlotManager.h"
 #include "AudioRecordWidget.h"
 
+#include <aquila/source/WaveFile.h>
 #include "Wavelet.h"
+
+using Signal = std::vector<Aquila::SampleType>;
 
 namespace Ui {
 class MainWindow;
@@ -31,8 +34,29 @@ private slots:
 
     void on_leLevel_textChanged(const QString &arg1);
 
+    void on_cbTransformType_currentIndexChanged(int index);
+
 private:
+    enum class PlotType {
+        InputSignal,
+        InputSignalTransformed,
+        NoiseSignal,
+        NoiseSignalTransformed,
+        ResultSignal
+    };
+
+    enum class SignalForTransform {
+        Input,
+        Noise
+    };
+
+    void clearLog();
     void log(const QString& str);
+
+    void makePlot(PlotType type,const Aquila::WaveFile& file);
+    void makePlot(PlotType type,const Signal& signal);
+    void makeTransform(SignalForTransform sigType, const Signal& signal);
+    QCustomPlot *getWidgetForPlot(PlotType type);
 
     Ui::MainWindow *ui;
     QScopedPointer<PlotManager> m_plotManager;
