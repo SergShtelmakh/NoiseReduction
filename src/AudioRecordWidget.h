@@ -1,5 +1,4 @@
-#ifndef AUDIORECORDWIDGET_H
-#define AUDIORECORDWIDGET_H
+#pragma once
 
 #include <QWidget>
 
@@ -41,5 +40,3 @@ private:
     QScopedPointer<QAudioOutput> m_player;
     State m_state;
 };
-
-#endif // AUDIORECORDWIDGET_H

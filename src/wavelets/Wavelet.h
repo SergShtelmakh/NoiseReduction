@@ -1,5 +1,4 @@
-#ifndef WAVELET_H
-#define WAVELET_H
+#pragma once
 
 #include <QList>
 #include <QString>
@@ -105,10 +104,4 @@ protected:
     Signal m_resultSignal;
 
 private:
-//    WaveletTransformType m_transformType;
-
-//    std::vector<double> m_flag;
-//    std::vector<int> m_length;
 };
-
-#endif // WAVELET_H

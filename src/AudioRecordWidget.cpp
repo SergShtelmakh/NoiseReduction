@@ -50,7 +50,7 @@ void AudioRecordWidget::on_pbPlay_clicked()
 
     m_player.reset(new QAudioOutput(info, format));
     m_player->start(&sourceFile);
-    m_state == State::Play;
+    m_state = State::Play;
 }
 
 void AudioRecordWidget::on_pbStop_clicked()
@@ -63,7 +63,7 @@ void AudioRecordWidget::on_pbStop_clicked()
         m_player->stop();
     }
 
-    m_state == State::Stop;
+    m_state = State::Stop;
 }
 
 void AudioRecordWidget::on_leFilePath_textChanged(const QString &arg1)

@@ -1,5 +1,4 @@
-#ifndef DISCRETEPERIODICWAVELET_H
-#define DISCRETEPERIODICWAVELET_H
+#pragma once
 
 #include "Wavelet.h"
 
@@ -18,5 +17,3 @@ private:
     std::vector<double> m_flag;
     std::vector<int> m_length;
 };
-
-#endif // DISCRETEPERIODICWAVELET_H

@@ -1,5 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
 
@@ -65,5 +64,3 @@ private:
     QScopedPointer<Wavelet> m_signalWavelet;
     QScopedPointer<Wavelet> m_noiseWavelet;
 };
-
-#endif // MAINWINDOW_H

@@ -1,5 +1,4 @@
-#ifndef PLOTMANAGER_H
-#define PLOTMANAGER_H
+#pragma once
 
 #include <QObject>
 
@@ -33,5 +32,3 @@ private:
     double m_minX;
     double m_maxX;
 };
-
-#endif // PLOTMANAGER_H

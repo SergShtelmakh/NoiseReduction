@@ -114,7 +114,11 @@
           </spacer>
          </item>
          <item>
-          <widget class="QLineEdit" name="leLevel"/>
+          <widget class="QLineEdit" name="leLevel">
+           <property name="text">
+            <string>2</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

@@ -1,5 +1,4 @@
-#ifndef AUDIO_H
-#define AUDIO_H
+#pragma once
 
 #include <QAudioEncoderSettings>
 #include <QAudioFormat>
@@ -25,7 +24,3 @@ QAudioFormat format() {
 }
 
 }
-
-
-
-#endif // AUDIO_H
