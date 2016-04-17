@@ -18,14 +18,16 @@ SOURCES += main.cpp\
         AudioEngine.cpp \
         Wavelet.cpp \
         PlotManager.cpp \
-        AudioRecordWidget.cpp
+        AudioRecordWidget.cpp \
+        DiscretePeriodicWavelet.cpp
 
 HEADERS  += mainwindow.h \
         AudioEngine.h \
         Wavelet.h \
         PlotManager.h \
         AudioRecordWidget.h \
-        Audio.h
+        Audio.h \
+        DiscretePeriodicWavelet.h
 
 FORMS    += mainwindow.ui \
         AudioRecordWidget.ui

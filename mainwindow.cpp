@@ -33,11 +33,12 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     , m_plotManager(new PlotManager)
     , m_recordWidget(new AudioRecordWidget)
-    , m_wavelet(new Wavelet)
+    , m_signalWavelet(Wavelet::create(Wavelet::WaveletTransformType::DiscretePeriodic1D))
+    , m_noiseWavelet(Wavelet::create(Wavelet::WaveletTransformType::DiscretePeriodic1D))
 {
     ui->setupUi(this);
-    ui->cbWaveletType->addItems(Wavelet::makeWaveletNames());
-    ui->cbTransformType->addItems(Wavelet::makeTransformNames());
+    ui->cbWaveletType->addItems(Wavelet::waveletFunctionsNames());
+    ui->cbTransformType->addItems(Wavelet::makeTransformsNames());
 }
 
 MainWindow::~MainWindow()
@@ -85,22 +86,20 @@ void MainWindow::makeTransform(MainWindow::SignalForTransform sigType, const Sig
     switch (sigType) {
     case SignalForTransform::Input:
         log("Prepare to input transform");
-        m_wavelet->makeTransform(signal);
-        log("Transform done");
-        makePlot(PlotType::InputSignalTransformed, m_wavelet->transform());
+        m_signalWavelet->makeTransform(signal);
+        makePlot(PlotType::InputSignalTransformed, m_signalWavelet->transformedSignal());
         break;
     case SignalForTransform::Noise:
         log("Prepare to noise transform");
-        m_wavelet->makeTransform(signal);
-        log("Transform done");
-        makePlot(PlotType::NoiseSignalTransformed, m_wavelet->transform());
+        m_noiseWavelet->makeTransform(signal);
+        makePlot(PlotType::NoiseSignalTransformed, m_noiseWavelet->transformedSignal());
         break;
     default:
         Q_ASSERT(false);
         break;
     }
 
-    log(m_wavelet->resultText());
+    log(m_signalWavelet->resultText());
 }
 
 QCustomPlot *MainWindow::getWidgetForPlot(MainWindow::PlotType type)
@@ -137,17 +136,18 @@ void MainWindow::makePlot(MainWindow::PlotType type, const Signal &signal)
 
 void MainWindow::on_cbWaveletType_currentIndexChanged(int index)
 {
-    m_wavelet->setWaveletType(static_cast<Wavelet::WaveletType>(index));
+    m_signalWavelet->setWaveletFunction(static_cast<Wavelet::WaveletFunction>(index));
+    m_noiseWavelet->setWaveletFunction(static_cast<Wavelet::WaveletFunction>(index));
 }
 
 void MainWindow::on_leLevel_textChanged(const QString &arg1)
 {
     bool ok;
     int result = QString(arg1).toInt(&ok);
-    m_wavelet->setLevel(ok ? result : 1);
+    m_signalWavelet->setLevel(ok ? result : 1);
+    m_noiseWavelet->setLevel(ok ? result : 1);
 }
 
 void MainWindow::on_cbTransformType_currentIndexChanged(int index)
 {
-    m_wavelet->setTransformType(static_cast<Wavelet::WaveletTransformType>(index));
 }

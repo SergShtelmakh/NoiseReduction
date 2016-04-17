@@ -4,11 +4,12 @@
 #include <QList>
 #include <QString>
 
+using Signal = std::vector<double>;
+
 class Wavelet
 {
 public:
-
-    enum class WaveletType : int {
+    enum class WaveletFunction : int {
         Haar = 0,
 
         Daubechies1 = 1,
@@ -60,8 +61,8 @@ public:
         Symmlet9 = 44,
         Symmlet10 = 45,
 
-        First = WaveletType::Haar,
-        Last  = WaveletType::Symmlet10
+        First = WaveletFunction::Haar,
+        Last  = WaveletFunction::Symmlet10
     };
 
     enum class WaveletTransformType {
@@ -74,37 +75,40 @@ public:
     };
 
     Wavelet();
+    virtual ~Wavelet();
 
 public:
-    void setWaveletType(WaveletType type);
-    void setTransformType(WaveletTransformType type);
+    static QList<QString> waveletFunctionsNames();
+    static QList<QString> makeTransformsNames();
+
+    static Wavelet *create(WaveletTransformType type);
+
+    virtual WaveletTransformType type() = 0;
+    virtual void makeTransform(const Signal& signal) = 0;
+    virtual void makeInverseTransform() = 0;
+    virtual QString resultText() = 0;
+
+    void setWaveletFunction(WaveletFunction function);
     void setLevel(int level);
 
-    void makeTransform(std::vector<double> signal);
-    void makeInverseTransform();
+    Signal transformedSignal() const;
+    Signal resultSignal() const;
 
-    static QList<QString> makeWaveletNames();
-    static QList<QString> makeTransformNames();
-    QString resultText();
+protected:
+    static std::string toStdString(WaveletFunction function);
+    static QString toString(WaveletFunction function);
+    static QString toString(WaveletTransformType type);
 
-    std::vector<double> input() const;
-    void setInput(const std::vector<double> &input);
-
-    std::vector<double> transform() const;
-
-    std::vector<double> result() const;
-    void setResult(const std::vector<double> &result);
+    WaveletFunction m_waveletFunction;
+    int m_level;
+    Signal m_transformedSignal;
+    Signal m_resultSignal;
 
 private:
-    WaveletType m_waveletType;
-    WaveletTransformType m_transformType;
-    int m_level;
+//    WaveletTransformType m_transformType;
 
-    std::vector<double> m_input;
-    std::vector<double> m_transform;
-    std::vector<double> m_result;
-    std::vector<double> m_flag;
-    std::vector<int> m_length;
+//    std::vector<double> m_flag;
+//    std::vector<int> m_length;
 };
 
 #endif // WAVELET_H

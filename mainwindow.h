@@ -61,7 +61,8 @@ private:
     Ui::MainWindow *ui;
     QScopedPointer<PlotManager> m_plotManager;
     QScopedPointer<AudioRecordWidget> m_recordWidget;
-    QScopedPointer<Wavelet> m_wavelet;
+    QScopedPointer<Wavelet> m_signalWavelet;
+    QScopedPointer<Wavelet> m_noiseWavelet;
 };
 
 #endif // MAINWINDOW_H
