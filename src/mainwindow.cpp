@@ -55,7 +55,6 @@ void MainWindow::on_pbStart_clicked()
     auto testFile = Aquila::WaveFile(QString(cTestFile).toStdString());
     makePlot(PlotType::InputSignal, testFile);
 
-
     auto noiseFile = Aquila::WaveFile(QString(cNoiseFile).toStdString());
     makePlot(PlotType::NoiseSignal, noiseFile);
 
@@ -144,8 +143,9 @@ void MainWindow::on_leLevel_textChanged(const QString &arg1)
 {
     bool ok;
     int result = QString(arg1).toInt(&ok);
-    m_signalWavelet->setLevel(ok ? result : 1);
-    m_noiseWavelet->setLevel(ok ? result : 1);
+    auto level = ok ? result : 1;
+    m_signalWavelet->setLevel(level);
+    m_noiseWavelet->setLevel(level);
 }
 
 void MainWindow::on_cbTransformType_currentIndexChanged(int)
