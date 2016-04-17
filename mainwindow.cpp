@@ -10,13 +10,30 @@
 #include <QDebug>
 #include <QTime>
 
+using Signal = std::vector<Aquila::SampleType>;
+
+namespace {
+    const QString cTestFile  = "test.wav";
+    const QString cNoiseFile = "noise.wav";
+
+    Signal makeSignal(const Aquila::WaveFile &wave) {
+        Signal result;
+        for (auto sample : wave) {
+            result.push_back(sample);
+        }
+        return result;
+    }
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , m_plotManager(new PlotManager)
     , m_recordWidget(new AudioRecordWidget)
+    , m_wavelet(new Wavelet)
 {
     ui->setupUi(this);
+    ui->cbWaveletType->addItems(Wavelet::makeNames());
 }
 
 MainWindow::~MainWindow()
@@ -28,36 +45,33 @@ void MainWindow::on_pbStart_clicked()
 {
     // Libs test
 
-    auto fileName = QFileDialog::getOpenFileName(this, tr("Open wave file"), "", tr("Wave Files (*.wav)"));
-    auto waveFile = Aquila::WaveFile(fileName.toStdString());
+    //auto fileName = QFileDialog::getOpenFileName(this, tr("Open wave file"), "", tr("Wave Files (*.wav)"));
 
-    qDebug() << "Loaded file:" << QString::fromStdString(waveFile.getFilename());
-    qDebug() << "Sample count" << waveFile.getSamplesCount();
-    qDebug() << QTime::currentTime();
-    std::vector<Aquila::SampleType> samples;
-    for (auto sample : waveFile) {
-        samples.push_back(sample);
-    }
-    qDebug() << "Done";
-    qDebug() << samples.size();
-    qDebug() << QTime::currentTime();
+    auto testFile = Aquila::WaveFile(QString(cTestFile).toStdString());
+    auto testSignal = makeSignal(testFile);
+    PlotManager::makePlot(ui->inpSignPlot, QVector<double>::fromStdVector(testSignal), 0, testFile.getAudioLength());
 
-    vector<double> original;
-    original = samples;
-    std::string nm = "db2";
-    int J = 3;
+    m_wavelet->makeTransform(testSignal);
 
-    vector<double> swt_output;
-    int length;
+    log("Test signal");
+    log(m_wavelet->resultText());
 
-    swt(samples, J, nm, swt_output, length);
-    qDebug() << "Done";
-    qDebug() << QTime::currentTime();
+    PlotManager::makePlot(ui->inpSignTransPlot, QVector<double>::fromStdVector(m_wavelet->transform()), 0, testFile.getAudioLength());
 
-    m_plotManager->setData(QVector<double>::fromStdVector(swt_output));
-    m_plotManager->setMinX(0);
-    m_plotManager->setMaxX(waveFile.getAudioLength());
-    m_plotManager->plot();
+    auto noiseFile = Aquila::WaveFile(QString(cNoiseFile).toStdString());
+    auto noiseSignal = makeSignal(noiseFile);
+    PlotManager::makePlot(ui->noisePlot, QVector<double>::fromStdVector(noiseSignal), 0, noiseFile.getAudioLength());
+
+    m_wavelet->makeTransform(noiseSignal);
+
+    log("Noise signal");
+    log(m_wavelet->resultText());
+
+    PlotManager::makePlot(ui->noiseTransPlot, QVector<double>::fromStdVector(m_wavelet->transform()), 0, noiseFile.getAudioLength());
+
+//    ui->inpSignPlot = plot3->getPlot();
+
+//    Aquila::WaveFile::save(Aquila::SignalSource(result), "result.wav");
 
 }
 
@@ -69,4 +83,21 @@ void MainWindow::on_pbStop_clicked()
 void MainWindow::on_actionRecorder_triggered()
 {
     m_recordWidget->show();
+}
+
+void MainWindow::log(const QString &str)
+{
+    ui->tbResult->append(QString("[%1] %2\n").arg(QTime::currentTime().toString(), str));
+}
+
+void MainWindow::on_cbWaveletType_currentIndexChanged(int index)
+{
+    m_wavelet->setWaveletType(static_cast<Wavelet::WaveletType>(index));
+}
+
+void MainWindow::on_leLevel_textChanged(const QString &arg1)
+{
+    bool ok;
+    int result = QString(arg1).toInt(&ok);
+    m_wavelet->setLevel(ok ? result : 1);
 }

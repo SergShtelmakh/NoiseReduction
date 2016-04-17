@@ -1,12 +1,15 @@
 #ifndef WAVELET_H
 #define WAVELET_H
 
+#include <QList>
+#include <QString>
+
 class Wavelet
 {
 public:
 
     enum class WaveletType : int {
-        Haar,
+        Haar = 0,
 
         Daubechies1 = 1,
         Daubechies2 = 2,
@@ -55,7 +58,10 @@ public:
         Symmlet7 = 42,
         Symmlet8 = 43,
         Symmlet9 = 44,
-        Symmlet10 = 45
+        Symmlet10 = 45,
+
+        First = WaveletType::Haar,
+        Last = WaveletType::Symmlet10
     };
 
     enum class WaveletTransformType {
@@ -71,11 +77,34 @@ public:
     Wavelet();
 
 public:
-    void makeTransform();
+    void setWaveletType(WaveletType type);
+    void setTransformType(WaveletTransformType type);
+    void setLevel(int level);
+
+    void makeTransform(std::vector<double> signal);
     void makeInverseTransform();
 
+    static QList<QString> makeNames();
+    QString resultText();
+
+    std::vector<double> input() const;
+    void setInput(const std::vector<double> &input);
+
+    std::vector<double> transform() const;
+
+    std::vector<double> result() const;
+    void setResult(const std::vector<double> &result);
+
 private:
+    WaveletType m_waveletType;
     WaveletTransformType m_transformType;
+    int m_level;
+
+    std::vector<double> m_input;
+    std::vector<double> m_transform;
+    std::vector<double> m_result;
+    std::vector<double> m_flag;
+    std::vector<int> m_length;
 };
 
 #endif // WAVELET_H
