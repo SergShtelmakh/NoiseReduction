@@ -4,12 +4,12 @@
 
 #include "PlotManager.h"
 #include "AudioRecordWidget.h"
+#include "DenoisingManager.h"
 
 #include <aquila/source/WaveFile.h>
 
+#include <src/AudioSignal.h>
 #include <src/wavelets/Wavelet.h>
-
-using Signal = std::vector<Aquila::SampleType>;
 
 namespace Ui {
 class MainWindow;
@@ -53,14 +53,14 @@ private:
     void clearLog();
     void log(const QString& str);
 
-    void makePlot(PlotType type,const Aquila::WaveFile& file);
-    void makePlot(PlotType type,const Signal& signal);
-    void makeTransform(SignalForTransform sigType, const Signal& signal);
+    void makePlot(PlotType type,const AudioSignal::Signal& signal);
+    void makeTransform(SignalForTransform sigType, const AudioSignal::Signal& signal);
     QCustomPlot *getWidgetForPlot(PlotType type);
 
     Ui::MainWindow *ui;
     QScopedPointer<PlotManager> m_plotManager;
     QScopedPointer<AudioRecordWidget> m_recordWidget;
-    QScopedPointer<Wavelet> m_signalWavelet;
-    QScopedPointer<Wavelet> m_noiseWavelet;
+    QScopedPointer<AudioSignal> m_testSignal;
+    QScopedPointer<AudioSignal> m_noisedSignal;
+    QScopedPointer<DenoisingManager> m_denoisingManager;
 };

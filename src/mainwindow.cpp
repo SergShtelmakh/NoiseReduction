@@ -1,30 +1,19 @@
 #include <src/mainwindow.h>
 #include "ui_mainwindow.h"
 
-#include <aquila/global.h>
-
-#include <wavelet2d/wavelet2d.h>
-
 #include <QFileDialog>
 #include <QDebug>
 #include <QTime>
 
+#include <QSound>
 
 
 namespace {
     const QString cTestFile  = "test.wav";
     const QString cNoiseFile = "noise.wav";
 
-    Signal makeSignal(const Aquila::WaveFile &wave) {
-        Signal result;
-        for (auto sample : wave) {
-            result.push_back(sample);
-        }
-        return result;
-    }
-
-    QVector<double> makeQVector (const Aquila::WaveFile &wave) {
-        return QVector<double>::fromStdVector(makeSignal(wave));
+    QString outputFileName() {
+        return qApp->applicationDirPath() + QString("/res%1.wav").arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
     }
 }
 
@@ -33,8 +22,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     , m_plotManager(new PlotManager)
     , m_recordWidget(new AudioRecordWidget)
-    , m_signalWavelet(Wavelet::create(Wavelet::WaveletTransformType::DiscretePeriodic1D))
-    , m_noiseWavelet(Wavelet::create(Wavelet::WaveletTransformType::DiscretePeriodic1D))
+    , m_denoisingManager(new DenoisingManager)
+    , m_noisedSignal(new AudioSignal)
+    , m_testSignal(new AudioSignal)
 {
     ui->setupUi(this);
     ui->cbWaveletType->addItems(Wavelet::waveletFunctionsNames());
@@ -52,22 +42,21 @@ void MainWindow::on_pbStart_clicked()
 
     //auto fileName = QFileDialog::getOpenFileName(this, tr("Open wave file"), "", tr("Wave Files (*.wav)"));
 
-    auto testFile = Aquila::WaveFile(QString(cTestFile).toStdString());
-    makePlot(PlotType::InputSignal, testFile);
+    m_testSignal->load(cTestFile);
+    makePlot(PlotType::InputSignal, m_testSignal->signal_std());
 
-    auto noiseFile = Aquila::WaveFile(QString(cNoiseFile).toStdString());
-    makePlot(PlotType::NoiseSignal, noiseFile);
+    m_noisedSignal->load(cTestFile);
+    makePlot(PlotType::NoiseSignal, m_noisedSignal->signal_std());
 
-    makeTransform(SignalForTransform::Input, makeSignal(testFile));
-    makeTransform(SignalForTransform::Noise, makeSignal(noiseFile));
+//    makeTransform(SignalForTransform::Input, m_testSignal->input());
+//    makeTransform(SignalForTransform::Noise, m_noisedSignal->input());
 
-    m_signalWavelet->denoising();
-    m_signalWavelet->makeInverseTransform();
-    makePlot(PlotType::ResultSignal, m_signalWavelet->resultSignal());
 
-    auto fileName = qApp->applicationDirPath() + QString("/res%1.wav").arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
-    qDebug() << fileName;
-    Aquila::WaveFile::save(Aquila::SignalSource(m_signalWavelet->resultSignal(), testFile.getSampleFrequency()), fileName.toStdString());
+//    makePlot(PlotType::ResultSignal, m_signalWavelet->resultSignal());
+
+//    auto fileName = outputFileName();
+//    qDebug() << fileName;
+//    Aquila::WaveFile::save(Aquila::SignalSource(m_signalWavelet->resultSignal(), testFile.getSampleFrequency()), fileName.toStdString());
 
 }
 
@@ -91,21 +80,21 @@ void MainWindow::makeTransform(MainWindow::SignalForTransform sigType, const Sig
     switch (sigType) {
     case SignalForTransform::Input:
         log("Prepare to input transform");
-        m_signalWavelet->makeTransform(signal);
-        makePlot(PlotType::InputSignalTransformed, m_signalWavelet->transformedSignal());
+//        m_signalWavelet->makeTransform(signal);
+//        makePlot(PlotType::InputSignalTransformed, m_testSignal->transformed());
         break;
     case SignalForTransform::Noise:
         log("Prepare to noise transform");
-        m_noiseWavelet->makeTransform(signal);
-        makePlot(PlotType::NoiseSignalTransformed, m_noiseWavelet->transformedSignal());
+//        m_noiseWavelet->makeTransform(signal);
+//        makePlot(PlotType::NoiseSignalTransformed, m_noiseWavelet->transformedSignal());
         break;
     default:
         Q_ASSERT(false);
         break;
     }
 
-    log(m_signalWavelet->resultText());
-    log(m_noiseWavelet->resultText());
+//    log(m_signalWavelet->resultText());
+//    log(m_noiseWavelet->resultText());
 }
 
 QCustomPlot *MainWindow::getWidgetForPlot(MainWindow::PlotType type)
@@ -129,12 +118,6 @@ QCustomPlot *MainWindow::getWidgetForPlot(MainWindow::PlotType type)
     return nullptr;
 }
 
-void MainWindow::makePlot(MainWindow::PlotType type, const Aquila::WaveFile &file)
-{
-    auto vect = makeQVector(file);
-    PlotManager::makePlot(getWidgetForPlot(type), vect , 0, vect.size());
-}
-
 void MainWindow::makePlot(MainWindow::PlotType type, const Signal &signal)
 {
     PlotManager::makePlot(getWidgetForPlot(type), QVector<double>::fromStdVector(signal), 0, signal.size());
@@ -142,8 +125,8 @@ void MainWindow::makePlot(MainWindow::PlotType type, const Signal &signal)
 
 void MainWindow::on_cbWaveletType_currentIndexChanged(int index)
 {
-    m_signalWavelet->setWaveletFunction(static_cast<Wavelet::WaveletFunction>(index));
-    m_noiseWavelet->setWaveletFunction(static_cast<Wavelet::WaveletFunction>(index));
+//    m_signalWavelet->setWaveletFunction(static_cast<Wavelet::WaveletFunction>(index));
+//    m_noiseWavelet->setWaveletFunction(static_cast<Wavelet::WaveletFunction>(index));
 }
 
 void MainWindow::on_leLevel_textChanged(const QString &arg1)
@@ -151,8 +134,8 @@ void MainWindow::on_leLevel_textChanged(const QString &arg1)
     bool ok;
     int result = QString(arg1).toInt(&ok);
     auto level = ok ? result : 1;
-    m_signalWavelet->setLevel(level);
-    m_noiseWavelet->setLevel(level);
+//    m_signalWavelet->setLevel(level);
+//    m_noiseWavelet->setLevel(level);
 }
 
 void MainWindow::on_cbTransformType_currentIndexChanged(int)

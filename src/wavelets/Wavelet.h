@@ -84,7 +84,7 @@ public:
 
     virtual WaveletTransformType type() = 0;
     virtual void makeTransform(const Signal& signal) = 0;
-    virtual void makeInverseTransform() = 0;
+    virtual void makeInverseTransform(const Signal& signal) = 0;
     virtual QString resultText() = 0;
     virtual void denoising() = 0;
 

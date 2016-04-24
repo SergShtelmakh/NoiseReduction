@@ -26,8 +26,9 @@ void DiscretePeriodicWavelet::makeTransform(const Signal &signal)
     dwt(m_inputSignal, m_level, toStdString(m_waveletFunction), m_transformedSignal, m_flag, m_length);
 }
 
-void DiscretePeriodicWavelet::makeInverseTransform()
+void DiscretePeriodicWavelet::makeInverseTransform(const Signal &signal)
 {
+    m_transformedSignal = signal;
     idwt(m_transformedSignal, m_flag, toStdString(m_waveletFunction), m_resultSignal, m_length);
 }
 

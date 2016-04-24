@@ -10,7 +10,7 @@ public:
 
     WaveletTransformType type() override;
     void makeTransform(const Signal& signal) override;
-    void makeInverseTransform() override;
+    void makeInverseTransform(const Signal& signal) override;
     QString resultText() override;
     void denoising() override;
 
