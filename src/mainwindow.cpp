@@ -1,6 +1,10 @@
 #include <src/mainwindow.h>
 #include "ui_mainwindow.h"
 
+#include <src/AudioSignal.h>
+#include <src/DenoisingManager.h>
+#include <src/AudioRecordWidget.h>
+
 #include <QFileDialog>
 #include <QDebug>
 #include <QTime>
@@ -22,9 +26,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     , m_plotManager(new PlotManager)
     , m_recordWidget(new AudioRecordWidget)
-    , m_denoisingManager(new DenoisingManager)
-    , m_noisedSignal(new AudioSignal)
     , m_testSignal(new AudioSignal)
+    , m_noisedSignal(new AudioSignal)
+    , m_denoisingManager(new DenoisingManager)
 {
     ui->setupUi(this);
     ui->cbWaveletType->addItems(Wavelet::waveletFunctionsNames());
@@ -43,10 +47,10 @@ void MainWindow::on_pbStart_clicked()
     //auto fileName = QFileDialog::getOpenFileName(this, tr("Open wave file"), "", tr("Wave Files (*.wav)"));
 
     m_testSignal->load(cTestFile);
-    makePlot(PlotType::InputSignal, m_testSignal->signal_std());
+    makePlot(PlotType::InputSignal, m_testSignal->stdSignal());
 
     m_noisedSignal->load(cTestFile);
-    makePlot(PlotType::NoiseSignal, m_noisedSignal->signal_std());
+    makePlot(PlotType::NoiseSignal, m_noisedSignal->stdSignal());
 
 //    makeTransform(SignalForTransform::Input, m_testSignal->input());
 //    makeTransform(SignalForTransform::Noise, m_noisedSignal->input());
@@ -57,6 +61,7 @@ void MainWindow::on_pbStart_clicked()
 //    auto fileName = outputFileName();
 //    qDebug() << fileName;
 //    Aquila::WaveFile::save(Aquila::SignalSource(m_signalWavelet->resultSignal(), testFile.getSampleFrequency()), fileName.toStdString());
+    m_testSignal->save(outputFileName());
 
 }
 
@@ -75,7 +80,7 @@ void MainWindow::log(const QString &str)
     ui->tbResult->append(QString("[%1] %2\n").arg(QTime::currentTime().toString(), str));
 }
 
-void MainWindow::makeTransform(MainWindow::SignalForTransform sigType, const Signal &signal)
+void MainWindow::makeTransform(MainWindow::SignalForTransform sigType, const Audio::stdSignal &)
 {
     switch (sigType) {
     case SignalForTransform::Input:
@@ -118,22 +123,22 @@ QCustomPlot *MainWindow::getWidgetForPlot(MainWindow::PlotType type)
     return nullptr;
 }
 
-void MainWindow::makePlot(MainWindow::PlotType type, const Signal &signal)
+void MainWindow::makePlot(MainWindow::PlotType type, const Audio::stdSignal &signal)
 {
     PlotManager::makePlot(getWidgetForPlot(type), QVector<double>::fromStdVector(signal), 0, signal.size());
 }
 
-void MainWindow::on_cbWaveletType_currentIndexChanged(int index)
+void MainWindow::on_cbWaveletType_currentIndexChanged(int)
 {
 //    m_signalWavelet->setWaveletFunction(static_cast<Wavelet::WaveletFunction>(index));
 //    m_noiseWavelet->setWaveletFunction(static_cast<Wavelet::WaveletFunction>(index));
 }
 
-void MainWindow::on_leLevel_textChanged(const QString &arg1)
+void MainWindow::on_leLevel_textChanged(const QString &)
 {
-    bool ok;
-    int result = QString(arg1).toInt(&ok);
-    auto level = ok ? result : 1;
+//    bool ok;
+//    int result = QString(arg1).toInt(&ok);
+//    auto level = ok ? result : 1;
 //    m_signalWavelet->setLevel(level);
 //    m_noiseWavelet->setLevel(level);
 }

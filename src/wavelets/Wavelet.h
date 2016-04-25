@@ -3,7 +3,7 @@
 #include <QList>
 #include <QString>
 
-using Signal = std::vector<double>;
+#include <src/AudioSignal.h>
 
 class Wavelet
 {
@@ -83,16 +83,16 @@ public:
     static Wavelet *create(WaveletTransformType type);
 
     virtual WaveletTransformType type() = 0;
-    virtual void makeTransform(const Signal& signal) = 0;
-    virtual void makeInverseTransform(const Signal& signal) = 0;
+    virtual void makeTransform(const Audio::stdSignal& signal) = 0;
+    virtual void makeInverseTransform(const Audio::stdSignal& signal) = 0;
     virtual QString resultText() = 0;
     virtual void denoising() = 0;
 
     void setWaveletFunction(WaveletFunction function);
     void setLevel(int level);
 
-    Signal transformedSignal() const;
-    Signal resultSignal() const;
+    Audio::stdSignal transformedSignal() const;
+    Audio::stdSignal resultSignal() const;
 
 protected:
     static std::string toStdString(WaveletFunction function);
@@ -101,9 +101,10 @@ protected:
 
     WaveletFunction m_waveletFunction;
     int m_level;
-    Signal m_inputSignal;
-    Signal m_transformedSignal;
-    Signal m_resultSignal;
+
+    Audio::stdSignal m_inputSignal;
+    Audio::stdSignal m_transformedSignal;
+    Audio::stdSignal m_resultSignal;
 
 private:
 };

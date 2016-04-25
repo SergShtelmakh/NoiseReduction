@@ -20,6 +20,7 @@ SOURCES  += $$PWD/src/main.cpp\
             $$PWD/src/wavelets/Wavelet.cpp \
             $$PWD/src/PlotManager.cpp \
             $$PWD/src/AudioRecordWidget.cpp \
+            $$PWD/src/Audio.cpp \
             $$PWD/src/wavelets/DiscretePeriodicWavelet.cpp \
             $$PWD/src/DenoisingManager.cpp
 

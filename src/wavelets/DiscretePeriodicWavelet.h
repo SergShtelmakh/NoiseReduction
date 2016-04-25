@@ -9,8 +9,8 @@ public:
     ~DiscretePeriodicWavelet();
 
     WaveletTransformType type() override;
-    void makeTransform(const Signal& signal) override;
-    void makeInverseTransform(const Signal& signal) override;
+    void makeTransform(const Audio::stdSignal& signal) override;
+    void makeInverseTransform(const Audio::stdSignal& signal) override;
     QString resultText() override;
     void denoising() override;
 

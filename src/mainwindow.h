@@ -2,14 +2,14 @@
 
 #include <QMainWindow>
 
-#include "PlotManager.h"
-#include "AudioRecordWidget.h"
-#include "DenoisingManager.h"
-
-#include <aquila/source/WaveFile.h>
+#include <src/PlotManager.h>
 
 #include <src/AudioSignal.h>
-#include <src/wavelets/Wavelet.h>
+
+class AudioSignal;
+class AudioRecordWidget;
+class PlotManager;
+class DenoisingManager;
 
 namespace Ui {
 class MainWindow;
@@ -53,8 +53,8 @@ private:
     void clearLog();
     void log(const QString& str);
 
-    void makePlot(PlotType type,const AudioSignal::Signal& signal);
-    void makeTransform(SignalForTransform sigType, const AudioSignal::Signal& signal);
+    void makePlot(PlotType type, const Audio::stdSignal& signal);
+    void makeTransform(SignalForTransform sigType, const Audio::stdSignal& signal);
     QCustomPlot *getWidgetForPlot(PlotType type);
 
     Ui::MainWindow *ui;

@@ -5,22 +5,10 @@
 
 namespace Audio {
 
-QAudioEncoderSettings encoderSettings() {
-    QAudioEncoderSettings audioSettings;
-    audioSettings.setCodec("audio/pcm");
-    audioSettings.setQuality(QMultimedia::HighQuality);
-    return audioSettings;
-}
+using stdSignal = std::vector<double>;
+using qtSignal = QVector<double>;
 
-QAudioFormat format() {
-    QAudioFormat format;
-    format.setSampleRate(8000);
-    format.setChannelCount(1);
-    format.setSampleSize(8);
-    format.setCodec("audio/pcm");
-    format.setByteOrder(QAudioFormat::LittleEndian);
-    format.setSampleType(QAudioFormat::UnSignedInt);
-    return format;
-}
+QAudioEncoderSettings encoderSettings();
+QAudioFormat format();
 
 }

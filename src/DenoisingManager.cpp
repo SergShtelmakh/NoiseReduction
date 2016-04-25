@@ -17,7 +17,7 @@ DenoisingManager::DenoisingManager()
 
 void DenoisingManager::setSignal(const AudioSignal &signal)
 {
-    m_inputSignal = signal.signal_std();
+    m_inputSignal = signal.stdSignal();
 }
 
 void DenoisingManager::makeTestNoise()
@@ -41,17 +41,17 @@ void DenoisingManager::denoise()
 
 }
 
-AudioSignal::Signal DenoisingManager::inputSignal() const
+Audio::stdSignal DenoisingManager::inputSignal() const
 {
     return m_inputSignal;
 }
 
-AudioSignal::Signal DenoisingManager::transformedSignal() const
+Audio::stdSignal DenoisingManager::transformedSignal() const
 {
     return m_transformedSignal;
 }
 
-AudioSignal::Signal DenoisingManager::outputSignal() const
+Audio::stdSignal DenoisingManager::outputSignal() const
 {
     return m_outputSignal;
 }

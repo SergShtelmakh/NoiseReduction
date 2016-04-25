@@ -2,7 +2,6 @@
 
 #include <QObject>
 
-#include <src/AudioSignal.h>
 #include <src/wavelets/wavelet.h>
 
 #include <QScopedPointer>
@@ -17,16 +16,14 @@ public:
     void makeTestNoise();
     void denoise();
 
-    AudioSignal::Signal inputSignal() const;
-
-    AudioSignal::Signal transformedSignal() const;
-
-    AudioSignal::Signal outputSignal() const;
+    Audio::stdSignal inputSignal() const;
+    Audio::stdSignal transformedSignal() const;
+    Audio::stdSignal outputSignal() const;
 
 private:
-    AudioSignal::Signal m_inputSignal;
-    AudioSignal::Signal m_transformedSignal;
-    AudioSignal::Signal m_outputSignal;
+    Audio::stdSignal m_inputSignal;
+    Audio::stdSignal m_transformedSignal;
+    Audio::stdSignal m_outputSignal;
 
     QScopedPointer<Wavelet> m_wavelet;
 };

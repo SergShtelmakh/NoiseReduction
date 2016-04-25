@@ -6,24 +6,24 @@
 #include <libs/aquila/global.h>
 #include <libs/aquila/source/WaveFile.h>
 
+#include <src/Audio.h>
+
 class AudioSignal
 {
 
 public:
-    using Signal  = std::vector<Aquila::SampleType>;
-    using QSignal = QVector<Aquila::SampleType>;
-    static Signal makeSignal(Aquila::WaveFile *wave);
+    static Audio::stdSignal makeSignal(Aquila::WaveFile *wave);
 
     AudioSignal();
     void load(const QString& str);
     void save(const QString& str);
 
-    Signal signal_std() const;
-    QSignal signal_qt() const;
-    void setSignal(const Signal& sign);
+    Audio::stdSignal stdSignal() const;
+    Audio::qtSignal qtSignal() const;
+    void setSignal(const Audio::stdSignal& sign);
 
 private:
-    Signal m_signal;
+    Audio::stdSignal m_signal;
     QScopedPointer<Aquila::WaveFile> m_file;
 
 };
