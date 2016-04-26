@@ -47,10 +47,10 @@ void MainWindow::on_pbStart_clicked()
     //auto fileName = QFileDialog::getOpenFileName(this, tr("Open wave file"), "", tr("Wave Files (*.wav)"));
 
     m_testSignal->load(cTestFile);
-    makePlot(PlotType::InputSignal, m_testSignal->stdSignal());
+    makePlot(PlotType::InputSignal, *m_testSignal.data());
 
     m_noisedSignal->load(cTestFile);
-    makePlot(PlotType::NoiseSignal, m_noisedSignal->stdSignal());
+    makePlot(PlotType::NoiseSignal, *m_noisedSignal.data());
 
 //    makeTransform(SignalForTransform::Input, m_testSignal->input());
 //    makeTransform(SignalForTransform::Noise, m_noisedSignal->input());
@@ -125,7 +125,12 @@ QCustomPlot *MainWindow::getWidgetForPlot(MainWindow::PlotType type)
 
 void MainWindow::makePlot(MainWindow::PlotType type, const Audio::stdSignal &signal)
 {
-    PlotManager::makePlot(getWidgetForPlot(type), QVector<double>::fromStdVector(signal), 0, signal.size());
+    PlotManager::plot(getWidgetForPlot(type), QVector<double>::fromStdVector(signal), 0, signal.size());
+}
+
+void MainWindow::makePlot(MainWindow::PlotType type, const AudioSignal &signal)
+{
+    PlotManager::plot(getWidgetForPlot(type), signal);
 }
 
 void MainWindow::on_cbWaveletType_currentIndexChanged(int)

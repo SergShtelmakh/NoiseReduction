@@ -2,6 +2,9 @@
 
 #include <QObject>
 
+#include <src/Audio.h>
+#include <src/AudioSignal.h>
+
 class QCustomPlot;
 
 class PlotManager : public QObject
@@ -10,5 +13,9 @@ class PlotManager : public QObject
 public:
     explicit PlotManager(QObject *parent = 0);
 
-    static void makePlot(QCustomPlot* widget, const QVector<double> &data, double minX, double maxX);
+    static void plot(QCustomPlot* widget, const Audio::qtSignal &data, double minX, double maxX);
+    static void plot(QCustomPlot* widget, const Audio::stdSignal &data, double minX, double maxX);
+    static void plot(QCustomPlot* widget, const AudioSignal &signal);
+
+    static void createDecompositionPlot(const Audio::qtSignalsVector &data);
 };

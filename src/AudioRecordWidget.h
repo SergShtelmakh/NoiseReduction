@@ -33,7 +33,6 @@ private:
         Invalid = -1
     };
 
-
     Ui::AudioRecordWidget *ui;
     QString m_fileName;
     QScopedPointer<QAudioRecorder> m_recorder;

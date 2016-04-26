@@ -22,6 +22,8 @@ public:
     Audio::qtSignal qtSignal() const;
     void setSignal(const Audio::stdSignal& sign);
 
+    int audioLength() const;
+
 private:
     Audio::stdSignal m_signal;
     QScopedPointer<Aquila::WaveFile> m_file;

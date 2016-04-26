@@ -40,3 +40,8 @@ void AudioSignal::setSignal(const Audio::stdSignal &sign)
 {
     m_signal = sign;
 }
+
+int AudioSignal::audioLength() const
+{
+    return m_file ? m_file->getAudioLength() : 0;
+}

@@ -7,7 +7,7 @@ PlotManager::PlotManager(QObject *parent)
 {
 }
 
-void PlotManager::makePlot(QCustomPlot *widget, const QVector<double> &data, double minX, double maxX)
+void PlotManager::plot(QCustomPlot *widget, const Audio::qtSignal &data, double minX, double maxX)
 {
     if (!widget || data.size() == 0) {
         return;
@@ -35,4 +35,19 @@ void PlotManager::makePlot(QCustomPlot *widget, const QVector<double> &data, dou
     widget->yAxis->setRange(minY, maxY);
     widget->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
     widget->replot();
+}
+
+void PlotManager::plot(QCustomPlot *widget, const Audio::stdSignal &data, double minX, double maxX)
+{
+    plot(widget, Audio::qtSignal::fromStdVector(data), minX, maxX);
+}
+
+void PlotManager::plot(QCustomPlot *widget, const AudioSignal &signal)
+{
+    plot(widget, signal.qtSignal(), 0, signal.audioLength());
+}
+
+void PlotManager::createDecompositionPlot(const Audio::qtSignalsVector &data)
+{
+
 }
