@@ -49,5 +49,19 @@ void PlotManager::plot(QCustomPlot *widget, const AudioSignal &signal)
 
 void PlotManager::createDecompositionPlot(const Audio::qtSignalsVector &data)
 {
+    if (data.empty()) {
+        return;
+    }
 
+    auto decompositionPlot = new QWidget();
+    auto mainLayout = new QVBoxLayout(decompositionPlot);
+
+    for (auto signal : data) {
+        auto currentPlot = new QCustomPlot(decompositionPlot);
+        plot(currentPlot, signal, 0, signal.size());
+        mainLayout->addWidget(currentPlot);
+    }
+    decompositionPlot->setGeometry(100, 100, 500, 500);
+    decompositionPlot->setLayout(mainLayout);
+    decompositionPlot->show();
 }

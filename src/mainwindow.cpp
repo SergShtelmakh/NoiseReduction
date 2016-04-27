@@ -62,6 +62,7 @@ void MainWindow::on_pbStart_clicked()
 //    qDebug() << fileName;
 //    Aquila::WaveFile::save(Aquila::SignalSource(m_signalWavelet->resultSignal(), testFile.getSampleFrequency()), fileName.toStdString());
     m_testSignal->save(outputFileName());
+    PlotManager::createDecompositionPlot(Audio::qtSignalsVector() << m_testSignal->qtSignal() << m_testSignal->qtSignal());
 
 }
 
