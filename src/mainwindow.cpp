@@ -62,7 +62,12 @@ void MainWindow::on_pbStart_clicked()
 //    qDebug() << fileName;
 //    Aquila::WaveFile::save(Aquila::SignalSource(m_signalWavelet->resultSignal(), testFile.getSampleFrequency()), fileName.toStdString());
     m_testSignal->save(outputFileName());
-    PlotManager::createDecompositionPlot(Audio::qtSignalsVector() << m_testSignal->qtSignal() << m_testSignal->qtSignal());
+    m_denoisingManager->setSignal(*m_noisedSignal.data());
+    m_denoisingManager->denoise();
+
+    makePlot(PlotType::NoiseSignalTransformed, m_denoisingManager->transformedSignal());
+    PlotManager::createDecompositionPlot(m_denoisingManager->transformedDecomposition());
+
 
 }
 

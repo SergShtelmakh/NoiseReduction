@@ -67,6 +67,30 @@ void DiscretePeriodicWavelet::denoising()
     }
 }
 
+Audio::stdSignalsVector DiscretePeriodicWavelet::decomposition()
+{
+    if (m_transformedSignal.empty())
+        return Audio::stdSignalsVector();
+
+   // Q_ASSERT(m_length.back() == static_cast<int>(m_transformedSignal.size()));
+
+    auto begin = 0;
+    auto end = 0;
+    Audio::stdSignalsVector decomposition;
+    for (size_t i = 0; i < m_length.size() - 1; ++i) {
+        auto currentSize = m_length[i];
+        Audio::stdSignal currentSignal;
+        end = begin + currentSize;
+        for (int j = begin; j < end; j++) {
+            currentSignal.push_back(m_transformedSignal[j]);
+        }
+        decomposition.push_back(currentSignal);
+        begin = end + 1;
+    }
+
+    return decomposition;
+}
+
 double DiscretePeriodicWavelet::denoise(double a, double lvl)
 {
     return lvl < 3 ? a : 0;

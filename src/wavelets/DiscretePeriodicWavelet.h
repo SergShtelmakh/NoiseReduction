@@ -13,6 +13,7 @@ public:
     void makeInverseTransform(const Audio::stdSignal& signal) override;
     QString resultText() override;
     void denoising() override;
+    Audio::stdSignalsVector decomposition() override;
 
 private:
     double denoise(double a, double lvl);

@@ -18,6 +18,7 @@ public:
 
     Audio::stdSignal inputSignal() const;
     Audio::stdSignal transformedSignal() const;
+    Audio::stdSignalsVector transformedDecomposition() const;
     Audio::stdSignal outputSignal() const;
 
 private:

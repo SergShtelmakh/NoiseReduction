@@ -65,3 +65,12 @@ void PlotManager::createDecompositionPlot(const Audio::qtSignalsVector &data)
     decompositionPlot->setLayout(mainLayout);
     decompositionPlot->show();
 }
+
+void PlotManager::createDecompositionPlot(const Audio::stdSignalsVector &data)
+{
+    Audio::qtSignalsVector vector;
+    for (auto i : data) {
+        vector << Audio::qtSignal::fromStdVector(i);
+    }
+    createDecompositionPlot(vector);
+}

@@ -88,7 +88,7 @@ TransformTypeHash makeTransformNameHash() {
 
 Wavelet::Wavelet()
     : m_waveletFunction(WaveletFunction::Haar)
-    , m_level(1)
+    , m_level(5)
 {
 }
 

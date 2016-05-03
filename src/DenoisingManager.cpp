@@ -51,6 +51,11 @@ Audio::stdSignal DenoisingManager::transformedSignal() const
     return m_transformedSignal;
 }
 
+Audio::stdSignalsVector DenoisingManager::transformedDecomposition() const
+{
+    return m_wavelet->decomposition();
+}
+
 Audio::stdSignal DenoisingManager::outputSignal() const
 {
     return m_outputSignal;

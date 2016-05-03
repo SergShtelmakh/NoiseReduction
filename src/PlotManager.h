@@ -18,4 +18,5 @@ public:
     static void plot(QCustomPlot* widget, const AudioSignal &signal);
 
     static void createDecompositionPlot(const Audio::qtSignalsVector &data);
+    static void createDecompositionPlot(const Audio::stdSignalsVector &data);
 };
