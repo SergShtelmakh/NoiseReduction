@@ -16,15 +16,15 @@ public:
     void makeTestNoise();
     void denoise();
 
-    Audio::stdSignal inputSignal() const;
-    Audio::stdSignal transformedSignal() const;
-    Audio::stdSignalsVector transformedDecomposition() const;
-    Audio::stdSignal outputSignal() const;
+    Audio::SignalStd inputSignal() const;
+    Audio::SignalStd transformedSignal() const;
+    Audio::SignalsVectorStd transformedDecomposition() const;
+    Audio::SignalStd outputSignal() const;
 
 private:
-    Audio::stdSignal m_inputSignal;
-    Audio::stdSignal m_transformedSignal;
-    Audio::stdSignal m_outputSignal;
+    Audio::SignalStd m_inputSignal;
+    Audio::SignalStd m_transformedSignal;
+    Audio::SignalStd m_outputSignal;
 
     QScopedPointer<Wavelet> m_wavelet;
 };

@@ -13,10 +13,10 @@ class PlotManager : public QObject
 public:
     explicit PlotManager(QObject *parent = 0);
 
-    static void plot(QCustomPlot* widget, const Audio::qtSignal &data, double minX, double maxX);
-    static void plot(QCustomPlot* widget, const Audio::stdSignal &data, double minX, double maxX);
+    static void plot(QCustomPlot* widget, const Audio::SignalQt &data, double minX, double maxX);
+    static void plot(QCustomPlot* widget, const Audio::SignalStd &data, double minX, double maxX);
     static void plot(QCustomPlot* widget, const AudioSignal &signal);
 
-    static void createDecompositionPlot(const Audio::qtSignalsVector &data);
-    static void createDecompositionPlot(const Audio::stdSignalsVector &data);
+    static void createDecompositionPlot(const Audio::SignalsVectorQt &data);
+    static void createDecompositionPlot(const Audio::SignalsVectorStd &data);
 };

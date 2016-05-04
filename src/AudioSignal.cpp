@@ -1,9 +1,9 @@
 #include "AudioSignal.h"
 #include <QVector>
 
-Audio::stdSignal AudioSignal::makeSignal(Aquila::WaveFile *wave)
+Audio::SignalStd AudioSignal::makeSignal(Aquila::WaveFile *wave)
 {
-    Audio::stdSignal result;
+    Audio::SignalStd result;
     for (auto sample : *wave) {
         result.push_back(sample);
     }
@@ -26,17 +26,17 @@ void AudioSignal::save(const QString &str)
     Aquila::WaveFile::save(Aquila::SignalSource(m_signal, m_file->getSampleFrequency()), QString(str).toStdString());
 }
 
-Audio::stdSignal AudioSignal::stdSignal() const
+Audio::SignalStd AudioSignal::stdSignal() const
 {
     return m_signal;
 }
 
-Audio::qtSignal AudioSignal::qtSignal() const
+Audio::SignalQt AudioSignal::qtSignal() const
 {
     return QVector<Aquila::SampleType>::fromStdVector(m_signal);
 }
 
-void AudioSignal::setSignal(const Audio::stdSignal &sign)
+void AudioSignal::setSignal(const Audio::SignalStd &sign)
 {
     m_signal = sign;
 }

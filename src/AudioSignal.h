@@ -12,20 +12,20 @@ class AudioSignal
 {
 
 public:
-    static Audio::stdSignal makeSignal(Aquila::WaveFile *wave);
+    static Audio::SignalStd makeSignal(Aquila::WaveFile *wave);
 
     AudioSignal();
     void load(const QString& str);
     void save(const QString& str);
 
-    Audio::stdSignal stdSignal() const;
-    Audio::qtSignal qtSignal() const;
-    void setSignal(const Audio::stdSignal& sign);
+    Audio::SignalStd stdSignal() const;
+    Audio::SignalQt qtSignal() const;
+    void setSignal(const Audio::SignalStd& sign);
 
     int audioLength() const;
 
 private:
-    Audio::stdSignal m_signal;
+    Audio::SignalStd m_signal;
     QScopedPointer<Aquila::WaveFile> m_file;
 
 };

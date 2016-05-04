@@ -1,4 +1,5 @@
 #include "Audio.h"
+#include <QVector>
 
 namespace Audio {
 
@@ -18,6 +19,15 @@ QAudioFormat format() {
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::UnSignedInt);
     return format;
+}
+
+SignalsVectorQt toQtVector(const SignalsVectorStd &data)
+{
+    SignalsVectorQt vector;
+    for (auto i : data) {
+        vector << SignalQt::fromStdVector(i);
+    }
+    return vector;
 }
 
 }

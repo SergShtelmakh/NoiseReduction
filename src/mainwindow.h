@@ -53,9 +53,9 @@ private:
     void clearLog();
     void log(const QString& str);
 
-    void makePlot(PlotType type, const Audio::stdSignal& signal);
+    void makePlot(PlotType type, const Audio::SignalStd& signal);
     void makePlot(PlotType type, const AudioSignal& signal);
-    void makeTransform(SignalForTransform sigType, const Audio::stdSignal& signal);
+    void makeTransform(SignalForTransform sigType, const Audio::SignalStd& signal);
     QCustomPlot *getWidgetForPlot(PlotType type);
 
     Ui::MainWindow *ui;

@@ -5,12 +5,13 @@
 
 namespace Audio {
 
-using stdSignal = std::vector<double>;
-using qtSignal = QVector<double>;
-using stdSignalsVector = std::vector<stdSignal>;
-using qtSignalsVector = QVector<qtSignal>;
+using SignalStd = std::vector<double>;
+using SignalQt = QVector<qreal>;
+using SignalsVectorStd = std::vector<SignalStd>;
+using SignalsVectorQt = QVector<SignalQt>;
 
 QAudioEncoderSettings encoderSettings();
 QAudioFormat format();
+SignalsVectorQt toQtVector(const SignalsVectorStd & vector);
 
 }

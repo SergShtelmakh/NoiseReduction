@@ -3,5 +3,4 @@
 AudioEngine::AudioEngine(QObject *parent)
     : QObject(parent)
 {
-
 }

@@ -151,12 +151,12 @@ Wavelet *Wavelet::create(Wavelet::WaveletTransformType type)
 
 
 
-Audio::stdSignal Wavelet::transformedSignal() const
+Audio::SignalStd Wavelet::transformedSignal() const
 {
     return m_transformedSignal;
 }
 
-Audio::stdSignal Wavelet::resultSignal() const
+Audio::SignalStd Wavelet::resultSignal() const
 {
     return m_resultSignal;
 }

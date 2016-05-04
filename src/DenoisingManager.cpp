@@ -41,22 +41,22 @@ void DenoisingManager::denoise()
 
 }
 
-Audio::stdSignal DenoisingManager::inputSignal() const
+Audio::SignalStd DenoisingManager::inputSignal() const
 {
     return m_inputSignal;
 }
 
-Audio::stdSignal DenoisingManager::transformedSignal() const
+Audio::SignalStd DenoisingManager::transformedSignal() const
 {
     return m_transformedSignal;
 }
 
-Audio::stdSignalsVector DenoisingManager::transformedDecomposition() const
+Audio::SignalsVectorStd DenoisingManager::transformedDecomposition() const
 {
     return m_wavelet->decomposition();
 }
 
-Audio::stdSignal DenoisingManager::outputSignal() const
+Audio::SignalStd DenoisingManager::outputSignal() const
 {
     return m_outputSignal;
 }

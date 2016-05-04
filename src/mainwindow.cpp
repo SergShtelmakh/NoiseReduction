@@ -5,12 +5,13 @@
 #include <src/DenoisingManager.h>
 #include <src/AudioRecordWidget.h>
 
+#include <src/DecompositionWidget.h>
+
 #include <QFileDialog>
 #include <QDebug>
 #include <QTime>
 
 #include <QSound>
-
 
 namespace {
     const QString cTestFile  = "test.wav";
@@ -66,8 +67,11 @@ void MainWindow::on_pbStart_clicked()
     m_denoisingManager->denoise();
 
     makePlot(PlotType::NoiseSignalTransformed, m_denoisingManager->transformedSignal());
-    PlotManager::createDecompositionPlot(m_denoisingManager->transformedDecomposition());
+    //PlotManager::createDecompositionPlot(m_denoisingManager->transformedDecomposition());
 
+    DecompositionWidget * wdg = new DecompositionWidget();
+    wdg->setDecomposition(Audio::toQtVector(m_denoisingManager->transformedDecomposition()));
+    wdg->show();
 
 }
 
@@ -86,7 +90,7 @@ void MainWindow::log(const QString &str)
     ui->tbResult->append(QString("[%1] %2\n").arg(QTime::currentTime().toString(), str));
 }
 
-void MainWindow::makeTransform(MainWindow::SignalForTransform sigType, const Audio::stdSignal &)
+void MainWindow::makeTransform(MainWindow::SignalForTransform sigType, const Audio::SignalStd &)
 {
     switch (sigType) {
     case SignalForTransform::Input:
@@ -129,7 +133,7 @@ QCustomPlot *MainWindow::getWidgetForPlot(MainWindow::PlotType type)
     return nullptr;
 }
 
-void MainWindow::makePlot(MainWindow::PlotType type, const Audio::stdSignal &signal)
+void MainWindow::makePlot(MainWindow::PlotType type, const Audio::SignalStd &signal)
 {
     PlotManager::plot(getWidgetForPlot(type), QVector<double>::fromStdVector(signal), 0, signal.size());
 }

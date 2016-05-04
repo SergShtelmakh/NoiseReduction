@@ -83,17 +83,17 @@ public:
     static Wavelet *create(WaveletTransformType type);
 
     virtual WaveletTransformType type() = 0;
-    virtual void makeTransform(const Audio::stdSignal& signal) = 0;
-    virtual void makeInverseTransform(const Audio::stdSignal& signal) = 0;
+    virtual void makeTransform(const Audio::SignalStd& signal) = 0;
+    virtual void makeInverseTransform(const Audio::SignalStd& signal) = 0;
     virtual QString resultText() = 0;
     virtual void denoising() = 0;
-    virtual Audio::stdSignalsVector decomposition() = 0;
+    virtual Audio::SignalsVectorStd decomposition() = 0;
 
     void setWaveletFunction(WaveletFunction function);
     void setLevel(int level);
 
-    Audio::stdSignal transformedSignal() const;
-    Audio::stdSignal resultSignal() const;
+    Audio::SignalStd transformedSignal() const;
+    Audio::SignalStd resultSignal() const;
 
 protected:
     static std::string toStdString(WaveletFunction function);
@@ -103,9 +103,9 @@ protected:
     WaveletFunction m_waveletFunction;
     int m_level;
 
-    Audio::stdSignal m_inputSignal;
-    Audio::stdSignal m_transformedSignal;
-    Audio::stdSignal m_resultSignal;
+    Audio::SignalStd m_inputSignal;
+    Audio::SignalStd m_transformedSignal;
+    Audio::SignalStd m_resultSignal;
 
 private:
 };

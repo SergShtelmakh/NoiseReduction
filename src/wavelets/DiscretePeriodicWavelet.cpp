@@ -16,7 +16,7 @@ Wavelet::WaveletTransformType DiscretePeriodicWavelet::type()
     return WaveletTransformType::DiscretePeriodic1D;
 }
 
-void DiscretePeriodicWavelet::makeTransform(const Audio::stdSignal &signal)
+void DiscretePeriodicWavelet::makeTransform(const Audio::SignalStd &signal)
 {
     m_flag.clear();
     m_length.clear();
@@ -26,7 +26,7 @@ void DiscretePeriodicWavelet::makeTransform(const Audio::stdSignal &signal)
     dwt(m_inputSignal, m_level, toStdString(m_waveletFunction), m_transformedSignal, m_flag, m_length);
 }
 
-void DiscretePeriodicWavelet::makeInverseTransform(const Audio::stdSignal &signal)
+void DiscretePeriodicWavelet::makeInverseTransform(const Audio::SignalStd &signal)
 {
     m_transformedSignal = signal;
     idwt(m_transformedSignal, m_flag, toStdString(m_waveletFunction), m_resultSignal, m_length);
@@ -67,19 +67,19 @@ void DiscretePeriodicWavelet::denoising()
     }
 }
 
-Audio::stdSignalsVector DiscretePeriodicWavelet::decomposition()
+Audio::SignalsVectorStd DiscretePeriodicWavelet::decomposition()
 {
     if (m_transformedSignal.empty())
-        return Audio::stdSignalsVector();
+        return Audio::SignalsVectorStd();
 
    // Q_ASSERT(m_length.back() == static_cast<int>(m_transformedSignal.size()));
 
     auto begin = 0;
     auto end = 0;
-    Audio::stdSignalsVector decomposition;
+    Audio::SignalsVectorStd decomposition;
     for (size_t i = 0; i < m_length.size() - 1; ++i) {
         auto currentSize = m_length[i];
-        Audio::stdSignal currentSignal;
+        Audio::SignalStd currentSignal;
         end = begin + currentSize;
         for (int j = begin; j < end; j++) {
             currentSignal.push_back(m_transformedSignal[j]);
