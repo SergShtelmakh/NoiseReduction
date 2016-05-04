@@ -12,6 +12,7 @@ using SignalsVectorQt = QVector<SignalQt>;
 
 QAudioEncoderSettings encoderSettings();
 QAudioFormat format();
-SignalsVectorQt toQtVector(const SignalsVectorStd & vector);
+SignalsVectorQt toQtVector(const SignalsVectorStd &vector);
+double maxAmplitude(const SignalQt &signal);
 
 }

@@ -8,6 +8,17 @@ DecompositionItem::DecompositionItem(QWidget *parent) :
     ui(new Ui::DecompositionItem)
 {
     ui->setupUi(this);
+    ui->sbThreshold->setMinimum(0);
+    ui->sbThreshold->setMaximum(100);
+    ui->sbThreshold->setValue(0);
+
+    ui->wPlot->addGraph();
+    ui->wPlot->addGraph();
+    ui->wPlot->addGraph();
+    ui->wPlot->xAxis->setLabel("Time");
+    ui->wPlot->yAxis->setLabel("Amplitude");
+
+    connect(ui->sbThreshold, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, [this](int val){setThreshold(val);});
 }
 
 DecompositionItem::~DecompositionItem()
@@ -29,34 +40,11 @@ void DecompositionItem::setSignal(const Audio::SignalQt &signal)
     m_signal = signal;
     emit signalChanged(m_signal);
 
-    if (m_signal.size() == 0) {
-        return;
-    }
+    setMaxThreshold(Audio::maxAmplitude(m_signal));
 
-    QVector<double> x(m_signal.size());
-    auto maxX = m_signal.size();
-    auto minX = 0;
-    auto dx = (maxX - minX) / m_signal.size();
-    auto currentX = minX;
-    auto minY = m_signal.first();
-    auto maxY = m_signal.first();
-    for (auto i = 0; i < m_signal.size(); ++i) {
-        x[i] = currentX;
-        currentX += dx;
-        minY = qMin(m_signal[i], minY);
-        maxY = qMax(m_signal[i], maxY);
-    }
+    updatePlotData();
 
-    ui->wPlot->addGraph();
-    ui->wPlot->graph(0)->setData(x, m_signal);
-
-    ui->wPlot->xAxis->setLabel("Time");
-    ui->wPlot->yAxis->setLabel("Amplitude");
-
-    ui->wPlot->xAxis->setRange(minX, maxX);
-    ui->wPlot->yAxis->setRange(minY, maxY);
-    ui->wPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-    ui->wPlot->replot();
+    replotSignal();
 }
 
 double DecompositionItem::maxThreshold() const
@@ -76,7 +64,51 @@ void DecompositionItem::setThreshold(double threshold)
     }
 
     m_threshold = threshold;
-    thresholdChanged(m_threshold);
+    emit thresholdChanged(m_threshold);
+
+    replotThreshold();
+}
+
+void DecompositionItem::updatePlotData()
+{
+    if (m_signal.size() == 0) {
+        return;
+    }
+
+    m_x.clear();
+    m_x.fill(0, m_signal.size());
+    auto maxX = m_signal.size();
+    auto minX = 0;
+    auto dx = (maxX - minX) / m_signal.size();
+    auto currentX = minX;
+    auto minY = m_signal.first();
+    auto maxY = m_signal.first();
+    for (auto i = 0; i < m_signal.size(); ++i) {
+        m_x[i] = currentX;
+        currentX += dx;
+        minY = qMin(m_signal[i], minY);
+        maxY = qMax(m_signal[i], maxY);
+    }
+
+    ui->wPlot->xAxis->setRange(minX, maxX);
+    ui->wPlot->yAxis->setRange(minY, maxY);
+}
+
+void DecompositionItem::replotSignal()
+{
+    ui->wPlot->graph(0)->setData(m_x, m_signal);
+    ui->wPlot->replot();
+}
+
+void DecompositionItem::replotThreshold()
+{
+    QVector<double> threshold;
+    threshold.fill(m_maxThreshold - m_threshold * m_maxThreshold / 100, m_x.size());
+    ui->wPlot->graph(1)->setData(m_x, threshold);
+
+    threshold.fill(-m_maxThreshold + m_threshold * m_maxThreshold / 100, m_x.size());
+    ui->wPlot->graph(2)->setData(m_x, threshold);
+    ui->wPlot->replot();
 }
 
 void DecompositionItem::setMaxThreshold(double maxThreshold)

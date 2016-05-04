@@ -30,4 +30,14 @@ SignalsVectorQt toQtVector(const SignalsVectorStd &data)
     return vector;
 }
 
+double maxAmplitude(const SignalQt &signal)
+{
+    double max = 0;
+    for (auto val : signal) {
+        max = qMax(max, qAbs(val));
+    }
+
+    return max;
+}
+
 }

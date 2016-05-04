@@ -34,9 +34,15 @@ signals:
 public slots:
 
 private:
+    void updatePlotData();
+    void replotSignal();
+    void replotThreshold();
+
     Audio::SignalQt m_signal;
     double m_maxThreshold;
     double m_threshold;
+
+    QVector<double> m_x;
 
     Ui::DecompositionItem *ui;
 };
