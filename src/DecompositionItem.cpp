@@ -3,6 +3,15 @@
 
 #include <qcustomplot/qcustomplot.h>
 
+namespace {
+
+double makeThreshold(double input, double max) {
+    auto sign = input > 0 ? 1 : -1;
+    return qMin(input, max) * sign;
+}
+
+}
+
 DecompositionItem::DecompositionItem(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DecompositionItem)
@@ -18,7 +27,7 @@ DecompositionItem::DecompositionItem(QWidget *parent) :
     ui->wPlot->xAxis->setLabel("Time");
     ui->wPlot->yAxis->setLabel("Amplitude");
 
-    connect(ui->sbThreshold, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, [this](int val){setThreshold(val);});
+    connect(ui->sbThreshold, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, [this](int val){ setThreshold(val); });
 }
 
 DecompositionItem::~DecompositionItem()
@@ -26,12 +35,12 @@ DecompositionItem::~DecompositionItem()
     delete ui;
 }
 
-Audio::SignalQt DecompositionItem::signal() const
+Audio::Signal DecompositionItem::signal() const
 {
     return m_signal;
 }
 
-void DecompositionItem::setSignal(const Audio::SignalQt &signal)
+void DecompositionItem::setSignal(const Audio::Signal &signal)
 {
     if (m_signal == signal) {
         return;
@@ -67,6 +76,17 @@ void DecompositionItem::setThreshold(double threshold)
     emit thresholdChanged(m_threshold);
 
     replotThreshold();
+}
+
+Audio::Signal DecompositionItem::thresholded() const
+{
+    auto max = m_maxThreshold - m_threshold * m_maxThreshold / 100;
+    Audio::Signal thresholded;
+    for (auto i : m_signal) {
+        thresholded << makeThreshold(i, max);
+    }
+
+    return thresholded;
 }
 
 void DecompositionItem::updatePlotData()

@@ -1,9 +1,9 @@
 #include <src/mainwindow.h>
 #include "ui_mainwindow.h"
 
-#include <src/AudioSignal.h>
+#include <src/audio/AudioSignal.h>
 #include <src/DenoisingManager.h>
-#include <src/AudioRecordWidget.h>
+#include <src/audio/AudioRecordWidget.h>
 
 #include <src/DecompositionWidget.h>
 

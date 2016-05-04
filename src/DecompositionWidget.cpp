@@ -27,3 +27,13 @@ void DecompositionWidget::setDecomposition(const Audio::SignalsVectorQt &decompo
         layout->addWidget(wdg);
     }
 }
+
+Audio::SignalsVectorQt DecompositionWidget::thresholdedSignals()
+{
+    Audio::SignalsVectorQt result;
+    for (auto w : m_widgets) {
+        result << w->thresholded();
+    }
+
+    return result;
+}

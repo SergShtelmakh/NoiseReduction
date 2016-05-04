@@ -3,7 +3,9 @@
 
 #include <QWidget>
 
-#include <src/Audio.h>
+#include <src/audio/Audio.h>
+
+class DecompositionItem;
 
 namespace Ui {
 class DecompositionWidget;
@@ -18,10 +20,11 @@ public:
     ~DecompositionWidget();
 
     void setDecomposition(const Audio::SignalsVectorQt &decomposiiton);
+    Audio::SignalsVectorQt thresholdedSignals();
 
 private:
     Ui::DecompositionWidget *ui;
-    QVector<QWidget *> m_widgets;
+    QVector<DecompositionItem *> m_widgets;
 };
 
 #endif // DECOMPOSITIONWIDGET_H

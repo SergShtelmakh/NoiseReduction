@@ -3,7 +3,7 @@
 #include <QList>
 #include <QString>
 
-#include <src/AudioSignal.h>
+#include <src/audio/AudioSignal.h>
 
 class Wavelet
 {

@@ -4,7 +4,7 @@
 
 #include <src/PlotManager.h>
 
-#include <src/AudioSignal.h>
+#include <src/audio/AudioSignal.h>
 
 class AudioSignal;
 class AudioRecordWidget;

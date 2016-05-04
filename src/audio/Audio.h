@@ -6,13 +6,13 @@
 namespace Audio {
 
 using SignalStd = std::vector<double>;
-using SignalQt = QVector<qreal>;
+using Signal = QVector<qreal>;
 using SignalsVectorStd = std::vector<SignalStd>;
-using SignalsVectorQt = QVector<SignalQt>;
+using SignalsVectorQt = QVector<Signal>;
 
 QAudioEncoderSettings encoderSettings();
 QAudioFormat format();
 SignalsVectorQt toQtVector(const SignalsVectorStd &vector);
-double maxAmplitude(const SignalQt &signal);
+double maxAmplitude(const Signal &signal);
 
 }

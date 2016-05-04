@@ -2,8 +2,8 @@
 
 #include <QObject>
 
-#include <src/Audio.h>
-#include <src/AudioSignal.h>
+#include <src/audio/Audio.h>
+#include <src/audio/AudioSignal.h>
 
 class QCustomPlot;
 
@@ -13,7 +13,7 @@ class PlotManager : public QObject
 public:
     explicit PlotManager(QObject *parent = 0);
 
-    static void plot(QCustomPlot* widget, const Audio::SignalQt &data, double minX, double maxX);
+    static void plot(QCustomPlot* widget, const Audio::Signal &data, double minX, double maxX);
     static void plot(QCustomPlot* widget, const Audio::SignalStd &data, double minX, double maxX);
     static void plot(QCustomPlot* widget, const AudioSignal &signal);
 

@@ -3,6 +3,7 @@
 #include <QObject>
 
 #include <src/wavelets/wavelet.h>
+#include <src/DecompositionWidget.h>
 
 #include <QScopedPointer>
 
@@ -27,4 +28,5 @@ private:
     Audio::SignalStd m_outputSignal;
 
     QScopedPointer<Wavelet> m_wavelet;
+    QScopedPointer<DecompositionWidget> m_widget;
 };

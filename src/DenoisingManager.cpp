@@ -17,7 +17,7 @@ DenoisingManager::DenoisingManager()
 
 void DenoisingManager::setSignal(const AudioSignal &signal)
 {
-    m_inputSignal = signal.stdSignal();
+    m_inputSignal = signal.signal().toStdVector();
 }
 
 void DenoisingManager::makeTestNoise()

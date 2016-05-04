@@ -25,12 +25,12 @@ SignalsVectorQt toQtVector(const SignalsVectorStd &data)
 {
     SignalsVectorQt vector;
     for (auto i : data) {
-        vector << SignalQt::fromStdVector(i);
+        vector << Signal::fromStdVector(i);
     }
     return vector;
 }
 
-double maxAmplitude(const SignalQt &signal)
+double maxAmplitude(const Signal &signal)
 {
     double max = 0;
     for (auto val : signal) {

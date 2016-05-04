@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include <src/Audio.h>
+#include <src/audio/Audio.h>
 
 namespace Ui {
 class DecompositionItem;
@@ -17,8 +17,8 @@ public:
     explicit DecompositionItem(QWidget *parent = 0);
     ~DecompositionItem();
 
-    Audio::SignalQt signal() const;
-    void setSignal(const Audio::SignalQt &signal);
+    Audio::Signal signal() const;
+    void setSignal(const Audio::Signal &signal);
 
     double maxThreshold() const;
     void setMaxThreshold(double maxThreshold);
@@ -26,8 +26,10 @@ public:
     double threshold() const;
     void setThreshold(double threshold);
 
+    Audio::Signal thresholded() const;
+
 signals:
-    void signalChanged(const Audio::SignalQt &signal);
+    void signalChanged(const Audio::Signal &signal);
     void maxThresholdChanged(double maxThreshold);
     void thresholdChanged(double threshold);
 
@@ -38,7 +40,7 @@ private:
     void replotSignal();
     void replotThreshold();
 
-    Audio::SignalQt m_signal;
+    Audio::Signal m_signal;
     double m_maxThreshold;
     double m_threshold;
 
