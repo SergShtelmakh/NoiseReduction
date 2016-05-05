@@ -5,16 +5,13 @@
 
 namespace Audio {
 
-using SignalStd = std::vector<double>;
-using Signal = QVector<qreal>;
-using SignalsVectorStd = std::vector<SignalStd>;
-using SignalsVectorQt = QVector<Signal>;
+using SignalSource = QVector<qreal>;
+using SignalsSourceVector = QVector<SignalSource>;
 
 QAudioEncoderSettings encoderSettings();
 QAudioFormat format();
-SignalsVectorQt toQtVector(const SignalsVectorStd &vector);
-double maxAmplitude(const Signal &signal);
-void makeWhiteNoise(Signal &signal, double maxAmplitude);
-void makeThreshold(Signal &signal, double max);
+double maxAmplitude(const SignalSource &signal);
+void makeWhiteNoise(SignalSource &signal, double maxAmplitude);
+void makeThreshold(SignalSource &signal, double max);
 
 }

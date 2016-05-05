@@ -16,8 +16,8 @@ public:
     explicit DecompositionItemWidget(QWidget *parent = 0);
     ~DecompositionItemWidget();
 
-    Audio::Signal signal() const;
-    void setSignal(const Audio::Signal &signal);
+    Audio::SignalSource signal() const;
+    void setSignal(const Audio::SignalSource &signal);
 
     double maxThreshold() const;
     void setMaxThreshold(double maxThreshold);
@@ -25,10 +25,10 @@ public:
     double threshold() const;
     void setThreshold(double threshold);
 
-    Audio::Signal thresholded() const;
+    Audio::SignalSource thresholded() const;
 
 signals:
-    void signalChanged(const Audio::Signal &signal);
+    void signalChanged(const Audio::SignalSource &signal);
     void maxThresholdChanged(double maxThreshold);
     void thresholdChanged(double threshold);
 
@@ -37,7 +37,7 @@ private:
     void replotSignal();
     void replotThreshold();
 
-    Audio::Signal m_signal;
+    Audio::SignalSource m_signal;
     double m_maxThreshold;
     double m_threshold;
 

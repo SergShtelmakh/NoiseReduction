@@ -19,18 +19,18 @@ public:
 
     void makeManualDenoise();
 
-    Audio::SignalStd inputSignal() const;
-    Audio::SignalStd transformedSignal() const;
-    Audio::SignalsVectorStd transformedDecomposition() const;
-    Audio::SignalStd outputSignal() const;
+    Audio::SignalSource inputSignal() const;
+    Audio::SignalSource transformedSignal() const;
+    Audio::SignalsSourceVector transformedDecomposition() const;
+    Audio::SignalSource outputSignal() const;
 
 private:
     void makeTransform();
     void makeInverseTransform();
 
-    Audio::SignalStd m_inputSignal;
-    Audio::SignalStd m_transformedSignal;
-    Audio::SignalStd m_outputSignal;
+    Audio::SignalSource m_inputSignal;
+    Audio::SignalSource m_transformedSignal;
+    Audio::SignalSource m_outputSignal;
 
     QScopedPointer<Wavelet> m_wavelet;
     QScopedPointer<DecompositionWidget> m_widget;

@@ -9,11 +9,11 @@ public:
     ~DiscretePeriodicWavelet();
 
     WaveletTransformType type() override;
-    void makeTransform(const Audio::SignalStd& signal) override;
-    void makeInverseTransform(const Audio::SignalStd& signal) override;
+    void makeTransform(const Audio::SignalSource& signal) override;
+    void makeInverseTransform(const Audio::SignalSource& signal) override;
     QString resultText() override;
     void denoising() override;
-    Audio::SignalsVectorStd decomposition() override;
+    Audio::SignalsSourceVector decomposition() override;
 
 private:
     double denoise(double a, double lvl);

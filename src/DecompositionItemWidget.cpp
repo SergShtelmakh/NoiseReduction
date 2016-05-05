@@ -26,12 +26,12 @@ DecompositionItemWidget::~DecompositionItemWidget()
     delete ui;
 }
 
-Audio::Signal DecompositionItemWidget::signal() const
+Audio::SignalSource DecompositionItemWidget::signal() const
 {
     return m_signal;
 }
 
-void DecompositionItemWidget::setSignal(const Audio::Signal &signal)
+void DecompositionItemWidget::setSignal(const Audio::SignalSource &signal)
 {
     if (m_signal == signal) {
         return;
@@ -69,10 +69,10 @@ void DecompositionItemWidget::setThreshold(double threshold)
     replotThreshold();
 }
 
-Audio::Signal DecompositionItemWidget::thresholded() const
+Audio::SignalSource DecompositionItemWidget::thresholded() const
 {
     auto max = m_maxThreshold - m_threshold * m_maxThreshold / 100;
-    Audio::Signal thresholded = m_signal;
+    Audio::SignalSource thresholded = m_signal;
     Audio::makeThreshold(thresholded, max);
     return thresholded;
 }

@@ -19,8 +19,8 @@ public:
     explicit DecompositionWidget(QWidget *parent = 0);
     ~DecompositionWidget();
 
-    void setDecomposition(const Audio::SignalsVectorQt &decomposiiton);
-    Audio::SignalsVectorQt thresholdedSignals();
+    void setDecomposition(const Audio::SignalsSourceVector &decomposiiton);
+    Audio::SignalsSourceVector thresholdedSignals();
 
 private:
     void clearWidget();

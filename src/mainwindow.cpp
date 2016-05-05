@@ -86,27 +86,27 @@ void MainWindow::log(const QString &str)
     ui->tbResult->append(QString("[%1] %2\n").arg(QTime::currentTime().toString(), str));
 }
 
-void MainWindow::makeTransform(MainWindow::SignalForTransform sigType, const Audio::SignalStd &)
-{
-    switch (sigType) {
-    case SignalForTransform::Input:
-        log("Prepare to input transform");
-//        m_signalWavelet->makeTransform(signal);
-//        makePlot(PlotType::InputSignalTransformed, m_testSignal->transformed());
-        break;
-    case SignalForTransform::Noise:
-        log("Prepare to noise transform");
-//        m_noiseWavelet->makeTransform(signal);
-//        makePlot(PlotType::NoiseSignalTransformed, m_noiseWavelet->transformedSignal());
-        break;
-    default:
-        Q_ASSERT(false);
-        break;
-    }
+//void MainWindow::makeTransform(MainWindow::SignalForTransform sigType, const Audio::SignalStd &)
+//{
+//    switch (sigType) {
+//    case SignalForTransform::Input:
+//        log("Prepare to input transform");
+////        m_signalWavelet->makeTransform(signal);
+////        makePlot(PlotType::InputSignalTransformed, m_testSignal->transformed());
+//        break;
+//    case SignalForTransform::Noise:
+//        log("Prepare to noise transform");
+////        m_noiseWavelet->makeTransform(signal);
+////        makePlot(PlotType::NoiseSignalTransformed, m_noiseWavelet->transformedSignal());
+//        break;
+//    default:
+//        Q_ASSERT(false);
+//        break;
+//    }
 
-//    log(m_signalWavelet->resultText());
-//    log(m_noiseWavelet->resultText());
-}
+////    log(m_signalWavelet->resultText());
+////    log(m_noiseWavelet->resultText());
+//}
 
 QCustomPlot *MainWindow::getWidgetForPlot(MainWindow::PlotType type)
 {
@@ -129,10 +129,10 @@ QCustomPlot *MainWindow::getWidgetForPlot(MainWindow::PlotType type)
     return nullptr;
 }
 
-void MainWindow::makePlot(MainWindow::PlotType type, const Audio::SignalStd &signal)
-{
-    PlotManager::plot(getWidgetForPlot(type), QVector<double>::fromStdVector(signal), 0, signal.size());
-}
+//void MainWindow::makePlot(MainWindow::PlotType type, const Audio::SignalStd &signal)
+//{
+//    PlotManager::plot(getWidgetForPlot(type), QVector<double>::fromStdVector(signal), 0, signal.size());
+//}
 
 void MainWindow::makePlot(MainWindow::PlotType type, const AudioSignal &signal)
 {

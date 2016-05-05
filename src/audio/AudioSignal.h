@@ -13,18 +13,18 @@ class AudioSignal
 {
 
 public:
-    static Audio::Signal makeSignal(Aquila::WaveFile *wave);
+    static Audio::SignalSource makeSignal(Aquila::WaveFile *wave);
 
     AudioSignal();
     void load(const QString& str);
     void save(const QString& str);
 
-    Audio::Signal signal() const;
-    void setSignal(const Audio::Signal& sign);
+    Audio::SignalSource signal() const;
+    void setSignal(const Audio::SignalSource& sign);
 
     int audioLength() const;
 
 private:
-    Audio::Signal m_signal;
+    Audio::SignalSource m_signal;
     QScopedPointer<Aquila::WaveFile> m_file;
 };

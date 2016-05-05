@@ -11,7 +11,7 @@ DenoisingManager::DenoisingManager()
 
 void DenoisingManager::setSignal(const AudioSignal &signal)
 {
-    m_inputSignal = signal.signal().toStdVector();
+    m_inputSignal = signal.signal();
 }
 
 void DenoisingManager::denoise()
@@ -28,26 +28,26 @@ void DenoisingManager::makeManualDenoise()
     makeTransform();
 
     m_widget.reset(new DecompositionWidget());
-    m_widget->setDecomposition(Audio::toQtVector(m_wavelet->decomposition()));
+    m_widget->setDecomposition(m_wavelet->decomposition());
     m_widget->show();
 }
 
-Audio::SignalStd DenoisingManager::inputSignal() const
+Audio::SignalSource DenoisingManager::inputSignal() const
 {
     return m_inputSignal;
 }
 
-Audio::SignalStd DenoisingManager::transformedSignal() const
+Audio::SignalSource DenoisingManager::transformedSignal() const
 {
     return m_transformedSignal;
 }
 
-Audio::SignalsVectorStd DenoisingManager::transformedDecomposition() const
+Audio::SignalsSourceVector DenoisingManager::transformedDecomposition() const
 {
     return m_wavelet->decomposition();
 }
 
-Audio::SignalStd DenoisingManager::outputSignal() const
+Audio::SignalSource DenoisingManager::outputSignal() const
 {
     return m_outputSignal;
 }

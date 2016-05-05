@@ -16,7 +16,7 @@ DecompositionWidget::~DecompositionWidget()
     delete ui;
 }
 
-void DecompositionWidget::setDecomposition(const Audio::SignalsVectorQt &decomposiiton)
+void DecompositionWidget::setDecomposition(const Audio::SignalsSourceVector &decomposiiton)
 {
     clearWidget();
 
@@ -30,9 +30,9 @@ void DecompositionWidget::setDecomposition(const Audio::SignalsVectorQt &decompo
     }
 }
 
-Audio::SignalsVectorQt DecompositionWidget::thresholdedSignals()
+Audio::SignalsSourceVector DecompositionWidget::thresholdedSignals()
 {
-    Audio::SignalsVectorQt result;
+    Audio::SignalsSourceVector result;
     for (auto w : m_widgets) {
         result << w->thresholded();
     }

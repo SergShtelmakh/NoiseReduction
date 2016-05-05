@@ -26,16 +26,16 @@ QAudioFormat format() {
     return format;
 }
 
-SignalsVectorQt toQtVector(const SignalsVectorStd &data)
-{
-    SignalsVectorQt vector;
-    for (auto i : data) {
-        vector << Signal::fromStdVector(i);
-    }
-    return vector;
-}
+//SignalsSourceVector toQtVector(const SignalsVectorStd &data)
+//{
+//    SignalsSourceVector vector;
+//    for (auto i : data) {
+//        vector << SignalSource::fromStdVector(i);
+//    }
+//    return vector;
+//}
 
-double maxAmplitude(const Signal &signal)
+double maxAmplitude(const SignalSource &signal)
 {
     double max = 0;
     for (auto val : signal) {
@@ -45,14 +45,14 @@ double maxAmplitude(const Signal &signal)
     return max;
 }
 
-void makeWhiteNoise(Signal &signal, double maxAmplitude)
+void makeWhiteNoise(SignalSource &signal, double maxAmplitude)
 {
     for (auto sample : signal) {
         sample = sample + rand(-maxAmplitude, maxAmplitude);
     }
 }
 
-void makeThreshold(Signal &signal, double max) {
+void makeThreshold(SignalSource &signal, double max) {
     for (auto i : signal) {
         auto sign = i > 0 ? 1 : -1;
         i = qMin(i, max) * sign;
