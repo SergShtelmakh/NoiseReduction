@@ -27,5 +27,4 @@ public:
 private:
     Audio::Signal m_signal;
     QScopedPointer<Aquila::WaveFile> m_file;
-
 };

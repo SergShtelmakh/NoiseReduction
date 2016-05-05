@@ -1,21 +1,20 @@
-#ifndef DECOMPOSITIONITEM_H
-#define DECOMPOSITIONITEM_H
+#pragma once
 
 #include <QWidget>
 
 #include <src/audio/Audio.h>
 
 namespace Ui {
-class DecompositionItem;
+class DecompositionItemWidget;
 }
 
-class DecompositionItem : public QWidget
+class DecompositionItemWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit DecompositionItem(QWidget *parent = 0);
-    ~DecompositionItem();
+    explicit DecompositionItemWidget(QWidget *parent = 0);
+    ~DecompositionItemWidget();
 
     Audio::Signal signal() const;
     void setSignal(const Audio::Signal &signal);
@@ -33,8 +32,6 @@ signals:
     void maxThresholdChanged(double maxThreshold);
     void thresholdChanged(double threshold);
 
-public slots:
-
 private:
     void updatePlotData();
     void replotSignal();
@@ -46,7 +43,5 @@ private:
 
     QVector<double> m_x;
 
-    Ui::DecompositionItem *ui;
+    Ui::DecompositionItemWidget *ui;
 };
-
-#endif // DECOMPOSITIONITEM_H

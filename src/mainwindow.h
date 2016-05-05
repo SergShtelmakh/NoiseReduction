@@ -2,9 +2,8 @@
 
 #include <QMainWindow>
 
+#include <src/audio/Audio.h>
 #include <src/PlotManager.h>
-
-#include <src/audio/AudioSignal.h>
 
 class AudioSignal;
 class AudioRecordWidget;

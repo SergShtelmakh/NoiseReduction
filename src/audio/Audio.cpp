@@ -3,6 +3,11 @@
 
 namespace Audio {
 
+int rand(int min, int max) {
+    Q_ASSERT(max > min);
+    return qrand() % ((max + 1) - min) + min;
+}
+
 QAudioEncoderSettings encoderSettings() {
     QAudioEncoderSettings audioSettings;
     audioSettings.setCodec("audio/pcm");
@@ -38,6 +43,20 @@ double maxAmplitude(const Signal &signal)
     }
 
     return max;
+}
+
+void makeWhiteNoise(Signal &signal, double maxAmplitude)
+{
+    for (auto sample : signal) {
+        sample = sample + rand(-maxAmplitude, maxAmplitude);
+    }
+}
+
+void makeThreshold(Signal &signal, double max) {
+    for (auto i : signal) {
+        auto sign = i > 0 ? 1 : -1;
+        i = qMin(i, max) * sign;
+    }
 }
 
 }

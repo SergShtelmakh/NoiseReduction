@@ -5,7 +5,7 @@
 
 #include <src/audio/Audio.h>
 
-class DecompositionItem;
+class DecompositionItemWidget;
 
 namespace Ui {
 class DecompositionWidget;
@@ -23,8 +23,10 @@ public:
     Audio::SignalsVectorQt thresholdedSignals();
 
 private:
+    void clearWidget();
+
     Ui::DecompositionWidget *ui;
-    QVector<DecompositionItem *> m_widgets;
+    QVector<DecompositionItemWidget *> m_widgets;
 };
 
 #endif // DECOMPOSITIONWIDGET_H

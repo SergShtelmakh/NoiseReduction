@@ -14,5 +14,7 @@ QAudioEncoderSettings encoderSettings();
 QAudioFormat format();
 SignalsVectorQt toQtVector(const SignalsVectorStd &vector);
 double maxAmplitude(const Signal &signal);
+void makeWhiteNoise(Signal &signal, double maxAmplitude);
+void makeThreshold(Signal &signal, double max);
 
 }

@@ -1,7 +1,7 @@
 #include "DecompositionWidget.h"
 #include "ui_DecompositionWidget.h"
 
-#include <src/DecompositionItem.h>
+#include <src/DecompositionItemWidget.h>
 #include <QScrollArea>
 
 DecompositionWidget::DecompositionWidget(QWidget *parent) :
@@ -18,10 +18,12 @@ DecompositionWidget::~DecompositionWidget()
 
 void DecompositionWidget::setDecomposition(const Audio::SignalsVectorQt &decomposiiton)
 {
+    clearWidget();
+
     auto layout = new QVBoxLayout(this);
     ui->scrollAreaWidgetContents->setLayout(layout);
     for (auto item : decomposiiton) {
-        auto wdg = new DecompositionItem(this);
+        auto wdg = new DecompositionItemWidget(this);
         m_widgets.push_back(wdg);
         wdg->setSignal(item);
         layout->addWidget(wdg);
@@ -36,4 +38,12 @@ Audio::SignalsVectorQt DecompositionWidget::thresholdedSignals()
     }
 
     return result;
+}
+
+void DecompositionWidget::clearWidget()
+{
+    while (!m_widgets.empty()) {
+        auto w = m_widgets.takeFirst();
+        w->deleteLater();
+    }
 }

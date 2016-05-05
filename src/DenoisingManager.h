@@ -17,12 +17,17 @@ public:
     void makeTestNoise();
     void denoise();
 
+    void makeManualDenoise();
+
     Audio::SignalStd inputSignal() const;
     Audio::SignalStd transformedSignal() const;
     Audio::SignalsVectorStd transformedDecomposition() const;
     Audio::SignalStd outputSignal() const;
 
 private:
+    void makeTransform();
+    void makeInverseTransform();
+
     Audio::SignalStd m_inputSignal;
     Audio::SignalStd m_transformedSignal;
     Audio::SignalStd m_outputSignal;

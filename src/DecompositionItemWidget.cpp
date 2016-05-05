@@ -1,20 +1,11 @@
-#include "DecompositionItem.h"
-#include "ui_DecompositionItem.h"
+#include "DecompositionItemWidget.h"
+#include "ui_DecompositionItemWidget.h"
 
 #include <qcustomplot/qcustomplot.h>
 
-namespace {
-
-double makeThreshold(double input, double max) {
-    auto sign = input > 0 ? 1 : -1;
-    return qMin(input, max) * sign;
-}
-
-}
-
-DecompositionItem::DecompositionItem(QWidget *parent) :
+DecompositionItemWidget::DecompositionItemWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::DecompositionItem)
+    ui(new Ui::DecompositionItemWidget)
 {
     ui->setupUi(this);
     ui->sbThreshold->setMinimum(0);
@@ -30,17 +21,17 @@ DecompositionItem::DecompositionItem(QWidget *parent) :
     connect(ui->sbThreshold, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, [this](int val){ setThreshold(val); });
 }
 
-DecompositionItem::~DecompositionItem()
+DecompositionItemWidget::~DecompositionItemWidget()
 {
     delete ui;
 }
 
-Audio::Signal DecompositionItem::signal() const
+Audio::Signal DecompositionItemWidget::signal() const
 {
     return m_signal;
 }
 
-void DecompositionItem::setSignal(const Audio::Signal &signal)
+void DecompositionItemWidget::setSignal(const Audio::Signal &signal)
 {
     if (m_signal == signal) {
         return;
@@ -56,17 +47,17 @@ void DecompositionItem::setSignal(const Audio::Signal &signal)
     replotSignal();
 }
 
-double DecompositionItem::maxThreshold() const
+double DecompositionItemWidget::maxThreshold() const
 {
     return m_maxThreshold;
 }
 
-double DecompositionItem::threshold() const
+double DecompositionItemWidget::threshold() const
 {
     return m_threshold;
 }
 
-void DecompositionItem::setThreshold(double threshold)
+void DecompositionItemWidget::setThreshold(double threshold)
 {
     if (m_threshold == threshold) {
         return;
@@ -78,18 +69,15 @@ void DecompositionItem::setThreshold(double threshold)
     replotThreshold();
 }
 
-Audio::Signal DecompositionItem::thresholded() const
+Audio::Signal DecompositionItemWidget::thresholded() const
 {
     auto max = m_maxThreshold - m_threshold * m_maxThreshold / 100;
-    Audio::Signal thresholded;
-    for (auto i : m_signal) {
-        thresholded << makeThreshold(i, max);
-    }
-
+    Audio::Signal thresholded = m_signal;
+    Audio::makeThreshold(thresholded, max);
     return thresholded;
 }
 
-void DecompositionItem::updatePlotData()
+void DecompositionItemWidget::updatePlotData()
 {
     if (m_signal.size() == 0) {
         return;
@@ -114,13 +102,13 @@ void DecompositionItem::updatePlotData()
     ui->wPlot->yAxis->setRange(minY, maxY);
 }
 
-void DecompositionItem::replotSignal()
+void DecompositionItemWidget::replotSignal()
 {
     ui->wPlot->graph(0)->setData(m_x, m_signal);
     ui->wPlot->replot();
 }
 
-void DecompositionItem::replotThreshold()
+void DecompositionItemWidget::replotThreshold()
 {
     QVector<double> threshold;
     threshold.fill(m_maxThreshold - m_threshold * m_maxThreshold / 100, m_x.size());
@@ -131,7 +119,7 @@ void DecompositionItem::replotThreshold()
     ui->wPlot->replot();
 }
 
-void DecompositionItem::setMaxThreshold(double maxThreshold)
+void DecompositionItemWidget::setMaxThreshold(double maxThreshold)
 {
     if (m_maxThreshold == maxThreshold) {
         return;
