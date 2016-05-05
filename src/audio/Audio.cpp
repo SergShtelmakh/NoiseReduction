@@ -26,15 +26,6 @@ QAudioFormat format() {
     return format;
 }
 
-//SignalsSourceVector toQtVector(const SignalsVectorStd &data)
-//{
-//    SignalsSourceVector vector;
-//    for (auto i : data) {
-//        vector << SignalSource::fromStdVector(i);
-//    }
-//    return vector;
-//}
-
 double maxAmplitude(const SignalSource &signal)
 {
     double max = 0;

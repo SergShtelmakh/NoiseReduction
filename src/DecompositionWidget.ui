@@ -36,10 +36,26 @@
      <property name="title">
       <string>GroupBox</string>
      </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="AudioPlayerWidget" name="inputSignalPlayerWidget" native="true"/>
+      </item>
+      <item>
+       <widget class="AudioPlayerWidget" name="outputSignalPlayerWidget" native="true"/>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>AudioPlayerWidget</class>
+   <extends>QWidget</extends>
+   <header>src/audio/AudioPlayerWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

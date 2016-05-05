@@ -11,7 +11,7 @@ DenoisingManager::DenoisingManager()
 
 void DenoisingManager::setSignal(const AudioSignal &signal)
 {
-    m_inputSignal = signal.signal();
+    m_inputSignal = signal.source();
 }
 
 void DenoisingManager::denoise()

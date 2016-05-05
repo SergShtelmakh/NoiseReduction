@@ -17,7 +17,7 @@ public:
     ~DecompositionItemWidget();
 
     Audio::SignalSource signal() const;
-    void setSignal(const Audio::SignalSource &signal);
+    void setSignalSource(const Audio::SignalSource &signal);
 
     double maxThreshold() const;
     void setMaxThreshold(double maxThreshold);
@@ -25,7 +25,7 @@ public:
     double threshold() const;
     void setThreshold(double threshold);
 
-    Audio::SignalSource thresholded() const;
+//    Audio::SignalSource thresholded() const;
 
 signals:
     void signalChanged(const Audio::SignalSource &signal);
@@ -37,7 +37,7 @@ private:
     void replotSignal();
     void replotThreshold();
 
-    Audio::SignalSource m_signal;
+    Audio::SignalSource m_signalSource;
     double m_maxThreshold;
     double m_threshold;
 

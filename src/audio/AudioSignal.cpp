@@ -18,22 +18,22 @@ void AudioSignal::load(const QString &str)
 {
     m_file.reset(new Aquila::WaveFile(QString(str).toStdString(), Aquila::StereoChannel::LEFT));
 
-    m_signal = makeSignal(m_file.data());
+    m_signalSource = makeSignal(m_file.data());
 }
 
 void AudioSignal::save(const QString &str)
 {
-    Aquila::WaveFile::save(Aquila::SignalSource(m_signal.toStdVector(), m_file->getSampleFrequency()), QString(str).toStdString());
+    Aquila::WaveFile::save(Aquila::SignalSource(m_signalSource.toStdVector(), m_file->getSampleFrequency()), QString(str).toStdString());
 }
 
-Audio::SignalSource AudioSignal::signal() const
+Audio::SignalSource AudioSignal::source() const
 {
-    return m_signal;
+    return m_signalSource;
 }
 
-void AudioSignal::setSignal(const Audio::SignalSource &signal)
+void AudioSignal::setSignalSource(const Audio::SignalSource &signal)
 {
-    m_signal = signal;
+    m_signalSource = signal;
 }
 
 int AudioSignal::audioLength() const

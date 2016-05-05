@@ -19,12 +19,12 @@ public:
     void load(const QString& str);
     void save(const QString& str);
 
-    Audio::SignalSource signal() const;
-    void setSignal(const Audio::SignalSource& sign);
+    Audio::SignalSource source() const;
+    void setSignalSource(const Audio::SignalSource& sign);
 
     int audioLength() const;
 
 private:
-    Audio::SignalSource m_signal;
+    Audio::SignalSource m_signalSource;
     QScopedPointer<Aquila::WaveFile> m_file;
 };

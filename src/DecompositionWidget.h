@@ -20,13 +20,14 @@ public:
     ~DecompositionWidget();
 
     void setDecomposition(const Audio::SignalsSourceVector &decomposiiton);
-    Audio::SignalsSourceVector thresholdedSignals();
+    QVector<double> thresholdsData() const;
 
 private:
     void clearWidget();
 
     Ui::DecompositionWidget *ui;
     QVector<DecompositionItemWidget *> m_widgets;
+    int m_itemsCount = 0;
 };
 
 #endif // DECOMPOSITIONWIDGET_H

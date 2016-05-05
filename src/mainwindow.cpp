@@ -129,11 +129,6 @@ QCustomPlot *MainWindow::getWidgetForPlot(MainWindow::PlotType type)
     return nullptr;
 }
 
-//void MainWindow::makePlot(MainWindow::PlotType type, const Audio::SignalStd &signal)
-//{
-//    PlotManager::plot(getWidgetForPlot(type), QVector<double>::fromStdVector(signal), 0, signal.size());
-//}
-
 void MainWindow::makePlot(MainWindow::PlotType type, const AudioSignal &signal)
 {
     PlotManager::plot(getWidgetForPlot(type), signal);

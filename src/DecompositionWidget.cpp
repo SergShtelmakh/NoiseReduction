@@ -9,6 +9,7 @@ DecompositionWidget::DecompositionWidget(QWidget *parent) :
     ui(new Ui::DecompositionWidget)
 {
     ui->setupUi(this);
+    ui->inputSignalPlayerWidget->setFileName("test.wav");
 }
 
 DecompositionWidget::~DecompositionWidget()
@@ -16,25 +17,29 @@ DecompositionWidget::~DecompositionWidget()
     delete ui;
 }
 
-void DecompositionWidget::setDecomposition(const Audio::SignalsSourceVector &decomposiiton)
+void DecompositionWidget::setDecomposition(const Audio::SignalsSourceVector &decomposition)
 {
     clearWidget();
 
+    m_itemsCount = decomposition.size();
+
     auto layout = new QVBoxLayout(this);
     ui->scrollAreaWidgetContents->setLayout(layout);
-    for (auto item : decomposiiton) {
+    for (auto item : decomposition) {
         auto wdg = new DecompositionItemWidget(this);
         m_widgets.push_back(wdg);
-        wdg->setSignal(item);
+        wdg->setSignalSource(item);
         layout->addWidget(wdg);
     }
+
+    Q_ASSERT(m_itemsCount == m_widgets.size());
 }
 
-Audio::SignalsSourceVector DecompositionWidget::thresholdedSignals()
+QVector<double> DecompositionWidget::thresholdsData() const
 {
-    Audio::SignalsSourceVector result;
+    QVector<double> result;
     for (auto w : m_widgets) {
-        result << w->thresholded();
+        result << w->threshold();
     }
 
     return result;
@@ -46,4 +51,5 @@ void DecompositionWidget::clearWidget()
         auto w = m_widgets.takeFirst();
         w->deleteLater();
     }
+
 }

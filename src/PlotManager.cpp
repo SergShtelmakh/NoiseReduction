@@ -37,14 +37,9 @@ void PlotManager::plot(QCustomPlot *widget, const Audio::SignalSource &data, dou
     widget->replot();
 }
 
-//void PlotManager::plot(QCustomPlot *widget, const Audio::SignalStd &data, double minX, double maxX)
-//{
-//    plot(widget, Audio::SignalSource::fromStdVector(data), minX, maxX);
-//}
-
 void PlotManager::plot(QCustomPlot *widget, const AudioSignal &signal)
 {
-    plot(widget, signal.signal(), 0, signal.audioLength());
+    plot(widget, signal.source(), 0, signal.audioLength());
 }
 
 void PlotManager::createDecompositionPlot(const Audio::SignalsSourceVector &data)
@@ -66,11 +61,3 @@ void PlotManager::createDecompositionPlot(const Audio::SignalsSourceVector &data
     decompositionPlot->show();
 }
 
-//void PlotManager::createDecompositionPlot(const Audio::SignalsVectorStd &data)
-//{
-//    Audio::SignalsSourceVector vector;
-//    for (auto i : data) {
-//        vector << Audio::SignalSource::fromStdVector(i);
-//    }
-//    createDecompositionPlot(vector);
-//}
