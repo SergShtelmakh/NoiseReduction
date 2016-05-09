@@ -14,7 +14,7 @@ DecompositionWidget::DecompositionWidget(QWidget *parent)
     m_audioSignal.reset(new AudioSignal());
     m_audioSignal->load("test.wav");
     m_denoisingManager->setSignal(*m_audioSignal.data());
-    m_denoisingManager->makeManualDenoise();
+    m_denoisingManager->makeTransform();
     setDecomposition(m_denoisingManager->transformedDecomposition());
 }
 

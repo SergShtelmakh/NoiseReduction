@@ -19,20 +19,6 @@ void DenoisingManager::makeThreshold(const QVector<double> &thr)
     m_wavelet->makeThreshold(thr);
 }
 
-void DenoisingManager::denoise()
-{
-    makeTransform();
-
-    // TODO thresholding
-
-    makeInverseTransform();
-}
-
-void DenoisingManager::makeManualDenoise()
-{
-    makeTransform();
-}
-
 Audio::SignalSource DenoisingManager::inputSignal() const
 {
     return m_inputSignal;

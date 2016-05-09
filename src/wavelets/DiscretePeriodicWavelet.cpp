@@ -42,14 +42,12 @@ void DiscretePeriodicWavelet::makeThreshold(const QVector<double> &thresholds)
         qDebug() << "i" << i;
         auto currentSize = m_length[i];
         end = begin + currentSize;
-        for (int j = begin; j < end && j < m_transformedSignal.size(); j++) {
+        for (int j = begin; j < end; j++) {
             m_transformedSignal[j] = qMin(m_transformedSignal[j], thresholds[i]);
         }
         begin = end + 1;
     }
-
 }
-
 
 void DiscretePeriodicWavelet::makeInverseTransform(const Audio::SignalSource &signal)
 {
@@ -77,27 +75,10 @@ QString DiscretePeriodicWavelet::resultText()
     return text;
 }
 
-void DiscretePeriodicWavelet::denoising()
-{
-    auto currentSize = 0;
-    auto begin = 0;
-    auto end = 0;
-    for (size_t i = 0; i < m_length.size() - 1; ++i) {
-        currentSize = m_length[i];
-        end = begin + currentSize;
-        for (int j = begin; j < end; j++) {
-//            m_transformedSignal[j] = denoise(m_transformedSignal[j], i);
-        }
-        begin = end + 1;
-    }
-}
-
 Audio::SignalsSourceVector DiscretePeriodicWavelet::decomposition()
 {
     if (m_transformedSignal.empty())
         return Audio::SignalsSourceVector();
-
-   // Q_ASSERT(m_length.back() == static_cast<int>(m_transformedSignal.size()));
 
     auto begin = 0;
     auto end = 0;

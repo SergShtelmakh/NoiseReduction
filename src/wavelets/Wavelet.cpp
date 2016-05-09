@@ -78,9 +78,6 @@ WaveletHash makeWaveletNameHash() {
 TransformTypeHash makeTransformNameHash() {
     TransformTypeHash names;
     names[TransformType::DiscretePeriodic1D] = "Discrete Periodic";
-    names[TransformType::DiscreteSymmetric1D] = "Discrete Symmetric";
-    names[TransformType::Stationary1D] = "Stationary";
-
     return names;
 }
 
@@ -94,7 +91,6 @@ Wavelet::Wavelet()
 
 Wavelet::~Wavelet()
 {
-
 }
 
 void Wavelet::setWaveletFunction(Wavelet::WaveletFunction function)
@@ -137,19 +133,12 @@ Wavelet *Wavelet::create(Wavelet::WaveletTransformType type)
     switch (type) {
     case WaveletTransformType::DiscretePeriodic1D:
         return new DiscretePeriodicWavelet;
-    case WaveletTransformType::DiscreteSymmetric1D:
-//        return new DiscreteSymmetricWavelet();
-    case WaveletTransformType::Stationary1D:
-//        return new StationaryWavelet();
     default:
-//        Q_ASSERT(false);
-        break;
+        Q_ASSERT(false);
     }
 
     return nullptr;
 }
-
-
 
 Audio::SignalSource Wavelet::transformedSignal() const
 {

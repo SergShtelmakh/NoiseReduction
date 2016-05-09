@@ -30,12 +30,7 @@ private slots:
     void timerTimeout();
 
 private:
-    struct Ranges {
-        double minX;
-        double maxX;
-        double minY;
-        double maxY;
-    };
+    struct Ranges { double minX; double maxX; double minY; double maxY; };
 
     void updateSignalPlot();
     void updateTimeLinePlot();

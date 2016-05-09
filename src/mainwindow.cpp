@@ -43,38 +43,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pbStart_clicked()
 {
-    // Libs test
-
-    //auto fileName = QFileDialog::getOpenFileName(this, tr("Open wave file"), "", tr("Wave Files (*.wav)"));
-
     m_testSignal->load(cTestFile);
     makePlot(PlotType::InputSignal, *m_testSignal.data());
 
     m_noisedSignal->load(cTestFile);
     makePlot(PlotType::NoiseSignal, *m_noisedSignal.data());
 
-//    makeTransform(SignalForTransform::Input, m_testSignal->input());
-//    makeTransform(SignalForTransform::Noise, m_noisedSignal->input());
-
-
-//    makePlot(PlotType::ResultSignal, m_signalWavelet->resultSignal());
-
-//    auto fileName = outputFileName();
-//    qDebug() << fileName;
-//    Aquila::WaveFile::save(Aquila::SignalSource(m_signalWavelet->resultSignal(), testFile.getSampleFrequency()), fileName.toStdString());
-//    m_testSignal->save(outputFileName());
-//    m_denoisingManager->setSignal(*m_noisedSignal.data());
-//    m_denoisingManager->makeManualDenoise();
-
     m_decompositionWidget->show();
-
-    //PlotManager::createDecompositionPlot(m_denoisingManager->transformedDecomposition());
-
 }
 
 void MainWindow::on_pbStop_clicked()
 {
-
 }
 
 void MainWindow::on_actionRecorder_triggered()
@@ -86,28 +65,6 @@ void MainWindow::log(const QString &str)
 {
     ui->tbResult->append(QString("[%1] %2\n").arg(QTime::currentTime().toString(), str));
 }
-
-//void MainWindow::makeTransform(MainWindow::SignalForTransform sigType, const Audio::SignalStd &)
-//{
-//    switch (sigType) {
-//    case SignalForTransform::Input:
-//        log("Prepare to input transform");
-////        m_signalWavelet->makeTransform(signal);
-////        makePlot(PlotType::InputSignalTransformed, m_testSignal->transformed());
-//        break;
-//    case SignalForTransform::Noise:
-//        log("Prepare to noise transform");
-////        m_noiseWavelet->makeTransform(signal);
-////        makePlot(PlotType::NoiseSignalTransformed, m_noiseWavelet->transformedSignal());
-//        break;
-//    default:
-//        Q_ASSERT(false);
-//        break;
-//    }
-
-////    log(m_signalWavelet->resultText());
-////    log(m_noiseWavelet->resultText());
-//}
 
 QCustomPlot *MainWindow::getWidgetForPlot(MainWindow::PlotType type)
 {

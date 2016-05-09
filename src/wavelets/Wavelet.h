@@ -66,11 +66,9 @@ public:
 
     enum class WaveletTransformType {
         DiscretePeriodic1D  = 0,
-        DiscreteSymmetric1D = 1,
-        Stationary1D        = 2,
 
         First = WaveletTransformType::DiscretePeriodic1D,
-        Last  = WaveletTransformType::Stationary1D
+        Last  = WaveletTransformType::DiscretePeriodic1D
     };
 
     Wavelet();
@@ -83,12 +81,15 @@ public:
     static Wavelet *create(WaveletTransformType type);
 
     virtual WaveletTransformType type() = 0;
+
     virtual void makeTransform(const Audio::SignalSource& signal) = 0;
-    virtual void makeInverseTransform(const Audio::SignalSource& signal) = 0;
-    virtual QString resultText() = 0;
-    virtual void denoising() = 0;
-    virtual Audio::SignalsSourceVector decomposition() = 0;
     virtual void makeThreshold(const QVector<double>& thresholds) = 0;
+    virtual void makeInverseTransform(const Audio::SignalSource& signal) = 0;
+
+    virtual QString resultText() = 0;
+//    virtual void denoising() = 0;
+    virtual Audio::SignalsSourceVector decomposition() = 0;
+
 
     void setWaveletFunction(WaveletFunction function);
     void setLevel(int level);

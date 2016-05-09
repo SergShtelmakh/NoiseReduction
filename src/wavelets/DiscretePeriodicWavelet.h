@@ -15,7 +15,7 @@ public:
     void makeInverseTransform(const Audio::SignalSource& signal) override;
 
     QString resultText() override;
-    void denoising() override;
+//    void denoising() override;
     Audio::SignalsSourceVector decomposition() override;
 
 private:
