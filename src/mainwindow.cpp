@@ -17,9 +17,9 @@ namespace {
     const QString cTestFile  = "test.wav";
     const QString cNoiseFile = "noise.wav";
 
-    QString outputFileName() {
-        return qApp->applicationDirPath() + QString("/res%1.wav").arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
-    }
+//    QString outputFileName() {
+//        return qApp->applicationDirPath() + QString("/res%1.wav").arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
+//    }
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_recordWidget(new AudioRecordWidget)
     , m_testSignal(new AudioSignal)
     , m_noisedSignal(new AudioSignal)
-    , m_denoisingManager(new DenoisingManager)
+    , m_decompositionWidget(new DecompositionWidget)
 {
     ui->setupUi(this);
     ui->cbWaveletType->addItems(Wavelet::waveletFunctionsNames());
@@ -62,10 +62,11 @@ void MainWindow::on_pbStart_clicked()
 //    auto fileName = outputFileName();
 //    qDebug() << fileName;
 //    Aquila::WaveFile::save(Aquila::SignalSource(m_signalWavelet->resultSignal(), testFile.getSampleFrequency()), fileName.toStdString());
-    m_testSignal->save(outputFileName());
-    m_denoisingManager->setSignal(*m_noisedSignal.data());
-    m_denoisingManager->makeManualDenoise();
+//    m_testSignal->save(outputFileName());
+//    m_denoisingManager->setSignal(*m_noisedSignal.data());
+//    m_denoisingManager->makeManualDenoise();
 
+    m_decompositionWidget->show();
 
     //PlotManager::createDecompositionPlot(m_denoisingManager->transformedDecomposition());
 

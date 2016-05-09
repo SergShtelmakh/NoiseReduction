@@ -4,12 +4,18 @@
 #include <src/DecompositionItemWidget.h>
 #include <QScrollArea>
 
-DecompositionWidget::DecompositionWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::DecompositionWidget)
+DecompositionWidget::DecompositionWidget(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::DecompositionWidget)
+    , m_denoisingManager(new DenoisingManager)
 {
     ui->setupUi(this);
     ui->inputSignalPlayerWidget->setFileName("test.wav");
+    m_audioSignal.reset(new AudioSignal());
+    m_audioSignal->load("test.wav");
+    m_denoisingManager->setSignal(*m_audioSignal.data());
+    m_denoisingManager->makeManualDenoise();
+    setDecomposition(m_denoisingManager->transformedDecomposition());
 }
 
 DecompositionWidget::~DecompositionWidget()
@@ -39,7 +45,7 @@ QVector<double> DecompositionWidget::thresholdsData() const
 {
     QVector<double> result;
     for (auto w : m_widgets) {
-        result << w->threshold();
+        result << w->thresholdValue();
     }
 
     return result;
@@ -53,3 +59,17 @@ void DecompositionWidget::clearWidget()
     }
 
 }
+
+void DecompositionWidget::on_pbProcess_clicked()
+{
+    m_denoisingManager->makeThreshold(thresholdsData());
+    m_denoisingManager->makeInverseTransform();
+
+    AudioSignal signal;
+    signal.setSignalSource(m_denoisingManager->outputSignal());
+    signal.save("temp.wave");
+
+    ui->outputSignalPlayerWidget->setFileName("temp.wave");
+
+}
+

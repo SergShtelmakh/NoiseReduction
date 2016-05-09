@@ -23,7 +23,9 @@ void AudioSignal::load(const QString &str)
 
 void AudioSignal::save(const QString &str)
 {
-    Aquila::WaveFile::save(Aquila::SignalSource(m_signalSource.toStdVector(), m_file->getSampleFrequency()), QString(str).toStdString());
+    auto frequency = m_file ? m_file->getSampleFrequency() : Audio::defaultSampleFrequency();
+
+    Aquila::WaveFile::save(Aquila::SignalSource(m_signalSource.toStdVector(), frequency), QString(str).toStdString());
 }
 
 Audio::SignalSource AudioSignal::source() const

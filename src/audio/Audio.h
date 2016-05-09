@@ -13,5 +13,6 @@ QAudioFormat format();
 double maxAmplitude(const SignalSource &signal);
 void makeWhiteNoise(SignalSource &signal, double maxAmplitude);
 void makeThreshold(SignalSource &signal, double max);
+double defaultSampleFrequency();
 
 }

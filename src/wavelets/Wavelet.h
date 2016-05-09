@@ -88,6 +88,7 @@ public:
     virtual QString resultText() = 0;
     virtual void denoising() = 0;
     virtual Audio::SignalsSourceVector decomposition() = 0;
+    virtual void makeThreshold(const QVector<double>& thresholds) = 0;
 
     void setWaveletFunction(WaveletFunction function);
     void setLevel(int level);

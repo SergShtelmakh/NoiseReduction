@@ -41,6 +41,13 @@
        <widget class="AudioPlayerWidget" name="inputSignalPlayerWidget" native="true"/>
       </item>
       <item>
+       <widget class="QPushButton" name="pbProcess">
+        <property name="text">
+         <string>Process</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="AudioPlayerWidget" name="outputSignalPlayerWidget" native="true"/>
       </item>
      </layout>

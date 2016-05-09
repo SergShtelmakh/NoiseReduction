@@ -14,6 +14,11 @@ void DenoisingManager::setSignal(const AudioSignal &signal)
     m_inputSignal = signal.source();
 }
 
+void DenoisingManager::makeThreshold(const QVector<double> &thr)
+{
+    m_wavelet->makeThreshold(thr);
+}
+
 void DenoisingManager::denoise()
 {
     makeTransform();
@@ -26,10 +31,6 @@ void DenoisingManager::denoise()
 void DenoisingManager::makeManualDenoise()
 {
     makeTransform();
-
-    m_widget.reset(new DecompositionWidget());
-    m_widget->setDecomposition(m_wavelet->decomposition());
-    m_widget->show();
 }
 
 Audio::SignalSource DenoisingManager::inputSignal() const

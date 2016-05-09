@@ -9,6 +9,7 @@ class AudioSignal;
 class AudioRecordWidget;
 class PlotManager;
 class DenoisingManager;
+class DecompositionWidget;
 
 namespace Ui {
 class MainWindow;
@@ -52,9 +53,7 @@ private:
     void clearLog();
     void log(const QString& str);
 
-//    void makePlot(PlotType type, const Audio::SignalStd& signal);
     void makePlot(PlotType type, const AudioSignal& signal);
-//    void makeTransform(SignalForTransform sigType, const Audio::SignalStd& signal);
     QCustomPlot *getWidgetForPlot(PlotType type);
 
     Ui::MainWindow *ui;
@@ -62,5 +61,6 @@ private:
     QScopedPointer<AudioRecordWidget> m_recordWidget;
     QScopedPointer<AudioSignal> m_testSignal;
     QScopedPointer<AudioSignal> m_noisedSignal;
-    QScopedPointer<DenoisingManager> m_denoisingManager;
+//    QScopedPointer<DenoisingManager> m_denoisingManager;
+    QScopedPointer<DecompositionWidget> m_decompositionWidget;
 };

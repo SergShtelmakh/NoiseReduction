@@ -1,9 +1,10 @@
-#ifndef DECOMPOSITIONWIDGET_H
-#define DECOMPOSITIONWIDGET_H
+#pragma once
 
 #include <QWidget>
 
 #include <src/audio/Audio.h>
+#include <src/DenoisingManager.h>
+#include <QScopedPointer>
 
 class DecompositionItemWidget;
 
@@ -22,12 +23,15 @@ public:
     void setDecomposition(const Audio::SignalsSourceVector &decomposiiton);
     QVector<double> thresholdsData() const;
 
+private slots:
+    void on_pbProcess_clicked();
+
 private:
     void clearWidget();
 
     Ui::DecompositionWidget *ui;
     QVector<DecompositionItemWidget *> m_widgets;
+    QScopedPointer<DenoisingManager> m_denoisingManager;
     int m_itemsCount = 0;
+    QScopedPointer<AudioSignal> m_audioSignal;
 };
-
-#endif // DECOMPOSITIONWIDGET_H

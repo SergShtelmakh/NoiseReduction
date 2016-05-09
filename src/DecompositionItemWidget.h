@@ -25,7 +25,7 @@ public:
     double threshold() const;
     void setThreshold(double threshold);
 
-//    Audio::SignalSource thresholded() const;
+    double thresholdValue() const;
 
 signals:
     void signalChanged(const Audio::SignalSource &signal);

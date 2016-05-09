@@ -45,6 +45,9 @@
        <property name="smallDecimalPoint">
         <bool>false</bool>
        </property>
+       <property name="digitCount">
+        <number>5</number>
+       </property>
        <property name="segmentStyle">
         <enum>QLCDNumber::Flat</enum>
        </property>

@@ -50,4 +50,9 @@ void makeThreshold(SignalSource &signal, double max) {
     }
 }
 
+double defaultSampleFrequency()
+{
+    return 48000;
+}
+
 }
