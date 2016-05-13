@@ -14,12 +14,11 @@ public:
     void setSignal(const AudioSignal& signal);
     void makeThreshold(const QVector<double>& thr);
 
-    void makeTestNoise();
-
     Audio::SignalSource inputSignal() const;
     Audio::SignalSource transformedSignal() const;
     Audio::SignalsSourceVector transformedDecomposition() const;
     Audio::SignalSource outputSignal() const;
+    Audio::SignalSource thresholdedSignal() const;
 
     void makeTransform();
     void makeInverseTransform();

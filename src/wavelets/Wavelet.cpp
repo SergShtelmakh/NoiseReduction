@@ -150,6 +150,11 @@ Audio::SignalSource Wavelet::resultSignal() const
     return Audio::SignalSource::fromStdVector(m_resultSignal);
 }
 
+Audio::SignalSource Wavelet::thresholded() const
+{
+    return Audio::SignalSource::fromStdVector(m_thresholded);
+}
+
 std::string Wavelet::toStdString(Wavelet::WaveletFunction function)
 {
     static auto names = makeWaveletNameHash();

@@ -50,6 +50,9 @@ void MainWindow::on_pbStart_clicked()
     makePlot(PlotType::NoiseSignal, *m_noisedSignal.data());
 
     m_decompositionWidget->show();
+
+    auto wdg = new DecompositionWidget(true);
+    wdg->show();
 }
 
 void MainWindow::on_pbStop_clicked()

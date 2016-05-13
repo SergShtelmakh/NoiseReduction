@@ -42,6 +42,13 @@ void PlotManager::plot(QCustomPlot *widget, const AudioSignal &signal)
     plot(widget, signal.source(), 0, signal.audioLength());
 }
 
+void PlotManager::plot(const Audio::SignalSource &data)
+{
+    QCustomPlot * pl = new QCustomPlot();
+    plot(pl,data,0,data.size());
+    pl->show();
+}
+
 void PlotManager::createDecompositionPlot(const Audio::SignalsSourceVector &data)
 {
     if (data.empty()) {

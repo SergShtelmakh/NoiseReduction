@@ -15,6 +15,7 @@ public:
 
     static void plot(QCustomPlot* widget, const Audio::SignalSource &data, double minX, double maxX);
     static void plot(QCustomPlot* widget, const AudioSignal &signal);
+    static void plot(const Audio::SignalSource& data);
 
     static void createDecompositionPlot(const Audio::SignalsSourceVector &data);
 };

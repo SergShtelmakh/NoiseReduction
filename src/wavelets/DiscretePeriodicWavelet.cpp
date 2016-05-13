@@ -33,6 +33,8 @@ void DiscretePeriodicWavelet::makeThreshold(const QVector<double> &thresholds)
         return;
     }
 
+    m_thresholded.clear();
+
     Q_ASSERT(thresholds.size() == static_cast<int>(m_length.size() - 1));
 
     auto begin = 0;
@@ -43,7 +45,8 @@ void DiscretePeriodicWavelet::makeThreshold(const QVector<double> &thresholds)
         auto currentSize = m_length[i];
         end = begin + currentSize;
         for (int j = begin; j < end; j++) {
-            m_transformedSignal[j] = qMin(m_transformedSignal[j], thresholds[i]);
+            auto sign = m_transformedSignal[j] > 0 ? 1.0 : -1.0;
+            m_thresholded.push_back(sign * qMin(qAbs(m_transformedSignal[j]), thresholds[i]));
         }
         begin = end + 1;
     }
@@ -51,8 +54,12 @@ void DiscretePeriodicWavelet::makeThreshold(const QVector<double> &thresholds)
 
 void DiscretePeriodicWavelet::makeInverseTransform(const Audio::SignalSource &signal)
 {
+    if (m_transformedSignal.empty() && m_thresholded.empty())
+        return;
+
+
     m_transformedSignal = signal.toStdVector();
-    idwt(m_transformedSignal, m_flag, toStdString(m_waveletFunction), m_resultSignal, m_length);
+    idwt(m_thresholded, m_flag, toStdString(m_waveletFunction), m_resultSignal, m_length);
 }
 
 QString DiscretePeriodicWavelet::resultText()

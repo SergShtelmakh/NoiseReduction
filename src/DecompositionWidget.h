@@ -17,17 +17,16 @@ class DecompositionWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit DecompositionWidget(QWidget *parent = 0);
+    explicit DecompositionWidget(bool noised = false,QWidget *parent = 0);
     ~DecompositionWidget();
-
-    void setDecomposition(const Audio::SignalsSourceVector &decomposiiton);
-    QVector<double> thresholdsData() const;
 
 private slots:
     void on_pbProcess_clicked();
 
 private:
     void clearWidget();
+    void processAudioSignal();
+    QVector<double> thresholdsData() const;
 
     Ui::DecompositionWidget *ui;
     QVector<DecompositionItemWidget *> m_widgets;

@@ -1,9 +1,5 @@
 #include "DenoisingManager.h"
 
-#include <QDebug>
-
-#include <QTime>
-
 DenoisingManager::DenoisingManager()
     : m_wavelet(Wavelet::create(Wavelet::WaveletTransformType::DiscretePeriodic1D))
 {
@@ -14,9 +10,9 @@ void DenoisingManager::setSignal(const AudioSignal &signal)
     m_inputSignal = signal.source();
 }
 
-void DenoisingManager::makeThreshold(const QVector<double> &thr)
+void DenoisingManager::makeThreshold(const QVector<double> &thresholds)
 {
-    m_wavelet->makeThreshold(thr);
+    m_wavelet->makeThreshold(thresholds);
 }
 
 Audio::SignalSource DenoisingManager::inputSignal() const
@@ -37,6 +33,11 @@ Audio::SignalsSourceVector DenoisingManager::transformedDecomposition() const
 Audio::SignalSource DenoisingManager::outputSignal() const
 {
     return m_outputSignal;
+}
+
+Audio::SignalSource DenoisingManager::thresholdedSignal() const
+{
+    return m_wavelet->thresholded();
 }
 
 void DenoisingManager::makeTransform()

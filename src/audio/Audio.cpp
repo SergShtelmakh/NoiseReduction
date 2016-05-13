@@ -36,18 +36,23 @@ double maxAmplitude(const SignalSource &signal)
     return max;
 }
 
-void makeWhiteNoise(SignalSource &signal, double maxAmplitude)
+SignalSource makeWhiteNoise(SignalSource &signal, double maxAmplitude)
 {
+    SignalSource result;
     for (auto sample : signal) {
-        sample = sample + rand(-maxAmplitude, maxAmplitude);
+        result << sample + rand(-maxAmplitude, maxAmplitude);
     }
+    return result;
 }
 
-void makeThreshold(SignalSource &signal, double max) {
+SignalSource makeThreshold(SignalSource &signal, double max)
+{
+    SignalSource result;
     for (auto i : signal) {
         auto sign = i > 0 ? 1 : -1;
-        i = qMin(i, max) * sign;
+        result << qMin(i, max) * sign;
     }
+    return result;
 }
 
 double defaultSampleFrequency()

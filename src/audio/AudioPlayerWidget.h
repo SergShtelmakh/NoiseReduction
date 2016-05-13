@@ -21,6 +21,7 @@ public:
     ~AudioPlayerWidget();
 
     void setFileName(const QString &fileName);
+    void setSignalSource(const Audio::SignalSource& signalSource);
 
 private slots:
     void on_pbPlay_clicked();

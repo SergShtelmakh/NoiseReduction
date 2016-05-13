@@ -13,16 +13,17 @@ class AudioSignal
 {
 
 public:
-    static Audio::SignalSource makeSignal(Aquila::WaveFile *wave);
-
     AudioSignal();
-    void load(const QString& str);
-    void save(const QString& str);
+    AudioSignal(const QString& fileName);
+    AudioSignal(const Audio::SignalSource& signalSource);
+
+    void load(const QString& fileName);
+    void save(const QString& fileName);
 
     Audio::SignalSource source() const;
-    void setSignalSource(const Audio::SignalSource& sign);
-
     int audioLength() const;
+
+    void makeWhiteNoise();
 
 private:
     Audio::SignalSource m_signalSource;

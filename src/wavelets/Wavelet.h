@@ -87,7 +87,6 @@ public:
     virtual void makeInverseTransform(const Audio::SignalSource& signal) = 0;
 
     virtual QString resultText() = 0;
-//    virtual void denoising() = 0;
     virtual Audio::SignalsSourceVector decomposition() = 0;
 
 
@@ -96,6 +95,7 @@ public:
 
     Audio::SignalSource transformedSignal() const;
     Audio::SignalSource resultSignal() const;
+    Audio::SignalSource thresholded() const;
 
 protected:
     static std::string toStdString(WaveletFunction function);
@@ -107,6 +107,7 @@ protected:
 
     std::vector<double> m_inputSignal;
     std::vector<double> m_transformedSignal;
+    std::vector<double> m_thresholded;
     std::vector<double> m_resultSignal;
 
 private:

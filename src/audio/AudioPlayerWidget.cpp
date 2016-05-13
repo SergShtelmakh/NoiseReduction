@@ -25,7 +25,17 @@ AudioPlayerWidget::~AudioPlayerWidget()
 
 void AudioPlayerWidget::setFileName(const QString &fileName)
 {
-    m_signal->load(fileName);
+    m_signal.reset(new AudioSignal(fileName));
+    m_player.setMedia(QUrl::fromLocalFile(fileName));
+    updateSignalPlot();
+    updateTimeLinePlot();
+}
+
+void AudioPlayerWidget::setSignalSource(const Audio::SignalSource &signalSource)
+{
+    m_signal.reset(new AudioSignal(signalSource));
+    auto fileName = "temp.wav";
+    m_signal->save(fileName);
     m_player.setMedia(QUrl::fromLocalFile(fileName));
     updateSignalPlot();
     updateTimeLinePlot();
@@ -109,5 +119,4 @@ void AudioPlayerWidget::updateTimeLinePlot()
 
     ui->audioPlot->graph(1)->setData(x, y);
     ui->audioPlot->replot();
-
 }

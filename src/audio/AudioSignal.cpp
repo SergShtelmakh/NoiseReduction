@@ -1,7 +1,9 @@
 #include "AudioSignal.h"
 #include <QVector>
 
-Audio::SignalSource AudioSignal::makeSignal(Aquila::WaveFile *wave)
+namespace {
+
+Audio::SignalSource makeSignal(Aquila::WaveFile *wave)
 {
     Audio::SignalSource resultSignal;
     for (auto sample : *wave) {
@@ -10,8 +12,20 @@ Audio::SignalSource AudioSignal::makeSignal(Aquila::WaveFile *wave)
     return resultSignal;
 }
 
+}
+
 AudioSignal::AudioSignal()
 {
+}
+
+AudioSignal::AudioSignal(const QString &fileName)
+{
+    load(fileName);
+}
+
+AudioSignal::AudioSignal(const Audio::SignalSource &signalSource)
+{
+    m_signalSource = signalSource;
 }
 
 void AudioSignal::load(const QString &str)
@@ -33,12 +47,12 @@ Audio::SignalSource AudioSignal::source() const
     return m_signalSource;
 }
 
-void AudioSignal::setSignalSource(const Audio::SignalSource &signal)
-{
-    m_signalSource = signal;
-}
-
 int AudioSignal::audioLength() const
 {
     return m_file ? m_file->getAudioLength() : 0;
+}
+
+void AudioSignal::makeWhiteNoise()
+{
+    m_signalSource = Audio::makeWhiteNoise(m_signalSource, 10000);
 }
