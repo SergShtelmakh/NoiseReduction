@@ -36,6 +36,14 @@ private slots:
 
     void on_cbTransformType_currentIndexChanged(int index);
 
+    void on_pbShowSourceSignal_clicked();
+
+    void on_pbMakeWhiteNoise_clicked();
+
+    void on_pbManualDenoising_clicked();
+
+    void on_pbAutomaticDenoising_clicked();
+
 private:
     enum class PlotType {
         InputSignal,
@@ -62,5 +70,5 @@ private:
     QScopedPointer<AudioSignal> m_testSignal;
     QScopedPointer<AudioSignal> m_noisedSignal;
 //    QScopedPointer<DenoisingManager> m_denoisingManager;
-    QScopedPointer<DenoisingWidget> m_decompositionWidget;
+    QScopedPointer<DenoisingWidget> m_denoisingWidget;
 };

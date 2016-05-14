@@ -29,11 +29,11 @@ MainWindow::MainWindow(QWidget *parent)
     , m_recordWidget(new AudioRecordWidget)
     , m_testSignal(new AudioSignal)
     , m_noisedSignal(new AudioSignal)
-    , m_decompositionWidget(new DenoisingWidget)
+    , m_denoisingWidget(new DenoisingWidget)
 {
     ui->setupUi(this);
-    ui->cbWaveletType->addItems(Wavelet::waveletFunctionsNames());
-    ui->cbTransformType->addItems(Wavelet::makeTransformsNames());
+//    ui->cbWaveletType->addItems(Wavelet::waveletFunctionsNames());
+//    ui->cbTransformType->addItems(Wavelet::makeTransformsNames());
 }
 
 MainWindow::~MainWindow()
@@ -49,7 +49,7 @@ void MainWindow::on_pbStart_clicked()
     m_noisedSignal->load(cTestFile);
     makePlot(PlotType::NoiseSignal, *m_noisedSignal.data());
 
-    m_decompositionWidget->show();
+    m_denoisingWidget->show();
 
     auto wdg = new DenoisingWidget(true);
     wdg->show();
@@ -66,26 +66,26 @@ void MainWindow::on_actionRecorder_triggered()
 
 void MainWindow::log(const QString &str)
 {
-    ui->tbResult->append(QString("[%1] %2\n").arg(QTime::currentTime().toString(), str));
+//    ui->tbResult->append(QString("[%1] %2\n").arg(QTime::currentTime().toString(), str));
 }
 
 QCustomPlot *MainWindow::getWidgetForPlot(MainWindow::PlotType type)
 {
-    switch (type) {
-    case PlotType::InputSignal:
-        return ui->inpSignPlot;
-    case PlotType::InputSignalTransformed:
-        return ui->inpSignTransPlot;
-    case PlotType::NoiseSignal:
-        return ui->noisePlot;
-    case PlotType::NoiseSignalTransformed:
-        return ui->noiseTransPlot;
-    case PlotType::ResultSignal:
-        return ui->resultPlot;
-    default:
-        Q_ASSERT(false);
-        break;
-    }
+//    switch (type) {
+//    case PlotType::InputSignal:
+//        return ui->inpSignPlot;
+//    case PlotType::InputSignalTransformed:
+//        return ui->inpSignTransPlot;
+//    case PlotType::NoiseSignal:
+//        return ui->noisePlot;
+//    case PlotType::NoiseSignalTransformed:
+//        return ui->noiseTransPlot;
+//    case PlotType::ResultSignal:
+//        return ui->resultPlot;
+//    default:
+//        Q_ASSERT(false);
+//        break;
+//    }
 
     return nullptr;
 }
@@ -112,4 +112,24 @@ void MainWindow::on_leLevel_textChanged(const QString &)
 
 void MainWindow::on_cbTransformType_currentIndexChanged(int)
 {
+}
+
+void MainWindow::on_pbShowSourceSignal_clicked()
+{
+
+}
+
+void MainWindow::on_pbMakeWhiteNoise_clicked()
+{
+
+}
+
+void MainWindow::on_pbManualDenoising_clicked()
+{
+
+}
+
+void MainWindow::on_pbAutomaticDenoising_clicked()
+{
+
 }
