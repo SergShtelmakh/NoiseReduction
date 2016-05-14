@@ -23,9 +23,10 @@ AudioSignal::AudioSignal(const QString &fileName)
     load(fileName);
 }
 
-AudioSignal::AudioSignal(const Audio::SignalSource &signalSource)
+AudioSignal::AudioSignal(const Audio::SignalSource &signalSource, double sampleFrequency)
 {
     m_signalSource = signalSource;
+    m_sampleFrequency = sampleFrequency;
 }
 
 void AudioSignal::load(const QString &str)
@@ -49,7 +50,7 @@ Audio::SignalSource AudioSignal::source() const
 
 int AudioSignal::audioLength() const
 {
-    return m_file ? m_file->getAudioLength() : 0;
+    return m_file ? m_file->getAudioLength() : m_signalSource.size() / (m_sampleFrequency / 1000);
 }
 
 void AudioSignal::makeWhiteNoise()

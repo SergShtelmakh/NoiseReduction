@@ -113,7 +113,6 @@ void AudioPlayerWidget::updateSignalPlot()
 void AudioPlayerWidget::updateTimeLinePlot()
 {
     double xBase = m_plotRanges.maxX * m_currentTime / m_signal->audioLength();
-
     QVector<double> x,y;
     x << xBase << xBase + 1;
     y << m_plotRanges.minY << m_plotRanges.maxY;

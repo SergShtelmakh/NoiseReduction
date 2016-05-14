@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_denoisingWidget(new DenoisingWidget)
 {
     ui->setupUi(this);
-    ui->audioPlayerWidget->setFileName(cTestFile);
+    ui->audioPlayerWidget->setSignalSource(m_signal->source());
 }
 
 MainWindow::~MainWindow()
