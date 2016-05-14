@@ -6,60 +6,118 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1287</width>
-    <height>730</height>
+    <width>832</width>
+    <height>562</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,1">
+  <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,2">
    <item>
-    <widget class="QScrollArea" name="scrollArea">
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>840</width>
-        <height>710</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>GroupBox</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="AudioPlayerWidget" name="inputSignalPlayerWidget" native="true"/>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pbProcess">
-        <property name="text">
-         <string>Process</string>
+    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="2,5">
+     <item>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="title">
+        <string>Settings</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Wavelet type</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="cbWaveletType"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Levels</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="leLevels"/>
+        </item>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="pbPrepare">
+          <property name="text">
+           <string>Prepare</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>265</width>
+          <height>381</height>
+         </rect>
         </property>
        </widget>
-      </item>
-      <item>
-       <widget class="AudioPlayerWidget" name="outputSignalPlayerWidget" native="true"/>
-      </item>
-     </layout>
-    </widget>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Input signal</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QCustomPlot" name="inputTransformedSignalWidget" native="true"/>
+        </item>
+        <item>
+         <widget class="AudioPlayerWidget" name="inputSignalPlayerWidget" native="true"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="title">
+        <string>Output signal</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QCustomPlot" name="outputTransformedSignalWidget" native="true"/>
+        </item>
+        <item>
+         <widget class="AudioPlayerWidget" name="outputSignalPlayerWidget" native="true"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot/qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>AudioPlayerWidget</class>
    <extends>QWidget</extends>
-   <header>src/audio/AudioPlayerWidget.h</header>
+   <header>src/audio/Audioplayerwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

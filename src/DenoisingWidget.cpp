@@ -6,29 +6,22 @@
 
 #include <QScrollArea>
 
-namespace
-{
-    const QString cTestFileName = "test.wav";
-}
-
-
-DenoisingWidget::DenoisingWidget(bool noised, QWidget *parent)
+DenoisingWidget::DenoisingWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::DenoisingWidget)
     , m_denoisingManager(new DenoisingManager)
 {
     ui->setupUi(this);
 
+    ui->cbWaveletType->addItems(Wavelet::waveletFunctionsNames());
+
     // TODO custom file name
-    m_audioSignal.reset(new AudioSignal(cTestFileName));
+//    m_inputAudioSignal.reset(new AudioSignal(cTestFileName));
 
-    if (noised)
-        m_audioSignal->makeWhiteNoise();
+//    ui->inputSignalPlayerWidget->setSignalSource(m_inputAudioSignal->source());
+//    m_denoisingManager->setSignal(*m_inputAudioSignal.data());
 
-    ui->inputSignalPlayerWidget->setSignalSource(m_audioSignal->source());
-    m_denoisingManager->setSignal(*m_audioSignal.data());
-
-    processAudioSignal();
+//    processAudioSignal();
 }
 
 DenoisingWidget::~DenoisingWidget()
@@ -74,13 +67,17 @@ void DenoisingWidget::processAudioSignal()
     Q_ASSERT(m_itemsCount == m_widgets.size());
 }
 
-void DenoisingWidget::on_pbProcess_clicked()
+//void DenoisingWidget::on_pbProcess_clicked()
+//{
+//    m_denoisingManager->makeThreshold(thresholdsData());
+//    m_denoisingManager->makeInverseTransform();
+
+//    ui->outputSignalPlayerWidget->setSignalSource(m_denoisingManager->outputSignal());
+
+//    PlotManager::plot(m_denoisingManager->thresholdedSignal());
+//}
+
+void DenoisingWidget::on_pbPrepare_clicked()
 {
-    m_denoisingManager->makeThreshold(thresholdsData());
-    m_denoisingManager->makeInverseTransform();
 
-    ui->outputSignalPlayerWidget->setSignalSource(m_denoisingManager->outputSignal());
-
-    PlotManager::plot(m_denoisingManager->thresholdedSignal());
 }
-

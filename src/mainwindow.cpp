@@ -46,7 +46,7 @@ void MainWindow::on_pbMakeWhiteNoise_clicked()
 
 void MainWindow::on_pbManualDenoising_clicked()
 {
-
+    m_denoisingWidget->show();
 }
 
 void MainWindow::on_pbAutomaticDenoising_clicked()
