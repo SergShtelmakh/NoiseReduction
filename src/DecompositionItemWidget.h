@@ -32,6 +32,9 @@ signals:
     void maxThresholdChanged(double maxThreshold);
     void thresholdChanged(double threshold);
 
+private slots:
+    void on_vsThresholdsLevel_valueChanged(int value);
+
 private:
     void updatePlotData();
     void replotSignal();

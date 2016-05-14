@@ -20,8 +20,16 @@ public:
     explicit DenoisingWidget(QWidget *parent = 0);
     ~DenoisingWidget();
 
+    void setSignal(const AudioSignal& signal);
+
 private slots:
     void on_pbPrepare_clicked();
+
+    void on_cbWaveletType_currentIndexChanged(const QString &arg1);
+
+    void on_sbLevel_valueChanged(int arg1);
+
+    void on_pbProcess_clicked();
 
 private:
     void clearWidget();

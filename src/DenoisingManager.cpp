@@ -15,6 +15,16 @@ void DenoisingManager::makeThreshold(const QVector<double> &thresholds)
     m_wavelet->makeThreshold(thresholds);
 }
 
+void DenoisingManager::setWaveletName(const QString &waveletName)
+{
+    m_wavelet->setWaveletFunction(waveletName);
+}
+
+void DenoisingManager::setLevel(int level)
+{
+    m_wavelet->setLevel(level);
+}
+
 Audio::SignalSource DenoisingManager::inputSignal() const
 {
     return m_inputSignal;

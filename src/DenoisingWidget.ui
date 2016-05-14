@@ -22,15 +22,25 @@
         <string>Settings</string>
        </property>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label">
+        <item row="0" column="1">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="2">
+         <widget class="QPushButton" name="pbPrepare">
           <property name="text">
-           <string>Wavelet type</string>
+           <string>Prepare</string>
           </property>
          </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QComboBox" name="cbWaveletType"/>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_2">
@@ -39,13 +49,30 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="leLevels"/>
+        <item row="0" column="2">
+         <widget class="QComboBox" name="cbWaveletType"/>
         </item>
-        <item row="2" column="1">
-         <widget class="QPushButton" name="pbPrepare">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
           <property name="text">
-           <string>Prepare</string>
+           <string>Wavelet type</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QSpinBox" name="sbLevel">
+          <property name="minimum">
+           <number>2</number>
+          </property>
+          <property name="maximum">
+           <number>10</number>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QPushButton" name="pbProcess">
+          <property name="text">
+           <string>Process</string>
           </property>
          </widget>
         </item>

@@ -98,6 +98,11 @@ void Wavelet::setWaveletFunction(Wavelet::WaveletFunction function)
     m_waveletFunction = function;
 }
 
+void Wavelet::setWaveletFunction(const QString &functionName)
+{
+    static auto names = makeWaveletNameHash();
+    m_waveletFunction = names.key(functionName.toStdString(), WaveletFunction::Haar);
+}
 
 void Wavelet::setLevel(int level)
 {

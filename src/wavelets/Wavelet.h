@@ -89,8 +89,8 @@ public:
     virtual QString resultText() = 0;
     virtual Audio::SignalsSourceVector decomposition() = 0;
 
-
     void setWaveletFunction(WaveletFunction function);
+    void setWaveletFunction(const QString& functionName);
     void setLevel(int level);
 
     Audio::SignalSource transformedSignal() const;

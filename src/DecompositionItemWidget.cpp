@@ -8,17 +8,15 @@ DecompositionItemWidget::DecompositionItemWidget(QWidget *parent) :
     ui(new Ui::DecompositionItemWidget)
 {
     ui->setupUi(this);
-    ui->sbThreshold->setMinimum(0);
-    ui->sbThreshold->setMaximum(100);
-    ui->sbThreshold->setValue(0);
+    ui->vsThresholdsLevel->setMinimum(0);
+    ui->vsThresholdsLevel->setMaximum(100);
+    ui->vsThresholdsLevel->setValue(0);
 
     ui->wPlot->addGraph();
     ui->wPlot->addGraph();
     ui->wPlot->addGraph();
     ui->wPlot->xAxis->setLabel("Time");
     ui->wPlot->yAxis->setLabel("Amplitude");
-
-    connect(ui->sbThreshold, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, [this](int val){ setThreshold(val); });
 }
 
 DecompositionItemWidget::~DecompositionItemWidget()
@@ -128,3 +126,8 @@ void DecompositionItemWidget::setMaxThreshold(double maxThreshold)
     emit maxThresholdChanged(m_maxThreshold);
 }
 
+
+void DecompositionItemWidget::on_vsThresholdsLevel_valueChanged(int value)
+{
+    setThreshold(value);
+}

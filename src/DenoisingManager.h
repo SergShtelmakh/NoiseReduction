@@ -14,6 +14,9 @@ public:
     void setSignal(const AudioSignal& signal);
     void makeThreshold(const QVector<double>& thr);
 
+    void setWaveletName(const QString& waveletName);
+    void setLevel(int level);
+
     Audio::SignalSource inputSignal() const;
     Audio::SignalSource transformedSignal() const;
     Audio::SignalsSourceVector transformedDecomposition() const;
