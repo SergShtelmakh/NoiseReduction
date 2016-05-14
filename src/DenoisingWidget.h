@@ -24,16 +24,10 @@ public:
 
 private slots:
     void on_pbPrepare_clicked();
-
-    void on_cbWaveletType_currentIndexChanged(const QString &arg1);
-
-    void on_sbLevel_valueChanged(int arg1);
-
     void on_pbProcess_clicked();
 
 private:
     void clearWidget();
-    void processAudioSignal();
     QVector<double> thresholdsData() const;
 
     Ui::DenoisingWidget *ui;

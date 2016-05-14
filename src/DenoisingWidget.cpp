@@ -48,9 +48,11 @@ void DenoisingWidget::clearWidget()
     }
 }
 
-void DenoisingWidget::processAudioSignal()
+void DenoisingWidget::on_pbPrepare_clicked()
 {
     m_denoisingManager->setSignal(*m_inputAudioSignal.data());
+    m_denoisingManager->setWaveletName(ui->cbWaveletType->currentText());
+    m_denoisingManager->setLevel(ui->sbLevel->value());
     m_denoisingManager->makeTransform();
     PlotManager::plot(ui->inputTransformedSignalWidget, m_denoisingManager->transformedSignal());
 
@@ -73,27 +75,11 @@ void DenoisingWidget::processAudioSignal()
     Q_ASSERT(m_itemsCount == m_widgets.size());
 }
 
-void DenoisingWidget::on_pbPrepare_clicked()
-{
-    processAudioSignal();
-}
-
-void DenoisingWidget::on_cbWaveletType_currentIndexChanged(const QString &arg1)
-{
-    m_denoisingManager->setWaveletName(arg1);
-}
-
-void DenoisingWidget::on_sbLevel_valueChanged(int arg1)
-{
-    m_denoisingManager->setLevel(arg1);
-}
-
 void DenoisingWidget::on_pbProcess_clicked()
 {
     m_denoisingManager->makeThreshold(thresholdsData());
     m_denoisingManager->makeInverseTransform();
 
-//    PlotManager::plot(ui->inputTransformedSignalWidget, m_denoisingManager->inputSignal());
     PlotManager::plot(ui->outputTransformedSignalWidget, m_denoisingManager->transformedSignal());
     ui->outputSignalPlayerWidget->setSignalSource(m_denoisingManager->outputSignal());
 }

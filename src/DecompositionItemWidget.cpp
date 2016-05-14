@@ -3,6 +3,10 @@
 
 #include <qcustomplot/qcustomplot.h>
 
+namespace {
+    const QPen cThresholdLevelPen = QPen(QBrush(Qt::red), 1);
+}
+
 DecompositionItemWidget::DecompositionItemWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DecompositionItemWidget)
@@ -15,6 +19,8 @@ DecompositionItemWidget::DecompositionItemWidget(QWidget *parent) :
     ui->wPlot->addGraph();
     ui->wPlot->addGraph();
     ui->wPlot->addGraph();
+    ui->wPlot->graph(1)->setPen(cThresholdLevelPen);
+    ui->wPlot->graph(2)->setPen(cThresholdLevelPen);
     ui->wPlot->xAxis->setLabel("Time");
     ui->wPlot->yAxis->setLabel("Amplitude");
 }
