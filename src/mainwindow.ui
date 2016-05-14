@@ -79,7 +79,7 @@
      </widget>
     </item>
     <item>
-     <widget class="AudioPlayerWidget" name="audioPlayer" native="true"/>
+     <widget class="AudioPlayerWidget" name="audioPlayerWidget" native="true"/>
     </item>
    </layout>
   </widget>
@@ -129,7 +129,7 @@
   <customwidget>
    <class>AudioPlayerWidget</class>
    <extends>QWidget</extends>
-   <header>src/Audioplayerwidget.h</header>
+   <header>src/audio/Audioplayerwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -10,6 +10,7 @@ AudioPlayerWidget::AudioPlayerWidget(QWidget *parent)
 
     ui->audioPlot->addGraph(); // signal
     ui->audioPlot->addGraph(); // time line
+    ui->audioPlot->graph(1)->setPen(QPen(QBrush(Qt::red), 5));
     ui->audioPlot->xAxis->setLabel("Time");
     ui->audioPlot->yAxis->setLabel("Amplitude");
 
