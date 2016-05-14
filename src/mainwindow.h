@@ -29,8 +29,11 @@ private slots:
     void on_pbAutomaticDenoising_clicked();
 
 private:
+    void updatePlot();
+
     Ui::MainWindow *ui;
-    QScopedPointer<AudioSignal> m_signal;
+    QScopedPointer<AudioSignal> m_sourceSignal;
+    QScopedPointer<AudioSignal> m_processedSignal;
     QScopedPointer<AudioRecordWidget> m_recordWidget;
     QScopedPointer<DenoisingWidget> m_denoisingWidget;
 };

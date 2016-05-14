@@ -4,25 +4,23 @@
 #include <src/audio/AudioSignal.h>
 #include <src/audio/AudioRecordWidget.h>
 #include <src/DenoisingWidget.h>
+#include <src/PlotManager.h>
 
 namespace {
     const QString cTestFile  = "test.wav";
     const QString cNoiseFile = "noise.wav";
-
-//    QString outputFileName() {
-//        return qApp->applicationDirPath() + QString("/res%1.wav").arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
-//    }
 }
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , m_signal(new AudioSignal(cTestFile))
+    , m_sourceSignal(new AudioSignal(cTestFile))
+    , m_processedSignal(new AudioSignal(m_sourceSignal->source()))
     , m_recordWidget(new AudioRecordWidget)
     , m_denoisingWidget(new DenoisingWidget)
 {
     ui->setupUi(this);
-    ui->audioPlayerWidget->setSignalSource(m_signal->source());
+    updatePlot();
 }
 
 MainWindow::~MainWindow()
@@ -37,12 +35,13 @@ void MainWindow::on_actionRecorder_triggered()
 
 void MainWindow::on_pbShowSourceSignal_clicked()
 {
-
+    PlotManager::plot(m_sourceSignal->source());
 }
 
 void MainWindow::on_pbMakeWhiteNoise_clicked()
 {
-
+    m_processedSignal->makeWhiteNoise();
+    updatePlot();
 }
 
 void MainWindow::on_pbManualDenoising_clicked()
@@ -53,4 +52,9 @@ void MainWindow::on_pbManualDenoising_clicked()
 void MainWindow::on_pbAutomaticDenoising_clicked()
 {
 
+}
+
+void MainWindow::updatePlot()
+{
+    ui->audioPlayerWidget->setSignalSource(m_processedSignal->source());
 }

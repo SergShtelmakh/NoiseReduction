@@ -35,7 +35,7 @@ void AudioPlayerWidget::setFileName(const QString &fileName)
 void AudioPlayerWidget::setSignalSource(const Audio::SignalSource &signalSource)
 {
     m_signal.reset(new AudioSignal(signalSource));
-    auto fileName = "temp.wav";
+    auto fileName = Audio::generateAudioFileName();
     m_signal->save(fileName);
     m_player.setMedia(QUrl::fromLocalFile(fileName));
     updateSignalPlot();

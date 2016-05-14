@@ -14,5 +14,6 @@ double maxAmplitude(const SignalSource &signal);
 SignalSource makeWhiteNoise(SignalSource &signal, double maxAmplitude);
 SignalSource makeThreshold(SignalSource &signal, double max);
 double defaultSampleFrequency();
+QString generateAudioFileName();
 
 }

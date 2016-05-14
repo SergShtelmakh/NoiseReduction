@@ -45,7 +45,8 @@ void PlotManager::plot(QCustomPlot *widget, const AudioSignal &signal)
 void PlotManager::plot(const Audio::SignalSource &data)
 {
     QCustomPlot * pl = new QCustomPlot();
-    plot(pl,data,0,data.size());
+    plot(pl,data,0,data.size() / (Audio::defaultSampleFrequency() / 1000));
+    pl->setGeometry(100, 100, 500, 500);
     pl->show();
 }
 

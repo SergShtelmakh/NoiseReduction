@@ -1,5 +1,7 @@
 #include "Audio.h"
 #include <QVector>
+#include <QApplication>
+#include <QTime>
 
 namespace Audio {
 
@@ -58,6 +60,11 @@ SignalSource makeThreshold(SignalSource &signal, double max)
 double defaultSampleFrequency()
 {
     return 48000;
+}
+
+QString generateAudioFileName()
+{
+    return qApp->applicationDirPath() + QString("/audio%1.wav").arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
 }
 
 }
