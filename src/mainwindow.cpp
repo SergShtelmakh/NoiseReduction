@@ -5,7 +5,7 @@
 #include <src/DenoisingManager.h>
 #include <src/audio/AudioRecordWidget.h>
 
-#include <src/DecompositionWidget.h>
+#include <src/DenoisingWidget.h>
 
 #include <QFileDialog>
 #include <QDebug>
@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_recordWidget(new AudioRecordWidget)
     , m_testSignal(new AudioSignal)
     , m_noisedSignal(new AudioSignal)
-    , m_decompositionWidget(new DecompositionWidget)
+    , m_decompositionWidget(new DenoisingWidget)
 {
     ui->setupUi(this);
     ui->cbWaveletType->addItems(Wavelet::waveletFunctionsNames());
@@ -51,7 +51,7 @@ void MainWindow::on_pbStart_clicked()
 
     m_decompositionWidget->show();
 
-    auto wdg = new DecompositionWidget(true);
+    auto wdg = new DenoisingWidget(true);
     wdg->show();
 }
 

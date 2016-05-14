@@ -9,16 +9,16 @@
 class DecompositionItemWidget;
 
 namespace Ui {
-class DecompositionWidget;
+class DenoisingWidget;
 }
 
-class DecompositionWidget : public QWidget
+class DenoisingWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit DecompositionWidget(bool noised = false,QWidget *parent = 0);
-    ~DecompositionWidget();
+    explicit DenoisingWidget(bool noised = false,QWidget *parent = 0);
+    ~DenoisingWidget();
 
 private slots:
     void on_pbProcess_clicked();
@@ -28,7 +28,7 @@ private:
     void processAudioSignal();
     QVector<double> thresholdsData() const;
 
-    Ui::DecompositionWidget *ui;
+    Ui::DenoisingWidget *ui;
     QVector<DecompositionItemWidget *> m_widgets;
     QScopedPointer<DenoisingManager> m_denoisingManager;
     int m_itemsCount = 0;

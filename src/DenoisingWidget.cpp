@@ -1,5 +1,5 @@
-#include "DecompositionWidget.h"
-#include "ui_DecompositionWidget.h"
+#include "DenoisingWidget.h"
+#include "ui_DenoisingWidget.h"
 
 #include <src/DecompositionItemWidget.h>
 #include <src/PlotManager.h>
@@ -12,9 +12,9 @@ namespace
 }
 
 
-DecompositionWidget::DecompositionWidget(bool noised, QWidget *parent)
+DenoisingWidget::DenoisingWidget(bool noised, QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::DecompositionWidget)
+    , ui(new Ui::DenoisingWidget)
     , m_denoisingManager(new DenoisingManager)
 {
     ui->setupUi(this);
@@ -31,12 +31,12 @@ DecompositionWidget::DecompositionWidget(bool noised, QWidget *parent)
     processAudioSignal();
 }
 
-DecompositionWidget::~DecompositionWidget()
+DenoisingWidget::~DenoisingWidget()
 {
     delete ui;
 }
 
-QVector<double> DecompositionWidget::thresholdsData() const
+QVector<double> DenoisingWidget::thresholdsData() const
 {
     QVector<double> result;
     for (auto w : m_widgets) {
@@ -46,7 +46,7 @@ QVector<double> DecompositionWidget::thresholdsData() const
     return result;
 }
 
-void DecompositionWidget::clearWidget()
+void DenoisingWidget::clearWidget()
 {
     while (!m_widgets.empty()) {
         auto w = m_widgets.takeFirst();
@@ -54,7 +54,7 @@ void DecompositionWidget::clearWidget()
     }
 }
 
-void DecompositionWidget::processAudioSignal()
+void DenoisingWidget::processAudioSignal()
 {
     m_denoisingManager->makeTransform();
 
@@ -74,7 +74,7 @@ void DecompositionWidget::processAudioSignal()
     Q_ASSERT(m_itemsCount == m_widgets.size());
 }
 
-void DecompositionWidget::on_pbProcess_clicked()
+void DenoisingWidget::on_pbProcess_clicked()
 {
     m_denoisingManager->makeThreshold(thresholdsData());
     m_denoisingManager->makeInverseTransform();

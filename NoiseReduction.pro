@@ -23,7 +23,7 @@ SOURCES  += $$PWD/src/main.cpp\
             $$PWD/src/wavelets/DiscretePeriodicWavelet.cpp \
             $$PWD/src/DenoisingManager.cpp \
             $$PWD/src/DecompositionItemWidget.cpp \
-            $$PWD/src/DecompositionWidget.cpp \
+            $$PWD/src/DenoisingWidget.cpp \
             $$PWD/src/audio/AudioPlayerWidget.cpp
 
 HEADERS  += $$PWD/src/mainwindow.h \
@@ -35,13 +35,13 @@ HEADERS  += $$PWD/src/mainwindow.h \
             $$PWD/src/wavelets/DiscretePeriodicWavelet.h \
             $$PWD/src/DenoisingManager.h \
             $$PWD/src/DecompositionItemWidget.h \
-            $$PWD/src/DecompositionWidget.h \
+            $$PWD/src/DenoisingWidget.h \
             $$PWD/src/audio/AudioPlayerWidget.h
 
 FORMS    += $$PWD/src/mainwindow.ui \
             $$PWD/src/audio/AudioRecordWidget.ui \
             $$PWD/src/DecompositionItemWidget.ui \
-            $$PWD/src/DecompositionWidget.ui \
+            $$PWD/src/DenoisingWidget.ui \
             $$PWD/src/audio/AudioPlayerWidget.ui
 
 LIBS     += $$PWD/libs/libAquila.a\
