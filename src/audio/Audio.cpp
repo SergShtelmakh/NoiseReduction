@@ -67,4 +67,14 @@ QString generateAudioFileName()
     return qApp->applicationDirPath() + QString("/audio%1.wav").arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
 }
 
+SignalSource makeSignalDifference(const SignalSource &first, const SignalSource &second)
+{
+    auto size = qMin(first.size(), second.size());
+    SignalSource result;
+    for (int i = 0 ; i < size; i++) {
+        result.push_back(first[i] - second[i]);
+    }
+    return result;
+}
+
 }

@@ -50,6 +50,8 @@ void DenoisingWidget::clearWidget()
 
 void DenoisingWidget::on_pbPrepare_clicked()
 {
+    clearWidget();
+
     m_denoisingManager->setSignal(*m_inputAudioSignal.data());
     m_denoisingManager->setWaveletName(ui->cbWaveletType->currentText());
     m_denoisingManager->setLevel(ui->sbLevel->value());
@@ -82,4 +84,5 @@ void DenoisingWidget::on_pbProcess_clicked()
 
     PlotManager::plot(ui->outputTransformedSignalWidget, m_denoisingManager->transformedSignal());
     ui->outputSignalPlayerWidget->setSignalSource(m_denoisingManager->outputSignal());
+    PlotManager::plot(Audio::makeSignalDifference(m_inputAudioSignal->source(), m_denoisingManager->outputSignal()));
 }

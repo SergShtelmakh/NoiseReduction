@@ -13,6 +13,7 @@ QAudioFormat format();
 double maxAmplitude(const SignalSource &signal);
 SignalSource makeWhiteNoise(SignalSource &signal, double maxAmplitude);
 SignalSource makeThreshold(SignalSource &signal, double max);
+SignalSource makeSignalDifference(const SignalSource &first, const SignalSource &second);
 double defaultSampleFrequency();
 QString generateAudioFileName();
 

@@ -1,7 +1,6 @@
 #include "DiscretePeriodicWavelet.h"
 
 #include <wavelet2d/wavelet2d.h>
-#include <QDebug>
 
 DiscretePeriodicWavelet::DiscretePeriodicWavelet()
     : Wavelet()
@@ -41,14 +40,13 @@ void DiscretePeriodicWavelet::makeThreshold(const QVector<double> &thresholds)
     auto end = 0;
 
     for (size_t i = 0; i < m_length.size() - 1; ++i) {
-        qDebug() << "i" << i;
         auto currentSize = m_length[i];
         end = begin + currentSize;
         for (int j = begin; j < end; j++) {
-            auto sign = m_transformedSignal[j] > 0 ? 1.0 : -1.0;
-            m_thresholded.push_back(sign * qMin(qAbs(m_transformedSignal[j]), thresholds[i]));
+            auto thresholded = qAbs(m_transformedSignal[j]) > thresholds[i] ? m_transformedSignal[j] : 0;
+            m_thresholded.push_back(thresholded);
         }
-        begin = end + 1;
+        begin = end;
     }
 }
 

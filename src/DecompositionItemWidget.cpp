@@ -75,7 +75,7 @@ void DecompositionItemWidget::setThreshold(double threshold)
 
 double DecompositionItemWidget::thresholdValue() const
 {
-    return m_maxThreshold - m_threshold * m_maxThreshold / 100;
+    return m_threshold * m_maxThreshold / 100;
 }
 
 void DecompositionItemWidget::updatePlotData()
