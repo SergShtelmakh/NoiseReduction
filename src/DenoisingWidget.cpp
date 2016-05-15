@@ -63,18 +63,34 @@ void DenoisingWidget::on_pbPrepare_clicked()
     auto decomposition = m_denoisingManager->transformedDecomposition();
 
     m_itemsCount = decomposition.size();
-
+    /*
     if (!ui->scrollAreaWidgetContents->layout()) {
         ui->scrollAreaWidgetContents->setLayout(new QVBoxLayout());
     }
 
     auto layout = ui->scrollAreaWidgetContents->layout();
+
+*/
+    QScrollArea* scrollArea = new QScrollArea();
+    scrollArea->setBackgroundRole(QPalette::Window);
+    scrollArea->setFrameShadow(QFrame::Plain);
+    scrollArea->setFrameShape(QFrame::NoFrame);
+    scrollArea->setWidgetResizable(true);
+
+    QWidget* wdg = new QWidget();
+    wdg->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    wdg->setLayout(new QVBoxLayout(wdg));
+    scrollArea->setWidget(wdg);
+
+    auto layout = wdg->layout();
     for (auto item : decomposition) {
         auto wdg = new ThresholdsWidget(this);
         m_widgets.push_back(wdg);
         wdg->setSignalSource(item);
         layout->addWidget(wdg);
     }
+
+    scrollArea->show();
 
     Q_ASSERT(m_itemsCount == m_widgets.size());
 }

@@ -1,6 +1,7 @@
 #include "DiscretePeriodicWavelet.h"
 
 #include <wavelet2d/wavelet2d.h>
+#include <src/PlotManager.h>
 
 DiscretePeriodicWavelet::DiscretePeriodicWavelet()
     : Wavelet()

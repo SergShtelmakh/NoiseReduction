@@ -2,6 +2,7 @@
 #include <QVector>
 #include <QApplication>
 #include <QTime>
+#include <QDebug>
 
 namespace Audio {
 
@@ -65,6 +66,47 @@ SignalSource makeSignalDifference(const SignalSource &first, const SignalSource 
 QString generateAudioFileName()
 {
     return qApp->applicationDirPath() + QString("/audio%1.wav").arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
+}
+
+SignalSource makeSignalDensity(const SignalSource &signal, bool positivePart)
+{
+    double size_d = 0.0;
+    for (auto val : signal) {
+        size_d = positivePart ? qMax(size_d, val) : qMin(size_d, val);
+    }
+
+    auto size = static_cast<int>(positivePart ? size_d : -size_d);
+    QVector<double> result(size);
+    for (auto val : signal) {
+        int val_t = trunc(val);
+        int index = -1;
+        if (val_t > 0 && positivePart) {
+            index = val_t - 1;
+        } else if (val_t < 0 && !positivePart) {
+            index = size + val_t - 1;
+        }
+
+        if (index >= 0 && index < result.size()) {
+            result[index] = result[index] + 1;
+        } else {
+//            qDebug() << "Wrong index " << index;
+        }
+    }
+
+    int sum = 0;
+    if (positivePart) {
+        for (int i = result.size() - 1; i >= 0; --i) {
+            sum += result[i];
+            result[i] = sum;
+        }
+    } else {
+        for (int i = 0; i < result.size(); ++i) {
+            sum += result[i];
+            result[i] = sum;
+        }
+    }
+
+    return result;
 }
 
 }

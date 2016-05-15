@@ -17,6 +17,7 @@ double defaultSampleFrequency();
 double maxAmplitude(const SignalSource &signal);
 SignalSource makeWhiteNoise(SignalSource &signal, double maxAmplitude);
 SignalSource makeSignalDifference(const SignalSource &first, const SignalSource &second);
+SignalSource makeSignalDensity(const SignalSource &signal, bool positivePart);
 
 QString generateAudioFileName();
 

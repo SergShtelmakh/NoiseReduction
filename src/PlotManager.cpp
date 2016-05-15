@@ -2,6 +2,8 @@
 
 #include <qcustomplot/qcustomplot.h>
 
+#include <QDebug>
+
 PlotManager::PlotManager(QObject *parent)
     : QObject(parent)
 {
@@ -68,4 +70,3 @@ void PlotManager::createDecompositionPlot(const Audio::SignalsSourceVector &data
     decompositionPlot->setLayout(mainLayout);
     decompositionPlot->show();
 }
-

@@ -2,6 +2,7 @@
 #include "ui_ThresholdsWidget.h"
 
 #include <qcustomplot/qcustomplot.h>
+#include <src/PlotManager.h>
 
 namespace {
     const QPen cThresholdLevelPen = QPen(QBrush(Qt::red), 1);
@@ -42,8 +43,11 @@ void ThresholdsWidget::setSignalSource(const Audio::SignalSource &signal)
     emit signalChanged(m_signalSource);
 
     setMaxThreshold(Audio::maxAmplitude(m_signalSource));
+    m_positiveDensity = Audio::makeSignalDensity(m_signalSource, true);
+    m_negativeDensity = Audio::makeSignalDensity(m_signalSource, false);
     updatePlotData();
     replotSignal();
+    replotDensity();
 }
 
 double ThresholdsWidget::maxThreshold() const
@@ -113,6 +117,12 @@ void ThresholdsWidget::replotThreshold()
     ui->wPlot->graph(2)->setData(m_x, thresholdVector);
 
     ui->wPlot->replot();
+}
+
+void ThresholdsWidget::replotDensity()
+{
+    PlotManager::plot(ui->positiveDensityPlot, m_positiveDensity, 0, m_positiveDensity.size());
+    PlotManager::plot(ui->negativeDensityPlot, m_negativeDensity, -m_negativeDensity.size(), 0);
 }
 
 void ThresholdsWidget::setMaxThreshold(double maxThreshold)

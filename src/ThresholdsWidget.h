@@ -35,12 +35,16 @@ private:
     void updatePlotData();
     void replotSignal();
     void replotThreshold();
+    void replotDensity();
 
     Audio::SignalSource m_signalSource;
     double m_maxThreshold;
     double m_threshold;
 
     QVector<double> m_x;
+
+    QVector<double> m_positiveDensity;
+    QVector<double> m_negativeDensity;
 
     Ui::ThresholdsWidget *ui;
 };
