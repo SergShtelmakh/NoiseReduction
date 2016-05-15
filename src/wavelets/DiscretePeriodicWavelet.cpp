@@ -7,10 +7,6 @@ DiscretePeriodicWavelet::DiscretePeriodicWavelet()
 {
 }
 
-DiscretePeriodicWavelet::~DiscretePeriodicWavelet()
-{
-}
-
 Wavelet::WaveletTransformType DiscretePeriodicWavelet::type()
 {
     return WaveletTransformType::DiscretePeriodic1D;
@@ -108,7 +104,7 @@ Audio::SignalsSourceVector DiscretePeriodicWavelet::decomposition()
             currentSignal.push_back(m_transformedSignal[j]);
         }
         decomposition.push_back(currentSignal);
-        begin = end + 1;
+        begin = end;
     }
 
     return decomposition;

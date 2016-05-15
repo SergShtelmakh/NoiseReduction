@@ -3,6 +3,8 @@
 
 namespace {
 
+const int cMsInSec = 1000;
+
 Audio::SignalSource makeSignal(Aquila::WaveFile *wave)
 {
     Audio::SignalSource resultSignal;
@@ -12,10 +14,6 @@ Audio::SignalSource makeSignal(Aquila::WaveFile *wave)
     return resultSignal;
 }
 
-}
-
-AudioSignal::AudioSignal()
-{
 }
 
 AudioSignal::AudioSignal(const QString &fileName)
@@ -50,10 +48,10 @@ Audio::SignalSource AudioSignal::source() const
 
 int AudioSignal::audioLength() const
 {
-    return m_file ? m_file->getAudioLength() : m_signalSource.size() / (m_sampleFrequency / 1000);
+    return m_file ? m_file->getAudioLength() : m_signalSource.size() / (m_sampleFrequency / cMsInSec);
 }
 
-void AudioSignal::makeWhiteNoise()
+void AudioSignal::makeWhiteNoise(double maxAmplitude)
 {
-    m_signalSource = Audio::makeWhiteNoise(m_signalSource, 1000);
+    m_signalSource = Audio::makeWhiteNoise(m_signalSource, maxAmplitude);
 }

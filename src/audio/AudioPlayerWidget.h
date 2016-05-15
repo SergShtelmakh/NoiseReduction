@@ -1,21 +1,17 @@
-#ifndef AUDIOPLAYERWIDGET_H
-#define AUDIOPLAYERWIDGET_H
+#pragma once
 
 #include <QWidget>
 
-#include <QMediaPlayer>
-#include <QTimer>
-
 #include <src/audio/AudioSignal.h>
 
-namespace Ui {
-class AudioPlayerWidget;
-}
+class QMediaPlayer;
+class QTimer;
+
+namespace Ui { class AudioPlayerWidget; }
 
 class AudioPlayerWidget : public QWidget
 {
     Q_OBJECT
-
 public:
     explicit AudioPlayerWidget(QWidget *parent = 0);
     ~AudioPlayerWidget();
@@ -28,21 +24,17 @@ private slots:
     void on_pbPause_clicked();
     void on_pbStop_clicked();
 
-    void timerTimeout();
+    void updateButtonState();
+    void updateTimeLinePlot();
 
 private:
     struct Ranges { double minX; double maxX; double minY; double maxY; };
 
     void updateSignalPlot();
-    void updateTimeLinePlot();
 
-    Ui::AudioPlayerWidget *ui;
-
+    Ui::AudioPlayerWidget* ui;
     QScopedPointer<AudioSignal> m_signal;
-    double m_currentTime = 0.0;
+    QScopedPointer<QMediaPlayer> m_player;
+    QScopedPointer<QTimer> m_playerStatusChecker;
     Ranges m_plotRanges;
-    QMediaPlayer m_player;
-    QTimer m_playerStatusChecker;
 };
-
-#endif // AUDIOPLAYERWIDGET_H

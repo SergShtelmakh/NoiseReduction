@@ -98,14 +98,6 @@ ThresholdTypeHash makeThresholdNameHash() {
 
 }
 
-Wavelet::Wavelet()
-{
-}
-
-Wavelet::~Wavelet()
-{
-}
-
 void Wavelet::setWaveletFunction(Wavelet::WaveletFunction function)
 {
     m_waveletFunction = function;

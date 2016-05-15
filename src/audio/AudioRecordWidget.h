@@ -2,9 +2,7 @@
 
 #include <QWidget>
 
-namespace Ui {
-class AudioRecordWidget;
-}
+namespace Ui { class AudioRecordWidget; }
 
 class QAudioRecorder;
 class QAudioOutput;
@@ -12,7 +10,6 @@ class QAudioOutput;
 class AudioRecordWidget : public QWidget
 {
     Q_OBJECT
-
 public:
     explicit AudioRecordWidget(QWidget *parent = 0);
     ~AudioRecordWidget();

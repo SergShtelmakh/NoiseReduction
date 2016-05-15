@@ -13,7 +13,7 @@ class AudioSignal
 {
 
 public:
-    AudioSignal();
+    AudioSignal(){}
     AudioSignal(const QString& fileName);
     AudioSignal(const Audio::SignalSource& signalSource, double sampleFrequency = Audio::defaultSampleFrequency());
 
@@ -23,7 +23,7 @@ public:
     Audio::SignalSource source() const;
     int audioLength() const;
 
-    void makeWhiteNoise();
+    void makeWhiteNoise(double maxAmplitude = 1000);
 
 private:
     Audio::SignalSource m_signalSource;

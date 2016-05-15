@@ -28,9 +28,14 @@ QAudioFormat format() {
     return format;
 }
 
+double defaultSampleFrequency()
+{
+    return 48000.0;
+}
+
 double maxAmplitude(const SignalSource &signal)
 {
-    double max = 0;
+    double max = 0.0;
     for (auto val : signal) {
         max = qMax(max, qAbs(val));
     }
@@ -47,26 +52,6 @@ SignalSource makeWhiteNoise(SignalSource &signal, double maxAmplitude)
     return result;
 }
 
-SignalSource makeThreshold(SignalSource &signal, double max)
-{
-    SignalSource result;
-    for (auto i : signal) {
-        auto sign = i > 0 ? 1 : -1;
-        result << qMin(i, max) * sign;
-    }
-    return result;
-}
-
-double defaultSampleFrequency()
-{
-    return 48000;
-}
-
-QString generateAudioFileName()
-{
-    return qApp->applicationDirPath() + QString("/audio%1.wav").arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
-}
-
 SignalSource makeSignalDifference(const SignalSource &first, const SignalSource &second)
 {
     auto size = qMin(first.size(), second.size());
@@ -75,6 +60,11 @@ SignalSource makeSignalDifference(const SignalSource &first, const SignalSource 
         result.push_back(first[i] - second[i]);
     }
     return result;
+}
+
+QString generateAudioFileName()
+{
+    return qApp->applicationDirPath() + QString("/audio%1.wav").arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
 }
 
 }

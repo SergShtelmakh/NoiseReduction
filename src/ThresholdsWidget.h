@@ -4,14 +4,11 @@
 
 #include <src/audio/Audio.h>
 
-namespace Ui {
-class ThresholdsWidget;
-}
+namespace Ui { class ThresholdsWidget; }
 
 class ThresholdsWidget : public QWidget
 {
     Q_OBJECT
-
 public:
     explicit ThresholdsWidget(QWidget *parent = 0);
     ~ThresholdsWidget();

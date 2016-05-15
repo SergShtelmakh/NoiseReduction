@@ -1,10 +1,15 @@
 #include "AudioPlayerWidget.h"
 #include "ui_AudioPlayerWidget.h"
 
+#include <QMediaPlayer>
+#include <QTimer>
+
 AudioPlayerWidget::AudioPlayerWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::AudioPlayerWidget)
     , m_signal(new AudioSignal)
+    , m_player(new QMediaPlayer)
+    , m_playerStatusChecker(new QTimer)
 {
     ui->setupUi(this);
 
@@ -14,9 +19,12 @@ AudioPlayerWidget::AudioPlayerWidget(QWidget *parent)
     ui->audioPlot->xAxis->setLabel("Time");
     ui->audioPlot->yAxis->setLabel("Amplitude");
 
-    m_playerStatusChecker.setInterval(100);
+    m_playerStatusChecker->setInterval(100);
 
-    connect(&m_playerStatusChecker, &QTimer::timeout, this, &AudioPlayerWidget::timerTimeout);
+    connect(m_playerStatusChecker.data(), &QTimer::timeout, this, &AudioPlayerWidget::updateTimeLinePlot);
+    connect(m_player.data(), &QMediaPlayer::stateChanged, this, &AudioPlayerWidget::updateButtonState);
+
+    updateButtonState();
 }
 
 AudioPlayerWidget::~AudioPlayerWidget()
@@ -27,7 +35,7 @@ AudioPlayerWidget::~AudioPlayerWidget()
 void AudioPlayerWidget::setFileName(const QString &fileName)
 {
     m_signal.reset(new AudioSignal(fileName));
-    m_player.setMedia(QUrl::fromLocalFile(fileName));
+    m_player->setMedia(QUrl::fromLocalFile(fileName));
     updateSignalPlot();
     updateTimeLinePlot();
 }
@@ -37,46 +45,49 @@ void AudioPlayerWidget::setSignalSource(const Audio::SignalSource &signalSource)
     m_signal.reset(new AudioSignal(signalSource));
     auto fileName = Audio::generateAudioFileName();
     m_signal->save(fileName);
-    m_player.setMedia(QUrl::fromLocalFile(fileName));
+    m_player->setMedia(QUrl::fromLocalFile(fileName));
     updateSignalPlot();
     updateTimeLinePlot();
 }
 
 void AudioPlayerWidget::on_pbPlay_clicked()
 {
-    if (m_player.state() == QMediaPlayer::PlayingState) {
+    if (m_player->state() == QMediaPlayer::PlayingState) {
         return;
     }
 
-    m_player.play();
-    m_playerStatusChecker.start();
+    m_player->play();
+    m_playerStatusChecker->start();
 }
 
 void AudioPlayerWidget::on_pbPause_clicked()
 {
-    if (m_player.state() != QMediaPlayer::PlayingState) {
+    if (m_player->state() != QMediaPlayer::PlayingState) {
         return;
     }
 
-    m_player.pause();
-    m_playerStatusChecker.stop();
+    m_player->pause();
+    m_playerStatusChecker->stop();
 }
 
 void AudioPlayerWidget::on_pbStop_clicked()
 {
-    if (m_player.state() == QMediaPlayer::StoppedState) {
+    if (m_player->state() == QMediaPlayer::StoppedState) {
         return;
     }
 
-    m_player.stop();
-    m_playerStatusChecker.stop();
+    m_player->stop();
+    m_playerStatusChecker->stop();
+
+    updateTimeLinePlot();
 }
 
-void AudioPlayerWidget::timerTimeout()
+void AudioPlayerWidget::updateButtonState()
 {
-    m_currentTime = m_player.position();
-    ui->lcdTime->display(m_currentTime / 1000.0);
-    updateTimeLinePlot();
+    auto playerState = m_player->state();
+    ui->pbPlay->setEnabled(playerState != QMediaPlayer::PlayingState);
+    ui->pbStop->setEnabled(playerState != QMediaPlayer::StoppedState);
+    ui->pbPause->setEnabled(playerState == QMediaPlayer::PlayingState);
 }
 
 void AudioPlayerWidget::updateSignalPlot()
@@ -112,7 +123,10 @@ void AudioPlayerWidget::updateSignalPlot()
 
 void AudioPlayerWidget::updateTimeLinePlot()
 {
-    double xBase = m_plotRanges.maxX * m_currentTime / m_signal->audioLength();
+    double currentTime = m_player->position();
+    ui->lcdTime->display(currentTime / 1000.0);
+
+    double xBase = m_plotRanges.maxX * currentTime / m_signal->audioLength();
     QVector<double> x,y;
     x << xBase << xBase + 1;
     y << m_plotRanges.minY << m_plotRanges.maxY;

@@ -1,11 +1,11 @@
 #include "AudioRecordWidget.h"
 #include "ui_AudioRecordWidget.h"
 
+#include <src/audio/Audio.h>
+
 #include <QFileDialog>
 #include <QAudioRecorder>
 #include <QAudioOutput>
-
-#include "Audio.h"
 
 AudioRecordWidget::AudioRecordWidget(QWidget *parent)
     : QWidget(parent)

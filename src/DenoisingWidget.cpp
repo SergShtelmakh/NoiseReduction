@@ -1,6 +1,7 @@
 #include "DenoisingWidget.h"
 #include "ui_DenoisingWidget.h"
 
+#include <src/DenoisingManager.h>
 #include <src/ThresholdsWidget.h>
 #include <src/PlotManager.h>
 

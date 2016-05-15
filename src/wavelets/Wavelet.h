@@ -80,8 +80,8 @@ public:
         Last  = ThresholdType::Fuzzy
     };
 
-    Wavelet();
-    virtual ~Wavelet();
+    Wavelet() {}
+    virtual ~Wavelet() {}
 
 public:
     static QList<QString> waveletFunctionsNames();

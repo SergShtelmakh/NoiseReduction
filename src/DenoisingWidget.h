@@ -2,20 +2,17 @@
 
 #include <QWidget>
 
-#include <src/audio/Audio.h>
-#include <src/DenoisingManager.h>
+#include <src/audio/AudioSignal.h>
 #include <QScopedPointer>
 
+class DenoisingManager;
 class ThresholdsWidget;
 
-namespace Ui {
-class DenoisingWidget;
-}
+namespace Ui { class DenoisingWidget; }
 
 class DenoisingWidget : public QWidget
 {
     Q_OBJECT
-
 public:
     explicit DenoisingWidget(QWidget *parent = 0);
     ~DenoisingWidget();
@@ -33,7 +30,7 @@ private:
     Ui::DenoisingWidget *ui;
     QVector<ThresholdsWidget *> m_widgets;
     QScopedPointer<DenoisingManager> m_denoisingManager;
-    int m_itemsCount = 0;
     QScopedPointer<AudioSignal> m_inputAudioSignal;
     QScopedPointer<AudioSignal> m_outputAudioSignal;
+    int m_itemsCount = 0;
 };

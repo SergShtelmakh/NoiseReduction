@@ -6,7 +6,7 @@ class DiscretePeriodicWavelet : public Wavelet
 {
 public:
     DiscretePeriodicWavelet();
-    ~DiscretePeriodicWavelet();
+    ~DiscretePeriodicWavelet() {}
 
     WaveletTransformType type() override;
 
