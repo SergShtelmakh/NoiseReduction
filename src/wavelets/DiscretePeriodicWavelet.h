@@ -18,7 +18,7 @@ public:
 //    void denoising() override;
     Audio::SignalsSourceVector decomposition() override;
 
-private:
+private:    
     std::vector<double> m_flag;
     std::vector<int> m_length;
 };

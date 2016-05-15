@@ -8,6 +8,8 @@ using WaveletType = Wavelet::WaveletFunction;
 using WaveletHash = QHash<WaveletType, std::string>;
 using TransformType = Wavelet::WaveletTransformType;
 using TransformTypeHash = QHash<TransformType, QString>;
+using ThresholdType = Wavelet::ThresholdType;
+using ThresholdTypeHash = QHash<ThresholdType, QString>;
 
 uint qHash(WaveletType type, uint seed) {
     return qHash(static_cast<int>(type), seed);
@@ -16,6 +18,11 @@ uint qHash(WaveletType type, uint seed) {
 uint qHash(TransformType type, uint seed) {
     return qHash(static_cast<int>(type), seed);
 }
+
+uint qHash(ThresholdType type, uint seed) {
+    return qHash(static_cast<int>(type), seed);
+}
+
 
 namespace {
 
@@ -81,11 +88,17 @@ TransformTypeHash makeTransformNameHash() {
     return names;
 }
 
+ThresholdTypeHash makeThresholdNameHash() {
+    ThresholdTypeHash names;
+    names[ThresholdType::Hard]  = "Hard";
+    names[ThresholdType::Soft]  = "Soft";
+    names[ThresholdType::Fuzzy] = "Fuzzy";
+    return names;
+}
+
 }
 
 Wavelet::Wavelet()
-    : m_waveletFunction(WaveletFunction::Haar)
-    , m_level(5)
 {
 }
 
@@ -109,6 +122,17 @@ void Wavelet::setLevel(int level)
     m_level = level;
 }
 
+void Wavelet::setThresholdType(Wavelet::ThresholdType type)
+{
+    m_thresholdType = type;
+}
+
+void Wavelet::setThresholdType(const QString &type)
+{
+    static auto names = makeThresholdNameHash();
+    m_thresholdType = names.key(type, ThresholdType::Hard);
+}
+
 QList<QString> Wavelet::waveletFunctionsNames()
 {
     auto first = static_cast<int>(WaveletFunction::First);
@@ -121,13 +145,25 @@ QList<QString> Wavelet::waveletFunctionsNames()
     return names;
 }
 
-QList<QString> Wavelet::makeTransformsNames()
+QList<QString> Wavelet::transformsNames()
 {
     auto first = static_cast<int>(TransformType::First);
     auto last = static_cast<int>(TransformType::Last);
     QList<QString> names;
     for (auto i = first; i <= last; i++) {
         auto currentType = static_cast<TransformType>(i);
+        names << toString(currentType);
+    }
+    return names;
+}
+
+QList<QString> Wavelet::thresholdsNames()
+{
+    auto first = static_cast<int>(ThresholdType::First);
+    auto last = static_cast<int>(ThresholdType::Last);
+    QList<QString> names;
+    for (auto i = first; i <= last; i++) {
+        auto currentType = static_cast<ThresholdType>(i);
         names << toString(currentType);
     }
     return names;
@@ -173,5 +209,10 @@ QString Wavelet::toString(WaveletFunction function)
 
 QString Wavelet::toString(TransformType type) {
     static auto names = makeTransformNameHash();
+    return names.value(type, "");
+}
+
+QString Wavelet::toString(ThresholdType type) {
+    static auto names = makeThresholdNameHash();
     return names.value(type, "");
 }

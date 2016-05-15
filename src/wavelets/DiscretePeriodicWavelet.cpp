@@ -43,7 +43,19 @@ void DiscretePeriodicWavelet::makeThreshold(const QVector<double> &thresholds)
         auto currentSize = m_length[i];
         end = begin + currentSize;
         for (int j = begin; j < end; j++) {
-            auto thresholded = qAbs(m_transformedSignal[j]) > thresholds[i] ? m_transformedSignal[j] : 0;
+            double thresholded = 0.0;
+            switch (m_thresholdType) {
+            case ThresholdType::Hard:
+                thresholded = qAbs(m_transformedSignal[j]) > thresholds[i] ? m_transformedSignal[j] : 0;
+                break;
+            case ThresholdType::Soft:
+                thresholded = qMax(0.0, 1.0 - (thresholds[i]/ qAbs(m_transformedSignal[j] + 0.0001))) * m_transformedSignal[j];
+                break;
+            default:
+                break;
+            }
+
+
             m_thresholded.push_back(thresholded);
         }
         begin = end;

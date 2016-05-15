@@ -71,12 +71,22 @@ public:
         Last  = WaveletTransformType::DiscretePeriodic1D
     };
 
+    enum class ThresholdType {
+        Hard  = 0,
+        Soft  = 1,
+        Fuzzy = 2,
+
+        First = ThresholdType::Hard,
+        Last  = ThresholdType::Fuzzy
+    };
+
     Wavelet();
     virtual ~Wavelet();
 
 public:
     static QList<QString> waveletFunctionsNames();
-    static QList<QString> makeTransformsNames();
+    static QList<QString> transformsNames();
+    static QList<QString> thresholdsNames();
 
     static Wavelet *create(WaveletTransformType type);
 
@@ -92,6 +102,8 @@ public:
     void setWaveletFunction(WaveletFunction function);
     void setWaveletFunction(const QString& functionName);
     void setLevel(int level);
+    void setThresholdType(ThresholdType type);
+    void setThresholdType(const QString &typeName);
 
     Audio::SignalSource transformedSignal() const;
     Audio::SignalSource resultSignal() const;
@@ -101,9 +113,11 @@ protected:
     static std::string toStdString(WaveletFunction function);
     static QString toString(WaveletFunction function);
     static QString toString(WaveletTransformType type);
+    static QString toString(ThresholdType type);
 
-    WaveletFunction m_waveletFunction;
-    int m_level;
+    WaveletFunction m_waveletFunction = WaveletFunction::Haar;
+    int m_level = 1;
+    ThresholdType m_thresholdType = ThresholdType::Hard;
 
     std::vector<double> m_inputSignal;
     std::vector<double> m_transformedSignal;

@@ -25,6 +25,11 @@ void DenoisingManager::setLevel(int level)
     m_wavelet->setLevel(level);
 }
 
+void DenoisingManager::setThresholdType(const QString &thresholdType)
+{
+    m_wavelet->setThresholdType(thresholdType);
+}
+
 Audio::SignalSource DenoisingManager::inputSignal() const
 {
     return m_inputSignal;

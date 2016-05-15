@@ -16,6 +16,7 @@ public:
 
     void setWaveletName(const QString& waveletName);
     void setLevel(int level);
+    void setThresholdType(const QString& thresholdType);
 
     Audio::SignalSource inputSignal() const;
     Audio::SignalSource transformedSignal() const;
