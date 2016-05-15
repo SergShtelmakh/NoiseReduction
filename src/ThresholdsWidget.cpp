@@ -1,5 +1,5 @@
-#include "DecompositionItemWidget.h"
-#include "ui_DecompositionItemWidget.h"
+#include "ThresholdsWidget.h"
+#include "ui_ThresholdsWidget.h"
 
 #include <qcustomplot/qcustomplot.h>
 
@@ -7,14 +7,11 @@ namespace {
     const QPen cThresholdLevelPen = QPen(QBrush(Qt::red), 1);
 }
 
-DecompositionItemWidget::DecompositionItemWidget(QWidget *parent) :
+ThresholdsWidget::ThresholdsWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::DecompositionItemWidget)
+    ui(new Ui::ThresholdsWidget)
 {
     ui->setupUi(this);
-    ui->vsThresholdsLevel->setMinimum(0);
-    ui->vsThresholdsLevel->setMaximum(100);
-    ui->vsThresholdsLevel->setValue(0);
 
     ui->wPlot->addGraph();
     ui->wPlot->addGraph();
@@ -25,17 +22,17 @@ DecompositionItemWidget::DecompositionItemWidget(QWidget *parent) :
     ui->wPlot->yAxis->setLabel("Amplitude");
 }
 
-DecompositionItemWidget::~DecompositionItemWidget()
+ThresholdsWidget::~ThresholdsWidget()
 {
     delete ui;
 }
 
-Audio::SignalSource DecompositionItemWidget::signal() const
+Audio::SignalSource ThresholdsWidget::signalSource() const
 {
     return m_signalSource;
 }
 
-void DecompositionItemWidget::setSignalSource(const Audio::SignalSource &signal)
+void ThresholdsWidget::setSignalSource(const Audio::SignalSource &signal)
 {
     if (m_signalSource == signal) {
         return;
@@ -45,40 +42,37 @@ void DecompositionItemWidget::setSignalSource(const Audio::SignalSource &signal)
     emit signalChanged(m_signalSource);
 
     setMaxThreshold(Audio::maxAmplitude(m_signalSource));
-
     updatePlotData();
-
     replotSignal();
 }
 
-double DecompositionItemWidget::maxThreshold() const
+double ThresholdsWidget::maxThreshold() const
 {
     return m_maxThreshold;
 }
 
-double DecompositionItemWidget::threshold() const
+double ThresholdsWidget::threshold() const
 {
     return m_threshold;
 }
 
-void DecompositionItemWidget::setThreshold(double threshold)
+void ThresholdsWidget::setThreshold(double threshold)
 {
     if (m_threshold == threshold) {
         return;
     }
 
     m_threshold = threshold;
+
+    ui->vsThresholdsLevel->setValue(static_cast<int>(threshold));
+    ui->sbThresholdsLevel->setValue(static_cast<int>(threshold));
+
     emit thresholdChanged(m_threshold);
 
     replotThreshold();
 }
 
-double DecompositionItemWidget::thresholdValue() const
-{
-    return m_threshold * m_maxThreshold / 100;
-}
-
-void DecompositionItemWidget::updatePlotData()
+void ThresholdsWidget::updatePlotData()
 {
     if (m_signalSource.size() == 0) {
         return;
@@ -103,37 +97,50 @@ void DecompositionItemWidget::updatePlotData()
     ui->wPlot->yAxis->setRange(minY, maxY);
 }
 
-void DecompositionItemWidget::replotSignal()
+void ThresholdsWidget::replotSignal()
 {
     ui->wPlot->graph(0)->setData(m_x, m_signalSource);
     ui->wPlot->replot();
 }
 
-void DecompositionItemWidget::replotThreshold()
+void ThresholdsWidget::replotThreshold()
 {
-    QVector<double> threshold;
-    double threshVal = thresholdValue();
+    QVector<double> thresholdVector;
 
-    threshold.fill(threshVal, m_x.size());
-    ui->wPlot->graph(1)->setData(m_x, threshold);
-    threshold.fill(-threshVal, m_x.size());
-    ui->wPlot->graph(2)->setData(m_x, threshold);
+    thresholdVector.fill(m_threshold, m_x.size());
+    ui->wPlot->graph(1)->setData(m_x, thresholdVector);
+    thresholdVector.fill(-m_threshold, m_x.size());
+    ui->wPlot->graph(2)->setData(m_x, thresholdVector);
 
     ui->wPlot->replot();
 }
 
-void DecompositionItemWidget::setMaxThreshold(double maxThreshold)
+void ThresholdsWidget::setMaxThreshold(double maxThreshold)
 {
     if (m_maxThreshold == maxThreshold) {
         return;
     }
 
     m_maxThreshold = maxThreshold;
+
+    ui->sbThresholdsLevel->setMaximum(static_cast<int>(maxThreshold));
+    ui->sbThresholdsLevel->setMinimum(0);
+    ui->sbThresholdsLevel->setValue(0);
+
+    ui->vsThresholdsLevel->setMaximum(static_cast<int>(maxThreshold));
+    ui->vsThresholdsLevel->setMinimum(0);
+    ui->vsThresholdsLevel->setValue(0);
+
     emit maxThresholdChanged(m_maxThreshold);
 }
 
 
-void DecompositionItemWidget::on_vsThresholdsLevel_valueChanged(int value)
+void ThresholdsWidget::on_vsThresholdsLevel_valueChanged(int value)
 {
     setThreshold(value);
+}
+
+void ThresholdsWidget::on_sbThresholdsLevel_valueChanged(int arg1)
+{
+    setThreshold(arg1);
 }

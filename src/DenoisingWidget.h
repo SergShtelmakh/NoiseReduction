@@ -6,7 +6,7 @@
 #include <src/DenoisingManager.h>
 #include <QScopedPointer>
 
-class DecompositionItemWidget;
+class ThresholdsWidget;
 
 namespace Ui {
 class DenoisingWidget;
@@ -31,7 +31,7 @@ private:
     QVector<double> thresholdsData() const;
 
     Ui::DenoisingWidget *ui;
-    QVector<DecompositionItemWidget *> m_widgets;
+    QVector<ThresholdsWidget *> m_widgets;
     QScopedPointer<DenoisingManager> m_denoisingManager;
     int m_itemsCount = 0;
     QScopedPointer<AudioSignal> m_inputAudioSignal;

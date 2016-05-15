@@ -1,7 +1,7 @@
 #include "DenoisingWidget.h"
 #include "ui_DenoisingWidget.h"
 
-#include <src/DecompositionItemWidget.h>
+#include <src/ThresholdsWidget.h>
 #include <src/PlotManager.h>
 
 #include <QScrollArea>
@@ -34,7 +34,7 @@ QVector<double> DenoisingWidget::thresholdsData() const
 {
     QVector<double> result;
     for (auto w : m_widgets) {
-        result << w->thresholdValue();
+        result << w->threshold();
     }
 
     return result;
@@ -68,7 +68,7 @@ void DenoisingWidget::on_pbPrepare_clicked()
 
     auto layout = ui->scrollAreaWidgetContents->layout();
     for (auto item : decomposition) {
-        auto wdg = new DecompositionItemWidget(this);
+        auto wdg = new ThresholdsWidget(this);
         m_widgets.push_back(wdg);
         wdg->setSignalSource(item);
         layout->addWidget(wdg);

@@ -55,5 +55,5 @@ int AudioSignal::audioLength() const
 
 void AudioSignal::makeWhiteNoise()
 {
-    m_signalSource = Audio::makeWhiteNoise(m_signalSource, 10000);
+    m_signalSource = Audio::makeWhiteNoise(m_signalSource, 1000);
 }

@@ -22,7 +22,7 @@ SOURCES  += $$PWD/src/main.cpp\
             $$PWD/src/audio/Audio.cpp \
             $$PWD/src/wavelets/DiscretePeriodicWavelet.cpp \
             $$PWD/src/DenoisingManager.cpp \
-            $$PWD/src/DecompositionItemWidget.cpp \
+            $$PWD/src/ThresholdsWidget.cpp \
             $$PWD/src/DenoisingWidget.cpp \
             $$PWD/src/audio/AudioPlayerWidget.cpp
 
@@ -34,13 +34,13 @@ HEADERS  += $$PWD/src/mainwindow.h \
             $$PWD/src/audio/Audio.h \
             $$PWD/src/wavelets/DiscretePeriodicWavelet.h \
             $$PWD/src/DenoisingManager.h \
-            $$PWD/src/DecompositionItemWidget.h \
+            $$PWD/src/ThresholdsWidget.h \
             $$PWD/src/DenoisingWidget.h \
             $$PWD/src/audio/AudioPlayerWidget.h
 
 FORMS    += $$PWD/src/mainwindow.ui \
             $$PWD/src/audio/AudioRecordWidget.ui \
-            $$PWD/src/DecompositionItemWidget.ui \
+            $$PWD/src/ThresholdsWidget.ui \
             $$PWD/src/DenoisingWidget.ui \
             $$PWD/src/audio/AudioPlayerWidget.ui
 
