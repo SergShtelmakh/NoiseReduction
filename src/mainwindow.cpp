@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QFileDialog>
+
 #include <src/audio/AudioSignal.h>
 #include <src/audio/AudioRecordWidget.h>
 #include <src/DenoisingWidget.h>
@@ -35,7 +37,7 @@ void MainWindow::on_actionRecorder_triggered()
 
 void MainWindow::on_pbShowSourceSignal_clicked()
 {
-    PlotManager::plot(m_sourceSignal->source());
+//    PlotManager::plot(m_sourceSignal->source());
 }
 
 void MainWindow::on_pbMakeWhiteNoise_clicked()
@@ -58,4 +60,26 @@ void MainWindow::on_pbAutomaticDenoising_clicked()
 void MainWindow::updatePlot()
 {
     ui->audioPlayerWidget->setSignalSource(m_processedSignal->source());
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+    auto fileName = QFileDialog::getOpenFileName(this,
+        tr("Open Audio"), "", tr("Wave Files (*.wav)"));
+    if (QFileInfo(fileName).exists()) {
+        m_sourceSignal.reset(new AudioSignal(fileName));
+        m_processedSignal.reset(new AudioSignal(m_sourceSignal->source()));
+        updatePlot();
+    }
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+    m_processedSignal->save(QFileDialog::getSaveFileName(this, tr("Save Audio"), "", tr("Wave Files (*.wav)")));
+}
+
+void MainWindow::on_pbRevert_clicked()
+{
+    m_processedSignal.reset(new AudioSignal(m_sourceSignal->source()));
+    updatePlot();
 }

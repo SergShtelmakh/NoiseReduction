@@ -121,8 +121,8 @@ void ThresholdsWidget::replotThreshold()
 
 void ThresholdsWidget::replotDensity()
 {
-    PlotManager::plot(ui->positiveDensityPlot, m_positiveDensity, 0, m_positiveDensity.size());
-    PlotManager::plot(ui->negativeDensityPlot, m_negativeDensity, -m_negativeDensity.size(), 0);
+//    PlotManager::plot(ui->positiveDensityPlot, m_positiveDensity, 0, m_positiveDensity.size());
+//    PlotManager::plot(ui->negativeDensityPlot, m_negativeDensity, -m_negativeDensity.size(), 0);
 }
 
 void ThresholdsWidget::setMaxThreshold(double maxThreshold)

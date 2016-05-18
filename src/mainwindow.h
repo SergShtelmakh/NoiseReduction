@@ -28,6 +28,12 @@ private slots:
     void on_pbManualDenoising_clicked();
     void on_pbAutomaticDenoising_clicked();
 
+    void on_actionOpen_triggered();
+
+    void on_actionSave_triggered();
+
+    void on_pbRevert_clicked();
+
 private:
     void updatePlot();
 

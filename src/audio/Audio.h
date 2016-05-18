@@ -5,7 +5,7 @@
 
 namespace Audio {
 
-using SignalSource = QVector<qreal>;
+using SignalSource = QVector<double>;
 using SignalsSourceVector = QVector<SignalSource>;
 
 // default values
