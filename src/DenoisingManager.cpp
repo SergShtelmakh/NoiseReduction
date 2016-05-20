@@ -1,7 +1,7 @@
 #include "DenoisingManager.h"
 
 DenoisingManager::DenoisingManager()
-    : m_wavelet(Wavelet::create(Wavelet::WaveletTransformType::DiscretePeriodic1D))
+    : m_wavelet(new DiscretePeriodicWavelet())
 {
 }
 
@@ -12,12 +12,12 @@ void DenoisingManager::setSignal(const AudioSignal &signal)
 
 void DenoisingManager::makeThreshold(const QVector<double> &thresholds)
 {
-    m_wavelet->makeThreshold(thresholds);
+//    m_wavelet->makeThreshold(thresholds);
 }
 
 void DenoisingManager::setWaveletName(const QString &waveletName)
 {
-    m_wavelet->setWaveletFunction(waveletName);
+    m_wavelet->setWaveletFunction(Wavelet::fromString(waveletName));
 }
 
 void DenoisingManager::setLevel(int level)
@@ -27,7 +27,7 @@ void DenoisingManager::setLevel(int level)
 
 void DenoisingManager::setThresholdType(const QString &thresholdType)
 {
-    m_wavelet->setThresholdType(thresholdType);
+//    m_wavelet->setThresholdType(thresholdType);
 }
 
 Audio::SignalSource DenoisingManager::inputSignal() const
@@ -42,7 +42,7 @@ Audio::SignalSource DenoisingManager::transformedSignal() const
 
 Audio::SignalsSourceVector DenoisingManager::transformedDecomposition() const
 {
-    return m_wavelet->decomposition();
+    return m_wavelet->transformedSignalVector();
 }
 
 Audio::SignalSource DenoisingManager::outputSignal() const
@@ -52,7 +52,7 @@ Audio::SignalSource DenoisingManager::outputSignal() const
 
 Audio::SignalSource DenoisingManager::thresholdedSignal() const
 {
-    return m_wavelet->thresholded();
+    return m_wavelet->transformedSignal();
 }
 
 void DenoisingManager::makeTransform()
@@ -65,7 +65,8 @@ void DenoisingManager::makeTransform()
         return;
     }
 
-    m_wavelet->makeTransform(m_inputSignal);
+    m_wavelet->setSignal(m_inputSignal);
+    m_wavelet->makeTransform();
     m_transformedSignal = m_wavelet->transformedSignal();
 }
 
@@ -79,6 +80,6 @@ void DenoisingManager::makeInverseTransform()
         return;
     }
 
-    m_wavelet->makeInverseTransform(m_transformedSignal);
-    m_outputSignal = m_wavelet->resultSignal();
+    m_wavelet->makeInverseTransform();
+    m_outputSignal = m_wavelet->outputSignal();
 }

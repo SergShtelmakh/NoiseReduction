@@ -19,6 +19,7 @@ SOURCES  += $$PWD/src/main.cpp\
             $$PWD/src/DenoisingWidget.cpp \
             $$PWD/src/PlotManager.cpp \
             $$PWD/src/ThresholdsWidget.cpp \
+            $$PWD/src/ThresholdsManager.cpp \
             $$PWD/src/audio/Audio.cpp \
             $$PWD/src/audio/AudioPlayerWidget.cpp \
             $$PWD/src/audio/AudioRecordWidget.cpp \
@@ -31,6 +32,7 @@ HEADERS  += $$PWD/src/mainwindow.h \
             $$PWD/src/DenoisingWidget.h \
             $$PWD/src/PlotManager.h \
             $$PWD/src/ThresholdsWidget.h \
+            $$PWD/src/ThresholdsManager.h \
             $$PWD/src/audio/Audio.h \
             $$PWD/src/audio/AudioPlayerWidget.h \
             $$PWD/src/audio/AudioRecordWidget.h \

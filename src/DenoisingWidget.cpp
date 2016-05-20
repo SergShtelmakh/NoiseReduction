@@ -15,7 +15,7 @@ DenoisingWidget::DenoisingWidget(QWidget *parent)
     ui->setupUi(this);
 
     ui->cbWaveletType->addItems(Wavelet::waveletFunctionsNames());
-    ui->cbThresholdType->addItems(Wavelet::thresholdsNames());
+//    ui->cbThresholdType->addItems(Wavelet::thresholdsNames());
 }
 
 DenoisingWidget::~DenoisingWidget()

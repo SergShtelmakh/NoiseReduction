@@ -2,130 +2,69 @@
 
 #include <QHash>
 
-#include "DiscretePeriodicWavelet.h"
+namespace Wavelet {
 
-using WaveletType = Wavelet::WaveletFunction;
-using WaveletHash = QHash<WaveletType, std::string>;
-using TransformType = Wavelet::WaveletTransformType;
-using TransformTypeHash = QHash<TransformType, QString>;
-using ThresholdType = Wavelet::ThresholdType;
-using ThresholdTypeHash = QHash<ThresholdType, QString>;
-
-uint qHash(WaveletType type, uint seed) {
-    return qHash(static_cast<int>(type), seed);
-}
-
-uint qHash(TransformType type, uint seed) {
-    return qHash(static_cast<int>(type), seed);
-}
-
-uint qHash(ThresholdType type, uint seed) {
-    return qHash(static_cast<int>(type), seed);
-}
-
-
-namespace {
+using WaveletHash = QHash<WaveletFunction, std::string>;
 
 WaveletHash makeWaveletNameHash() {
     WaveletHash names;
-    names[WaveletType::Haar] = "haar";
+    names[WaveletFunction::Haar] = "haar";
 
-    names[WaveletType::Daubechies1] = "db1";
-    names[WaveletType::Daubechies2] = "db2";
-    names[WaveletType::Daubechies3] = "db3";
-    names[WaveletType::Daubechies4] = "db4";
-    names[WaveletType::Daubechies5] = "db5";
-    names[WaveletType::Daubechies6] = "db6";
-    names[WaveletType::Daubechies7] = "db7";
-    names[WaveletType::Daubechies8] = "db8";
-    names[WaveletType::Daubechies9] = "db9";
-    names[WaveletType::Daubechies10] = "db10";
-    names[WaveletType::Daubechies11] = "db11";
-    names[WaveletType::Daubechies12] = "db12";
-    names[WaveletType::Daubechies13] = "db13";
-    names[WaveletType::Daubechies14] = "db14";
-    names[WaveletType::Daubechies15] = "db15";
+    names[WaveletFunction::Daubechies1] = "db1";
+    names[WaveletFunction::Daubechies2] = "db2";
+    names[WaveletFunction::Daubechies3] = "db3";
+    names[WaveletFunction::Daubechies4] = "db4";
+    names[WaveletFunction::Daubechies5] = "db5";
+    names[WaveletFunction::Daubechies6] = "db6";
+    names[WaveletFunction::Daubechies7] = "db7";
+    names[WaveletFunction::Daubechies8] = "db8";
+    names[WaveletFunction::Daubechies9] = "db9";
+    names[WaveletFunction::Daubechies10] = "db10";
+    names[WaveletFunction::Daubechies11] = "db11";
+    names[WaveletFunction::Daubechies12] = "db12";
+    names[WaveletFunction::Daubechies13] = "db13";
+    names[WaveletFunction::Daubechies14] = "db14";
+    names[WaveletFunction::Daubechies15] = "db15";
 
-    names[WaveletType::Biorthogonal1_1] = "bior1.1";
-    names[WaveletType::Biorthogonal1_3] = "bior1.3";
-    names[WaveletType::Biorthogonal1_5] = "bior1.5";
-    names[WaveletType::Biorthogonal2_2] = "bior2.2";
-    names[WaveletType::Biorthogonal2_4] = "bior2.4";
-    names[WaveletType::Biorthogonal2_6] = "bior2.6";
-    names[WaveletType::Biorthogonal2_8] = "bior2.8";
-    names[WaveletType::Biorthogonal3_1] = "bior3.1";
-    names[WaveletType::Biorthogonal3_3] = "bior3.3";
-    names[WaveletType::Biorthogonal3_5] = "bior3.5";
-    names[WaveletType::Biorthogonal3_7] = "bior3.7";
-    names[WaveletType::Biorthogonal3_9] = "bior3.9";
-    names[WaveletType::Biorthogonal4_4] = "bior4.4";
-    names[WaveletType::Biorthogonal5_5] = "bior5.5";
-    names[WaveletType::Biorthogonal6_8] = "bior6.8";
+    names[WaveletFunction::Biorthogonal1_1] = "bior1.1";
+    names[WaveletFunction::Biorthogonal1_3] = "bior1.3";
+    names[WaveletFunction::Biorthogonal1_5] = "bior1.5";
+    names[WaveletFunction::Biorthogonal2_2] = "bior2.2";
+    names[WaveletFunction::Biorthogonal2_4] = "bior2.4";
+    names[WaveletFunction::Biorthogonal2_6] = "bior2.6";
+    names[WaveletFunction::Biorthogonal2_8] = "bior2.8";
+    names[WaveletFunction::Biorthogonal3_1] = "bior3.1";
+    names[WaveletFunction::Biorthogonal3_3] = "bior3.3";
+    names[WaveletFunction::Biorthogonal3_5] = "bior3.5";
+    names[WaveletFunction::Biorthogonal3_7] = "bior3.7";
+    names[WaveletFunction::Biorthogonal3_9] = "bior3.9";
+    names[WaveletFunction::Biorthogonal4_4] = "bior4.4";
+    names[WaveletFunction::Biorthogonal5_5] = "bior5.5";
+    names[WaveletFunction::Biorthogonal6_8] = "bior6.8";
 
-    names[WaveletType::Coiflet1] = "coif1";
-    names[WaveletType::Coiflet2] = "coif2";
-    names[WaveletType::Coiflet3] = "coif3";
-    names[WaveletType::Coiflet4] = "coif4";
-    names[WaveletType::Coiflet5] = "coif5";
+    names[WaveletFunction::Coiflet1] = "coif1";
+    names[WaveletFunction::Coiflet2] = "coif2";
+    names[WaveletFunction::Coiflet3] = "coif3";
+    names[WaveletFunction::Coiflet4] = "coif4";
+    names[WaveletFunction::Coiflet5] = "coif5";
 
-    names[WaveletType::Symmlet1] = "sym1";
-    names[WaveletType::Symmlet2] = "sym2";
-    names[WaveletType::Symmlet3] = "sym3";
-    names[WaveletType::Symmlet4] = "sym4";
-    names[WaveletType::Symmlet5] = "sym5";
-    names[WaveletType::Symmlet6] = "sym6";
-    names[WaveletType::Symmlet7] = "sym7";
-    names[WaveletType::Symmlet8] = "sym8";
-    names[WaveletType::Symmlet9] = "sym9";
-    names[WaveletType::Symmlet10] = "sym10";
+    names[WaveletFunction::Symmlet1] = "sym1";
+    names[WaveletFunction::Symmlet2] = "sym2";
+    names[WaveletFunction::Symmlet3] = "sym3";
+    names[WaveletFunction::Symmlet4] = "sym4";
+    names[WaveletFunction::Symmlet5] = "sym5";
+    names[WaveletFunction::Symmlet6] = "sym6";
+    names[WaveletFunction::Symmlet7] = "sym7";
+    names[WaveletFunction::Symmlet8] = "sym8";
+    names[WaveletFunction::Symmlet9] = "sym9";
+    names[WaveletFunction::Symmlet10] = "sym10";
 
     return names;
 }
 
-TransformTypeHash makeTransformNameHash() {
-    TransformTypeHash names;
-    names[TransformType::DiscretePeriodic1D] = "Discrete Periodic";
-    return names;
-}
+static const auto waveletHash = makeWaveletNameHash();
 
-ThresholdTypeHash makeThresholdNameHash() {
-    ThresholdTypeHash names;
-    names[ThresholdType::Hard]  = "Hard";
-    names[ThresholdType::Soft]  = "Soft";
-    names[ThresholdType::Fuzzy] = "Fuzzy";
-    return names;
-}
-
-}
-
-void Wavelet::setWaveletFunction(Wavelet::WaveletFunction function)
-{
-    m_waveletFunction = function;
-}
-
-void Wavelet::setWaveletFunction(const QString &functionName)
-{
-    static auto names = makeWaveletNameHash();
-    m_waveletFunction = names.key(functionName.toStdString(), WaveletFunction::Haar);
-}
-
-void Wavelet::setLevel(int level)
-{
-    m_level = level;
-}
-
-void Wavelet::setThresholdType(Wavelet::ThresholdType type)
-{
-    m_thresholdType = type;
-}
-
-void Wavelet::setThresholdType(const QString &type)
-{
-    static auto names = makeThresholdNameHash();
-    m_thresholdType = names.key(type, ThresholdType::Hard);
-}
-
-QList<QString> Wavelet::waveletFunctionsNames()
+QList<QString> waveletFunctionsNames()
 {
     auto first = static_cast<int>(WaveletFunction::First);
     auto last = static_cast<int>(WaveletFunction::Last);
@@ -137,74 +76,22 @@ QList<QString> Wavelet::waveletFunctionsNames()
     return names;
 }
 
-QList<QString> Wavelet::transformsNames()
+std::string toStdString(WaveletFunction function)
 {
-    auto first = static_cast<int>(TransformType::First);
-    auto last = static_cast<int>(TransformType::Last);
-    QList<QString> names;
-    for (auto i = first; i <= last; i++) {
-        auto currentType = static_cast<TransformType>(i);
-        names << toString(currentType);
-    }
-    return names;
+    return waveletHash.value(function, "");
 }
 
-QList<QString> Wavelet::thresholdsNames()
+QString toString(WaveletFunction function)
 {
-    auto first = static_cast<int>(ThresholdType::First);
-    auto last = static_cast<int>(ThresholdType::Last);
-    QList<QString> names;
-    for (auto i = first; i <= last; i++) {
-        auto currentType = static_cast<ThresholdType>(i);
-        names << toString(currentType);
-    }
-    return names;
+    return QString::fromStdString(waveletHash.value(function, ""));
 }
 
-Wavelet *Wavelet::create(Wavelet::WaveletTransformType type)
+WaveletFunction fromString(const QString &str)
 {
-    switch (type) {
-    case WaveletTransformType::DiscretePeriodic1D:
-        return new DiscretePeriodicWavelet;
-    default:
-        Q_ASSERT(false);
-    }
-
-    return nullptr;
+    return waveletHash.key(str.toStdString(), Wavelet::Haar);
 }
 
-Audio::SignalSource Wavelet::transformedSignal() const
-{
-    return Audio::SignalSource::fromStdVector(m_transformedSignal);
 }
 
-Audio::SignalSource Wavelet::resultSignal() const
-{
-    return Audio::SignalSource::fromStdVector(m_resultSignal);
-}
 
-Audio::SignalSource Wavelet::thresholded() const
-{
-    return Audio::SignalSource::fromStdVector(m_thresholded);
-}
 
-std::string Wavelet::toStdString(Wavelet::WaveletFunction function)
-{
-    static auto names = makeWaveletNameHash();
-    return names.value(function, "");
-}
-
-QString Wavelet::toString(WaveletFunction function)
-{
-    return QString::fromStdString(toStdString(function));
-}
-
-QString Wavelet::toString(TransformType type) {
-    static auto names = makeTransformNameHash();
-    return names.value(type, "");
-}
-
-QString Wavelet::toString(ThresholdType type) {
-    static auto names = makeThresholdNameHash();
-    return names.value(type, "");
-}

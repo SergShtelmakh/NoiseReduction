@@ -1,95 +1,37 @@
 #include "DiscretePeriodicWavelet.h"
 
 #include <wavelet2d/wavelet2d.h>
-#include <src/PlotManager.h>
 
-DiscretePeriodicWavelet::DiscretePeriodicWavelet()
-    : Wavelet()
+void DiscretePeriodicWavelet::setSignal(const Audio::SignalSource &data)
 {
+    m_inputSignal = data.toStdVector();
 }
 
-Wavelet::WaveletTransformType DiscretePeriodicWavelet::type()
+Audio::SignalSource DiscretePeriodicWavelet::inputSignal() const
 {
-    return WaveletTransformType::DiscretePeriodic1D;
+    return Audio::SignalSource::fromStdVector(m_inputSignal);
 }
 
-void DiscretePeriodicWavelet::makeTransform(const Audio::SignalSource &signal)
+void DiscretePeriodicWavelet::makeTransform()
 {
     m_flag.clear();
     m_length.clear();
     m_transformedSignal.clear();
-    m_resultSignal.clear();
-    m_inputSignal = signal.toStdVector();
+    m_outputSignal.clear();
+
+    if (m_inputSignal.empty()) {
+        return;
+    }
+
     dwt(m_inputSignal, m_level, toStdString(m_waveletFunction), m_transformedSignal, m_flag, m_length);
 }
 
-void DiscretePeriodicWavelet::makeThreshold(const QVector<double> &thresholds)
+Audio::SignalSource DiscretePeriodicWavelet::transformedSignal() const
 {
-    if (m_transformedSignal.empty()) {
-        return;
-    }
-
-    m_thresholded.clear();
-
-    Q_ASSERT(thresholds.size() == static_cast<int>(m_length.size() - 1));
-
-    auto begin = 0;
-    auto end = 0;
-
-    for (size_t i = 0; i < m_length.size() - 1; ++i) {
-        auto currentSize = m_length[i];
-        end = begin + currentSize;
-        for (int j = begin; j < end; j++) {
-            double thresholded = 0.0;
-            switch (m_thresholdType) {
-            case ThresholdType::Hard:
-                thresholded = qAbs(m_transformedSignal[j]) > thresholds[i] ? m_transformedSignal[j] : 0;
-                break;
-            case ThresholdType::Soft:
-                thresholded = qMax(0.0, 1.0 - (thresholds[i]/ qAbs(m_transformedSignal[j] + 0.0001))) * m_transformedSignal[j];
-                break;
-            default:
-                break;
-            }
-
-
-            m_thresholded.push_back(thresholded);
-        }
-        begin = end;
-    }
+    return Audio::SignalSource::fromStdVector(m_transformedSignal);
 }
 
-void DiscretePeriodicWavelet::makeInverseTransform(const Audio::SignalSource &signal)
-{
-    if (m_transformedSignal.empty() && m_thresholded.empty())
-        return;
-
-
-    m_transformedSignal = signal.toStdVector();
-    idwt(m_thresholded, m_flag, toStdString(m_waveletFunction), m_resultSignal, m_length);
-}
-
-QString DiscretePeriodicWavelet::resultText()
-{
-    QString text = "Discrete periodic wavelet transform done\n\n";
-
-    text += QString("Input signal size = %1\n").arg(m_inputSignal.size());
-    text += QString("Transformed signal size = %1\n\n").arg(m_transformedSignal.size());
-
-    for (size_t i = 0; i < m_flag.size(); i++) {
-        text += QString("Flag[%1] = %2\n").arg(i).arg(m_flag[i]);
-    }
-
-    text += "\n";
-
-    for (size_t i = 0; i < m_length.size(); i++) {
-        text += QString("Length[%1] = %2\n").arg(i).arg(m_length[i]);
-    }
-
-    return text;
-}
-
-Audio::SignalsSourceVector DiscretePeriodicWavelet::decomposition()
+Audio::SignalsSourceVector DiscretePeriodicWavelet::transformedSignalVector() const
 {
     if (m_transformedSignal.empty())
         return Audio::SignalsSourceVector();
@@ -111,3 +53,24 @@ Audio::SignalsSourceVector DiscretePeriodicWavelet::decomposition()
     return decomposition;
 }
 
+void DiscretePeriodicWavelet::setTransformedSignalVector(const Audio::SignalsSourceVector &data)
+{
+    Audio::SignalSource thresholded;
+    for (auto i : data) {
+        thresholded.append(i);
+    }
+    m_transformedSignal = thresholded.toStdVector();
+}
+
+void DiscretePeriodicWavelet::makeInverseTransform()
+{
+    if (m_transformedSignal.empty())
+        return;
+
+    idwt(m_transformedSignal, m_flag, toStdString(m_waveletFunction), m_outputSignal, m_length);
+}
+
+Audio::SignalSource DiscretePeriodicWavelet::outputSignal() const
+{
+    return Audio::SignalSource::fromStdVector(m_outputSignal);
+}

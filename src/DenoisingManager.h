@@ -2,7 +2,8 @@
 
 #include <QObject>
 
-#include <src/wavelets/wavelet.h>
+#include <src/wavelets/DiscretePeriodicWavelet.h>
+#include <src/audio/AudioSignal.h>
 
 #include <QScopedPointer>
 
@@ -32,5 +33,5 @@ private:
     Audio::SignalSource m_transformedSignal;
     Audio::SignalSource m_outputSignal;
 
-    QScopedPointer<Wavelet> m_wavelet;
+    QScopedPointer<DiscretePeriodicWavelet> m_wavelet;
 };
