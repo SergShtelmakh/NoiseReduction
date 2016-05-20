@@ -24,7 +24,7 @@ PlotManager::PlotData PlotManager::createPlotData(const Audio::SignalSource &dat
 }
 
 
-void PlotManager::plot(QCustomPlot *widget, const Audio::SignalSource &data, double minX, double maxX)
+void PlotManager::plot(QCustomPlot *widget, const Audio::SignalSource &data, double minX, double maxX, bool interaction)
 {
     if (!widget || data.size() == 0) {
         return;
@@ -41,7 +41,9 @@ void PlotManager::plot(QCustomPlot *widget, const Audio::SignalSource &data, dou
 
     widget->xAxis->setRange(plotData.minX, plotData.maxX);
     widget->yAxis->setRange(plotData.minY, plotData.maxY);
-    widget->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    if (interaction) {
+        widget->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    }
     widget->replot();
 }
 

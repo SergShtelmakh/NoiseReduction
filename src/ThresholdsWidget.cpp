@@ -14,13 +14,25 @@ ThresholdsWidget::ThresholdsWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->wPlot->addGraph();
-    ui->wPlot->addGraph();
-    ui->wPlot->addGraph();
+    ui->wPlot->addGraph(); // signal
+    ui->wPlot->addGraph(); // positive threshold
+    ui->wPlot->addGraph(); // negative threshold
     ui->wPlot->graph(1)->setPen(cThresholdLevelPen);
     ui->wPlot->graph(2)->setPen(cThresholdLevelPen);
     ui->wPlot->xAxis->setLabel("Time");
     ui->wPlot->yAxis->setLabel("Amplitude");
+
+    ui->positiveDensityPlot->addGraph(); // density
+    ui->positiveDensityPlot->addGraph(); // threshold
+    ui->positiveDensityPlot->graph(1)->setPen(cThresholdLevelPen);
+    ui->positiveDensityPlot->xAxis->setLabel("Amplitude");
+    ui->positiveDensityPlot->yAxis->setLabel("N");
+
+    ui->negativeDensityPlot->addGraph(); // density
+    ui->negativeDensityPlot->addGraph(); // threshold
+    ui->negativeDensityPlot->graph(1)->setPen(cThresholdLevelPen);
+    ui->negativeDensityPlot->xAxis->setLabel("Amplitude");
+    ui->negativeDensityPlot->yAxis->setLabel("N");
 }
 
 ThresholdsWidget::~ThresholdsWidget()
@@ -45,7 +57,6 @@ void ThresholdsWidget::setSignalSource(const Audio::SignalSource &signal)
     setMaxThreshold(Audio::maxAmplitude(m_signalSource));
     m_positiveDensity = Audio::makeSignalDensity(m_signalSource, true);
     m_negativeDensity = Audio::makeSignalDensity(m_signalSource, false);
-    updatePlotData();
     replotSignal();
     replotDensity();
 }
@@ -76,53 +87,52 @@ void ThresholdsWidget::setThreshold(double threshold)
     replotThreshold();
 }
 
-void ThresholdsWidget::updatePlotData()
+void ThresholdsWidget::replotSignal()
 {
     if (m_signalSource.size() == 0) {
         return;
     }
+    m_signalPlotData = PlotManager::createPlotData(m_signalSource, 0, m_signalSource.size());
 
-    m_x.clear();
-    m_x.fill(0, m_signalSource.size());
-    auto maxX = m_signalSource.size();
-    auto minX = 0;
-    auto dx = (maxX - minX) / m_signalSource.size();
-    auto currentX = minX;
-    auto minY = m_signalSource.first();
-    auto maxY = m_signalSource.first();
-    for (auto i = 0; i < m_signalSource.size(); ++i) {
-        m_x[i] = currentX;
-        currentX += dx;
-        minY = qMin(m_signalSource[i], minY);
-        maxY = qMax(m_signalSource[i], maxY);
-    }
-
-    ui->wPlot->xAxis->setRange(minX, maxX);
-    ui->wPlot->yAxis->setRange(minY, maxY);
-}
-
-void ThresholdsWidget::replotSignal()
-{
-    ui->wPlot->graph(0)->setData(m_x, m_signalSource);
+    ui->wPlot->graph(0)->setData(m_signalPlotData.x, m_signalPlotData.y);
+    ui->wPlot->xAxis->setRange(m_signalPlotData.minX, m_signalPlotData.maxX);
+    ui->wPlot->yAxis->setRange(m_signalPlotData.minY, m_signalPlotData.maxY);
     ui->wPlot->replot();
 }
 
 void ThresholdsWidget::replotThreshold()
 {
     QVector<double> thresholdVector;
-
-    thresholdVector.fill(m_threshold, m_x.size());
-    ui->wPlot->graph(1)->setData(m_x, thresholdVector);
-    thresholdVector.fill(-m_threshold, m_x.size());
-    ui->wPlot->graph(2)->setData(m_x, thresholdVector);
-
+    thresholdVector.fill(m_threshold, m_signalPlotData.x.size());
+    ui->wPlot->graph(1)->setData(m_signalPlotData.x, thresholdVector);
+    thresholdVector.fill(-m_threshold, m_signalPlotData.x.size());
+    ui->wPlot->graph(2)->setData(m_signalPlotData.x, thresholdVector);
     ui->wPlot->replot();
+
+    QVector<double> posT_x = { m_threshold, m_threshold + 1 };
+    QVector<double> posT_y = { m_pdPlotData.minY, m_pdPlotData.maxY };
+    ui->positiveDensityPlot->graph(1)->setData(posT_x, posT_y);
+    ui->positiveDensityPlot->replot();
+
+    QVector<double> negT_x = { -m_threshold, -m_threshold + 1 };
+    QVector<double> negT_y = { m_ndPlotData.minY, m_ndPlotData.maxY };
+    ui->negativeDensityPlot->graph(1)->setData(negT_x, negT_y);
+    ui->negativeDensityPlot->replot();
 }
 
 void ThresholdsWidget::replotDensity()
 {
-//    PlotManager::plot(ui->positiveDensityPlot, m_positiveDensity, 0, m_positiveDensity.size());
-//    PlotManager::plot(ui->negativeDensityPlot, m_negativeDensity, -m_negativeDensity.size(), 0);
+    m_pdPlotData = PlotManager::createPlotData(m_positiveDensity, 0, m_positiveDensity.size());
+    ui->positiveDensityPlot->graph(0)->setData(m_pdPlotData.x, m_pdPlotData.y);
+    ui->positiveDensityPlot->xAxis->setRange(m_pdPlotData.minX, m_pdPlotData.maxX);
+    ui->positiveDensityPlot->yAxis->setRange(m_pdPlotData.minY, m_pdPlotData.maxY);
+    ui->positiveDensityPlot->replot();
+
+    m_ndPlotData = PlotManager::createPlotData(m_negativeDensity, -m_negativeDensity.size(), 0);
+    ui->negativeDensityPlot->graph(0)->setData(m_ndPlotData.x, m_ndPlotData.y);
+    ui->negativeDensityPlot->xAxis->setRange(m_ndPlotData.minX, m_ndPlotData.maxX);
+    ui->negativeDensityPlot->yAxis->setRange(m_ndPlotData.minY, m_ndPlotData.maxY);
+    ui->negativeDensityPlot->replot();
 }
 
 void ThresholdsWidget::setMaxThreshold(double maxThreshold)

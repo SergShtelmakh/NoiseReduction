@@ -3,6 +3,7 @@
 #include <QWidget>
 
 #include <src/audio/Audio.h>
+#include <src/PlotManager.h>
 
 namespace Ui { class ThresholdsWidget; }
 
@@ -32,7 +33,6 @@ private slots:
     void on_sbThresholdsLevel_valueChanged(int arg1);
 
 private:
-    void updatePlotData();
     void replotSignal();
     void replotThreshold();
     void replotDensity();
@@ -45,6 +45,10 @@ private:
 
     QVector<double> m_positiveDensity;
     QVector<double> m_negativeDensity;
+
+    PlotManager::PlotData m_signalPlotData;
+    PlotManager::PlotData m_pdPlotData;
+    PlotManager::PlotData m_ndPlotData;
 
     Ui::ThresholdsWidget *ui;
 };

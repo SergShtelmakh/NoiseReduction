@@ -20,7 +20,7 @@ struct PlotData {
 };
     PlotData createPlotData(const Audio::SignalSource &data, double minX, double maxX);
 
-    void plot(QCustomPlot* widget, const Audio::SignalSource &data, double minX, double maxX);
+    void plot(QCustomPlot* widget, const Audio::SignalSource &data, double minX, double maxX, bool interaction = true);
     void plot(QCustomPlot *widget, const AudioSignal &signal);
 
     void createPlot(const Audio::SignalSource &data);
