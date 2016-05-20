@@ -3,6 +3,7 @@
 
 #include <src/DenoisingManager.h>
 #include <src/ThresholdsWidget.h>
+#include <src/ThresholdsManager.h>
 #include <src/PlotManager.h>
 
 #include <QScrollArea>
@@ -15,7 +16,7 @@ DenoisingWidget::DenoisingWidget(QWidget *parent)
     ui->setupUi(this);
 
     ui->cbWaveletType->addItems(Wavelet::waveletFunctionsNames());
-//    ui->cbThresholdType->addItems(Wavelet::thresholdsNames());
+    ui->cbThresholdType->addItems(ThresholdsManager::thresholdsNames());
 }
 
 DenoisingWidget::~DenoisingWidget()

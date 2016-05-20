@@ -2,6 +2,7 @@
 
 #include <QAudioEncoderSettings>
 #include <QAudioFormat>
+#include <QVector>
 
 namespace Audio {
 
