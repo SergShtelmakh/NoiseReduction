@@ -58,7 +58,7 @@ void DenoisingWidget::on_pbPrepare_clicked()
     m_denoisingManager->setWaveletName(ui->cbWaveletType->currentText());
     m_denoisingManager->setLevel(ui->sbLevel->value());
     m_denoisingManager->makeTransform();
-//    PlotManager::plot(ui->inputTransformedSignalWidget, m_denoisingManager->transformedSignal());
+    PlotManager::plot(ui->inputTransformedSignalWidget, m_denoisingManager->transformedSignal());
 
     auto decomposition = m_denoisingManager->transformedDecomposition();
 
@@ -101,7 +101,7 @@ void DenoisingWidget::on_pbProcess_clicked()
     m_denoisingManager->makeThreshold(thresholdsData());
     m_denoisingManager->makeInverseTransform();
 
-//    PlotManager::plot(ui->outputTransformedSignalWidget, m_denoisingManager->thresholdedSignal());
+    PlotManager::plot(ui->outputTransformedSignalWidget, m_denoisingManager->thresholdedSignal());
     ui->outputSignalPlayerWidget->setSignalSource(m_denoisingManager->outputSignal());
-//    PlotManager::plot(Audio::makeSignalDifference(m_inputAudioSignal->source(), m_denoisingManager->outputSignal()));
+    PlotManager::createPlot(Audio::makeSignalDifference(m_inputAudioSignal->source(), m_denoisingManager->outputSignal()));
 }
