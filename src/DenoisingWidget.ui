@@ -62,10 +62,13 @@
         <item row="1" column="2">
          <widget class="QSpinBox" name="sbLevel">
           <property name="minimum">
-           <number>2</number>
+           <number>1</number>
           </property>
           <property name="maximum">
-           <number>10</number>
+           <number>6</number>
+          </property>
+          <property name="value">
+           <number>5</number>
           </property>
          </widget>
         </item>

@@ -7,6 +7,8 @@ namespace {
 using ThresholdType = ThresholdsManager::ThresholdType;
 using ThresholdTypeHash = QHash<ThresholdType, QString>;
 
+const int cFuzzyStep = 5;
+
 ThresholdTypeHash makeThresholdNameHash() {
     ThresholdTypeHash names;
     names[ThresholdType::Hard]  = "Hard";
@@ -19,6 +21,25 @@ static const auto thresholdsNameHash = makeThresholdNameHash();
 
 QString toString(ThresholdType type) {
     return thresholdsNameHash.value(type, "");
+}
+
+int nonZeroNeighborCount(const QVector<double> &data, int index) {
+    int count = 0;
+    for (int i = index - cFuzzyStep; i < index + cFuzzyStep; i++) {
+        if (i >= 0 && i < data.size() && qAbs(data[i]) > 0) {
+            count++;
+        }
+    }
+    return count;
+}
+
+bool nonZeroNeighborExist(const QVector<double> &data, int index) {
+    for (int i = index - cFuzzyStep; i < index + cFuzzyStep; i++) {
+        if (i >= 0 && i < data.size() && qAbs(data[i]) > 0) {
+            return true;
+        }
+    }
+    return false;
 }
 
 }
@@ -49,19 +70,40 @@ void ThresholdsManager::makeThreshold(const QVector<double> &thresholds)
 
     m_thresholdedSignalsVector.clear();
     for (int i = 0; i < thresholds.size(); ++i) {
-        QVector<double> currentSignal;
-        for (auto signalItem : m_signalsVector.at(i)) {
-            switch (m_thresholdType) {
-            case ThresholdType::Hard:
-                currentSignal.append((qAbs(signalItem) > thresholds[i]) ? signalItem : 0);
-                break;
-            case ThresholdType::Soft:
-                currentSignal.append(qMax(0.0, 1.0 - (thresholds[i]/ qAbs(signalItem + 0.0001))) * signalItem);
-                break;
-            default:
-                break;
+        m_thresholdedSignalsVector << threshodedSignal(m_signalsVector.at(i), thresholds[i]);
+    }
+}
+
+QVector<double> ThresholdsManager::threshodedSignal(const QVector<double> &signal, double threshod)
+{
+    QVector<double> result;
+    switch (m_thresholdType) {
+    case ThresholdType::Hard: {
+        for (auto signalItem : signal) {
+            result.append((qAbs(signalItem) > threshod) ? signalItem : 0);
+        }
+        break;
+    }
+    case ThresholdType::Soft: {
+        for (auto signalItem : signal) {
+            result.append(qMax(0.0, 1.0 - (threshod/ qAbs(signalItem + 0.0001))) * signalItem);
+        }
+        break;
+    }
+    case ThresholdType::Fuzzy: {
+        for (auto signalItem : signal) {
+            result.append(qMax(0.0, 1.0 - (threshod/ qAbs(signalItem + 0.0001))) * signalItem);
+        }
+        for (int i = 0; i < result.size(); i++) {
+            if (qAbs(result[i]) > 0 && nonZeroNeighborCount(result, i) < cFuzzyStep) {
+                result[i] = 0;
             }
         }
-        m_thresholdedSignalsVector << currentSignal;
+        break;
     }
+    default:
+        break;
+    }
+
+    return result;
 }

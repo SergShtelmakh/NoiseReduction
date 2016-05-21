@@ -32,6 +32,8 @@ public:
     Audio::SignalsSourceVector thresholdedSignalsVector() const { return m_thresholdedSignalsVector; }
 
 private:
+    QVector<double> threshodedSignal(const QVector<double> &signal, double threshod);
+
     ThresholdType m_thresholdType;
 
     Audio::SignalsSourceVector m_signalsVector;
