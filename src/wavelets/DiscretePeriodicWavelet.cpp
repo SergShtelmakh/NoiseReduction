@@ -59,15 +59,25 @@ void DiscretePeriodicWavelet::setTransformedSignalVector(const Audio::SignalsSou
     for (auto i : data) {
         thresholded.append(i);
     }
-    m_transformedSignal = thresholded.toStdVector();
+    m_thresholdedSignal = thresholded.toStdVector();
+}
+
+Audio::SignalSource DiscretePeriodicWavelet::thresholdedSignal() const
+{
+    return Audio::SignalSource::fromStdVector(m_thresholdedSignal);
 }
 
 void DiscretePeriodicWavelet::makeInverseTransform()
 {
-    if (m_transformedSignal.empty())
+    if (m_thresholdedSignal.empty()) {
+        if (m_transformedSignal.empty()) {
+            return;
+        }
+        idwt(m_transformedSignal, m_flag, toStdString(m_waveletFunction), m_outputSignal, m_length);
         return;
+    }
 
-    idwt(m_transformedSignal, m_flag, toStdString(m_waveletFunction), m_outputSignal, m_length);
+    idwt(m_thresholdedSignal, m_flag, toStdString(m_waveletFunction), m_outputSignal, m_length);
 }
 
 Audio::SignalSource DiscretePeriodicWavelet::outputSignal() const

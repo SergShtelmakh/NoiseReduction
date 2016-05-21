@@ -22,6 +22,7 @@ public:
     Audio::SignalSource transformedSignal() const;
     Audio::SignalsSourceVector transformedSignalVector() const;
     void setTransformedSignalVector(const Audio::SignalsSourceVector &data);
+    Audio::SignalSource thresholdedSignal() const;
 
     void makeInverseTransform();
 
@@ -36,6 +37,7 @@ private:
     std::vector<double> m_flag;
     std::vector<int> m_length;
     std::vector<double> m_transformedSignal;
+    std::vector<double> m_thresholdedSignal;
 
     std::vector<double> m_outputSignal;
 };

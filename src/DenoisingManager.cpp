@@ -40,6 +40,6 @@ Audio::SignalsSourceVector DenoisingManager::transformedDecomposition() const
 
 Audio::SignalSource DenoisingManager::thresholdedSignal() const
 {
-    return m_wavelet->transformedSignal();
+    return m_wavelet->thresholdedSignal();
 }
 
