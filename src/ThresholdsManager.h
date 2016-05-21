@@ -20,15 +20,15 @@ public:
 
     ThresholdsManager(){}
 
-    ThresholdType thresholdType() const;
-    void setThresholdType(const ThresholdType &thresholdType);
+    ThresholdType thresholdType() const { return m_thresholdType; }
+    void setThresholdType(const ThresholdType &thresholdType) { m_thresholdType = thresholdType; }
 
     void makeThreshold(const QVector<double> &thresholds);
 
-    Audio::SignalsSourceVector signalsVector() const;
-    void setSignalsVector(const Audio::SignalsSourceVector &signalsVector);
+    Audio::SignalsSourceVector signalsVector() const { return m_signalsVector; }
+    void setSignalsVector(const Audio::SignalsSourceVector &signalsVector) { m_signalsVector = signalsVector; }
 
-    Audio::SignalsSourceVector thresholdedSignalsVector() const;
+    Audio::SignalsSourceVector thresholdedSignalsVector() const { return m_thresholdedSignalsVector; }
 
 private:
     ThresholdType m_thresholdType;

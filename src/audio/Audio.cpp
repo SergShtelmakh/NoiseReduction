@@ -109,4 +109,46 @@ SignalSource makeSignalDensity(const SignalSource &signal, bool positivePart)
     return result;
 }
 
+SignalSource makeAmplitudeFrequency(const SignalSource &signal, bool positivePart, int step)
+{
+    double size_d = 0.0;
+    for (auto val : signal) {
+        size_d = positivePart ? qMax(size_d, val) : qMin(size_d, val);
+    }
+
+    auto size = static_cast<int>(positivePart ? size_d : -size_d);
+    QVector<double> result(size);
+    for (auto val : signal) {
+        int val_t = trunc(val);
+        int index = -1;
+        if (val_t > 0 && positivePart) {
+            index = val_t - 1;
+        } else if (val_t < 0 && !positivePart) {
+            index = size + val_t - 1;
+        }
+
+        if (index >= 0 && index < result.size()) {
+            result[index] = result[index] + 1;
+        } else {
+//            qDebug() << "Wrong index " << index;
+        }
+    }
+
+    int stepCounter = 0;
+    int sum = 0;
+    QVector<double> compressedResult;
+    for (int i = 0; i < result.size(); i++) {
+        stepCounter++;
+        sum += result[i];
+        if (stepCounter == step) {
+            QVector<double> sumVector(step, sum);
+            compressedResult.append(sumVector);
+            stepCounter = 0;
+            sum = 0;
+        }
+    }
+
+    return compressedResult;
+}
+
 }

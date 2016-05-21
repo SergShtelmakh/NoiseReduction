@@ -6,6 +6,7 @@
 
 namespace {
     const QPen cThresholdLevelPen = QPen(QBrush(Qt::red), 1);
+    const int cAmplitudeFrequencyStep = 10;
 }
 
 ThresholdsWidget::ThresholdsWidget(QWidget *parent) :
@@ -55,8 +56,8 @@ void ThresholdsWidget::setSignalSource(const Audio::SignalSource &signal)
     emit signalChanged(m_signalSource);
 
     setMaxThreshold(Audio::maxAmplitude(m_signalSource));
-    m_positiveDensity = Audio::makeSignalDensity(m_signalSource, true);
-    m_negativeDensity = Audio::makeSignalDensity(m_signalSource, false);
+    m_positiveDensity = Audio::makeAmplitudeFrequency(m_signalSource, true, cAmplitudeFrequencyStep);
+    m_negativeDensity = Audio::makeAmplitudeFrequency(m_signalSource, false, cAmplitudeFrequencyStep);
     replotSignal();
     replotDensity();
 }
