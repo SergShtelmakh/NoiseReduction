@@ -8,6 +8,10 @@
 
 #include <QScrollArea>
 
+namespace {
+    const bool cShowThresholdsWidgetSeparately = false;
+}
+
 DenoisingWidget::DenoisingWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::DenoisingWidget)
@@ -56,34 +60,37 @@ void DenoisingWidget::on_pbPrepare_clicked()
     clearWidget();
 
     m_denoisingManager->setSignal(*m_inputAudioSignal.data());
-    m_denoisingManager->setWaveletName(ui->cbWaveletType->currentText());
-    m_denoisingManager->setLevel(ui->sbLevel->value());
-    m_denoisingManager->makeTransform();
+    m_denoisingManager->prepareToDenoising(ui->cbWaveletType->currentText(), ui->sbLevel->value());
+
     PlotManager::plot(ui->inputTransformedSignalWidget, m_denoisingManager->transformedSignal());
 
     auto decomposition = m_denoisingManager->transformedDecomposition();
 
     m_itemsCount = decomposition.size();
-    /*
-    if (!ui->scrollAreaWidgetContents->layout()) {
-        ui->scrollAreaWidgetContents->setLayout(new QVBoxLayout());
+
+    QLayout *layout;
+    if (cShowThresholdsWidgetSeparately) {
+        QScrollArea* scrollArea = new QScrollArea();
+        scrollArea->setBackgroundRole(QPalette::Window);
+        scrollArea->setFrameShadow(QFrame::Plain);
+        scrollArea->setFrameShape(QFrame::NoFrame);
+        scrollArea->setWidgetResizable(true);
+
+        QWidget* wdg = new QWidget();
+        wdg->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        wdg->setLayout(new QVBoxLayout(wdg));
+        scrollArea->setWidget(wdg);
+        scrollArea->show();
+
+        layout = wdg->layout();
+    } else {
+        if (!ui->scrollAreaWidgetContents->layout()) {
+            ui->scrollAreaWidgetContents->setLayout(new QVBoxLayout());
+        }
+
+        layout = ui->scrollAreaWidgetContents->layout();
     }
 
-    auto layout = ui->scrollAreaWidgetContents->layout();
-
-*/
-    QScrollArea* scrollArea = new QScrollArea();
-    scrollArea->setBackgroundRole(QPalette::Window);
-    scrollArea->setFrameShadow(QFrame::Plain);
-    scrollArea->setFrameShape(QFrame::NoFrame);
-    scrollArea->setWidgetResizable(true);
-
-    QWidget* wdg = new QWidget();
-    wdg->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    wdg->setLayout(new QVBoxLayout(wdg));
-    scrollArea->setWidget(wdg);
-
-    auto layout = wdg->layout();
     for (auto item : decomposition) {
         auto wdg = new ThresholdsWidget(this);
         m_widgets.push_back(wdg);
@@ -91,16 +98,12 @@ void DenoisingWidget::on_pbPrepare_clicked()
         layout->addWidget(wdg);
     }
 
-    scrollArea->show();
-
     Q_ASSERT(m_itemsCount == m_widgets.size());
 }
 
 void DenoisingWidget::on_pbProcess_clicked()
 {
-    m_denoisingManager->setThresholdType(ui->cbThresholdType->currentText());
-    m_denoisingManager->makeThreshold(thresholdsData());
-    m_denoisingManager->makeInverseTransform();
+    m_denoisingManager->denoising(ui->cbThresholdType->currentText(), thresholdsData());
 
     PlotManager::plot(ui->outputTransformedSignalWidget, m_denoisingManager->thresholdedSignal());
     ui->outputSignalPlayerWidget->setSignalSource(m_denoisingManager->outputSignal());

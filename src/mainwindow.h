@@ -8,9 +8,7 @@ class AudioSignal;
 class AudioRecordWidget;
 class DenoisingWidget;
 
-namespace Ui {
-class MainWindow;
-}
+namespace Ui { class MainWindow; }
 
 class MainWindow : public QMainWindow
 {

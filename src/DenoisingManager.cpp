@@ -2,6 +2,7 @@
 
 DenoisingManager::DenoisingManager()
     : m_wavelet(new DiscretePeriodicWavelet())
+    , m_thresholdsManager(new ThresholdsManager())
 {
 }
 
@@ -10,34 +11,26 @@ void DenoisingManager::setSignal(const AudioSignal &signal)
     m_inputSignal = signal.source();
 }
 
-void DenoisingManager::makeThreshold(const QVector<double> &thresholds)
-{
-//    m_wavelet->makeThreshold(thresholds);
-}
-
-void DenoisingManager::setWaveletName(const QString &waveletName)
+void DenoisingManager::prepareToDenoising(const QString &waveletName, int level)
 {
     m_wavelet->setWaveletFunction(Wavelet::fromString(waveletName));
-}
-
-void DenoisingManager::setLevel(int level)
-{
     m_wavelet->setLevel(level);
+    m_wavelet->setSignal(m_inputSignal);
+
+    m_wavelet->makeTransform();
+    m_transformedSignal = m_wavelet->transformedSignal();
 }
 
-void DenoisingManager::setThresholdType(const QString &thresholdType)
+void DenoisingManager::denoising(const QString &thresholdType, const QVector<double> &thresholds)
 {
-//    m_wavelet->setThresholdType(thresholdType);
-}
+    m_thresholdsManager->setSignalsVector(m_wavelet->transformedSignalVector());
+    m_thresholdsManager->setThresholdType(ThresholdsManager::fromString(thresholdType));
+    m_thresholdsManager->makeThreshold(thresholds);
 
-Audio::SignalSource DenoisingManager::inputSignal() const
-{
-    return m_inputSignal;
-}
+    m_wavelet->setTransformedSignalVector(m_thresholdsManager->thresholdedSignalsVector());
 
-Audio::SignalSource DenoisingManager::transformedSignal() const
-{
-    return m_transformedSignal;
+    m_wavelet->makeInverseTransform();
+    m_outputSignal = m_wavelet->outputSignal();
 }
 
 Audio::SignalsSourceVector DenoisingManager::transformedDecomposition() const
@@ -45,41 +38,8 @@ Audio::SignalsSourceVector DenoisingManager::transformedDecomposition() const
     return m_wavelet->transformedSignalVector();
 }
 
-Audio::SignalSource DenoisingManager::outputSignal() const
-{
-    return m_outputSignal;
-}
-
 Audio::SignalSource DenoisingManager::thresholdedSignal() const
 {
     return m_wavelet->transformedSignal();
 }
 
-void DenoisingManager::makeTransform()
-{
-    Q_ASSERT(m_wavelet);
-
-    m_transformedSignal.clear();
-
-    if (m_inputSignal.empty()) {
-        return;
-    }
-
-    m_wavelet->setSignal(m_inputSignal);
-    m_wavelet->makeTransform();
-    m_transformedSignal = m_wavelet->transformedSignal();
-}
-
-void DenoisingManager::makeInverseTransform()
-{
-    Q_ASSERT(m_wavelet);
-
-    m_outputSignal.clear();
-
-    if (m_transformedSignal.empty()) {
-        return;
-    }
-
-    m_wavelet->makeInverseTransform();
-    m_outputSignal = m_wavelet->outputSignal();
-}

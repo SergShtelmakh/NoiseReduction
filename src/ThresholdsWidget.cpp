@@ -126,12 +126,14 @@ void ThresholdsWidget::replotDensity()
     m_pdPlotData = PlotManager::createPlotData(m_positiveDensity, 0, m_positiveDensity.size());
     ui->positiveDensityPlot->graph(0)->setData(m_pdPlotData.x, m_pdPlotData.y);
     ui->positiveDensityPlot->xAxis->setRange(m_pdPlotData.minX, m_pdPlotData.maxX);
+    ui->positiveDensityPlot->xAxis->setTickLabels(false);
     ui->positiveDensityPlot->yAxis->setRange(m_pdPlotData.minY, m_pdPlotData.maxY);
     ui->positiveDensityPlot->replot();
 
     m_ndPlotData = PlotManager::createPlotData(m_negativeDensity, -m_negativeDensity.size(), 0);
     ui->negativeDensityPlot->graph(0)->setData(m_ndPlotData.x, m_ndPlotData.y);
     ui->negativeDensityPlot->xAxis->setRange(m_ndPlotData.minX, m_ndPlotData.maxX);
+    ui->negativeDensityPlot->xAxis->setTickLabels(false);
     ui->negativeDensityPlot->yAxis->setRange(m_ndPlotData.minY, m_ndPlotData.maxY);
     ui->negativeDensityPlot->replot();
 }

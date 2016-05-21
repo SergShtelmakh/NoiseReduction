@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>832</width>
-    <height>562</height>
+    <width>1087</width>
+    <height>560</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,2">
+  <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0,1">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="2,5">
      <item>
@@ -106,14 +106,21 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>265</width>
-          <height>362</height>
+          <width>523</width>
+          <height>360</height>
          </rect>
         </property>
        </widget>
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -153,15 +160,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QCustomPlot</class>
-   <extends>QWidget</extends>
-   <header>qcustomplot/qcustomplot.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>AudioPlayerWidget</class>
    <extends>QWidget</extends>
    <header>src/audio/Audioplayerwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot/qcustomplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

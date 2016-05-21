@@ -37,7 +37,7 @@ void MainWindow::on_actionRecorder_triggered()
 
 void MainWindow::on_pbShowSourceSignal_clicked()
 {
-//    PlotManager::plot(m_sourceSignal->source());
+    PlotManager::createPlot(m_sourceSignal->source());
 }
 
 void MainWindow::on_pbMakeWhiteNoise_clicked()

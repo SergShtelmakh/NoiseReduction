@@ -17,16 +17,17 @@ public:
     };
 
     static QList<QString> thresholdsNames();
+    static ThresholdType fromString(const QString& str);
 
     ThresholdsManager(){}
 
     ThresholdType thresholdType() const { return m_thresholdType; }
     void setThresholdType(const ThresholdType &thresholdType) { m_thresholdType = thresholdType; }
 
-    void makeThreshold(const QVector<double> &thresholds);
-
     Audio::SignalsSourceVector signalsVector() const { return m_signalsVector; }
     void setSignalsVector(const Audio::SignalsSourceVector &signalsVector) { m_signalsVector = signalsVector; }
+
+    void makeThreshold(const QVector<double> &thresholds);
 
     Audio::SignalsSourceVector thresholdedSignalsVector() const { return m_thresholdedSignalsVector; }
 
