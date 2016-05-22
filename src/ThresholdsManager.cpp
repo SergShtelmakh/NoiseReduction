@@ -61,23 +61,10 @@ ThresholdsManager::ThresholdType ThresholdsManager::fromString(const QString &st
     return thresholdsNameHash.key(str, ThresholdType::Hard);
 }
 
-void ThresholdsManager::makeThreshold(const QVector<double> &thresholds)
-{
-    if (thresholds.size() != m_signalsVector.size()) {
-        qDebug("Wrong thresholds vector size");
-        return;
-    }
-
-    m_thresholdedSignalsVector.clear();
-    for (int i = 0; i < thresholds.size(); ++i) {
-        m_thresholdedSignalsVector << threshodedSignal(m_signalsVector.at(i), thresholds[i]);
-    }
-}
-
-QVector<double> ThresholdsManager::threshodedSignal(const QVector<double> &signal, double threshod)
+QVector<double> ThresholdsManager::threshodedSignal(ThresholdsManager::ThresholdType type, const QVector<double> &signal, double threshod)
 {
     QVector<double> result;
-    switch (m_thresholdType) {
+    switch (type) {
     case ThresholdType::Hard: {
         for (auto signalItem : signal) {
             result.append((qAbs(signalItem) > threshod) ? signalItem : 0);
@@ -106,4 +93,22 @@ QVector<double> ThresholdsManager::threshodedSignal(const QVector<double> &signa
     }
 
     return result;
+}
+
+void ThresholdsManager::makeThreshold(const QVector<double> &thresholds)
+{
+    if (thresholds.size() != m_signalsVector.size()) {
+        qDebug("Wrong thresholds vector size");
+        return;
+    }
+
+    m_thresholdedSignalsVector.clear();
+    for (int i = 0; i < thresholds.size(); ++i) {
+        m_thresholdedSignalsVector << threshodedSignal(m_signalsVector.at(i), thresholds[i]);
+    }
+}
+
+QVector<double> ThresholdsManager::threshodedSignal(const QVector<double> &signal, double threshod)
+{
+    return threshodedSignal(m_thresholdType, signal, threshod);
 }

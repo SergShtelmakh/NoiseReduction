@@ -60,3 +60,8 @@ void PlotManager::createPlot(const Audio::SignalSource &data)
     pl->show();
 }
 
+
+void PlotManager::plot(QCustomPlot *widget, const Audio::SignalSource &signalSource)
+{
+    plot(widget, signalSource, 0, signalSource.size());
+}

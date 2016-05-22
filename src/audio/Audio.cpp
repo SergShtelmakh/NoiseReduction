@@ -44,11 +44,20 @@ double maxAmplitude(const SignalSource &signal)
     return max;
 }
 
-SignalSource makeWhiteNoise(SignalSource &signal, double maxAmplitude)
+bool genenerateRandomEvent(double probability)
+{
+    const int maxRand = 1000;
+    return rand(0, maxRand) < probability * maxRand;
+}
+
+SignalSource makeWhiteNoise(SignalSource &signal, double maxAmplitude, double probability)
 {
     SignalSource result;
     for (auto sample : signal) {
-        result << sample + rand(-maxAmplitude, maxAmplitude);
+        if (genenerateRandomEvent(probability)) {
+            sample += rand(-maxAmplitude, maxAmplitude);
+        }
+        result << sample;
     }
     return result;
 }
@@ -149,6 +158,20 @@ SignalSource makeAmplitudeFrequency(const SignalSource &signal, bool positivePar
     }
 
     return compressedResult;
+}
+
+int overThresholdsAmlitudeCount(const SignalSource &signal, double amplitude, int maxCount) {
+    int count = 0;
+    for (auto signalItem : signal) {
+        if (qAbs(signalItem) > amplitude ) {
+            count++;
+        }
+        if (maxCount == count) {
+            return count;
+        }
+    }
+
+    return count;
 }
 
 }

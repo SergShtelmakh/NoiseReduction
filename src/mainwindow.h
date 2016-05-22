@@ -7,6 +7,7 @@
 class AudioSignal;
 class AudioRecordWidget;
 class DenoisingWidget;
+class AnalyzerWidget;
 
 namespace Ui { class MainWindow; }
 
@@ -40,4 +41,5 @@ private:
     QScopedPointer<AudioSignal> m_processedSignal;
     QScopedPointer<AudioRecordWidget> m_recordWidget;
     QScopedPointer<DenoisingWidget> m_denoisingWidget;
+    QScopedPointer<AnalyzerWidget> m_analyzerWidget;
 };

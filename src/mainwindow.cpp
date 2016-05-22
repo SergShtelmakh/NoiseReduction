@@ -7,6 +7,7 @@
 #include <src/audio/AudioRecordWidget.h>
 #include <src/DenoisingWidget.h>
 #include <src/PlotManager.h>
+#include <src/AnalyzerWidget.h>
 
 namespace {
     const QString cTestFile  = "test.wav";
@@ -20,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_processedSignal(new AudioSignal(m_sourceSignal->source()))
     , m_recordWidget(new AudioRecordWidget)
     , m_denoisingWidget(new DenoisingWidget)
+    , m_analyzerWidget(new AnalyzerWidget)
 {
     ui->setupUi(this);
     updatePlot();
@@ -54,7 +56,8 @@ void MainWindow::on_pbManualDenoising_clicked()
 
 void MainWindow::on_pbAutomaticDenoising_clicked()
 {
-
+    m_analyzerWidget->setSignal(*m_processedSignal.data());
+    m_analyzerWidget->show();
 }
 
 void MainWindow::updatePlot()

@@ -27,11 +27,21 @@ AudioSignal::AudioSignal(const Audio::SignalSource &signalSource, double sampleF
     m_sampleFrequency = sampleFrequency;
 }
 
+void AudioSignal::operator=(const AudioSignal &other)
+{
+    m_file = &(*other.m_file);
+    m_sampleFrequency = other.m_sampleFrequency;
+    m_signalSource = other.m_signalSource;
+}
+
 void AudioSignal::load(const QString &str)
 {
-    m_file.reset(new Aquila::WaveFile(QString(str).toStdString(), Aquila::StereoChannel::LEFT));
+    if (m_file) {
+        delete m_file;
+    }
+    m_file = new Aquila::WaveFile(QString(str).toStdString(), Aquila::StereoChannel::LEFT);
 
-    m_signalSource = makeSignal(m_file.data());
+    m_signalSource = makeSignal(m_file);
 }
 
 void AudioSignal::save(const QString &str)
@@ -51,7 +61,7 @@ int AudioSignal::audioLength() const
     return m_file ? m_file->getAudioLength() : m_signalSource.size() / (m_sampleFrequency / cMsInSec);
 }
 
-void AudioSignal::makeWhiteNoise(double maxAmplitude)
+void AudioSignal::makeWhiteNoise(double maxAmplitude, double density)
 {
-    m_signalSource = Audio::makeWhiteNoise(m_signalSource, maxAmplitude);
+    m_signalSource = Audio::makeWhiteNoise(m_signalSource, maxAmplitude, density);
 }

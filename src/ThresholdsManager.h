@@ -18,6 +18,7 @@ public:
 
     static QList<QString> thresholdsNames();
     static ThresholdType fromString(const QString& str);
+    static QVector<double> threshodedSignal(ThresholdType type,const QVector<double> &signal, double threshod);
 
     ThresholdsManager(){}
 
