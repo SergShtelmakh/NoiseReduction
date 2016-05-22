@@ -27,7 +27,7 @@ void SignalAnalyzer::start()
     emit log("Signal size " + QString("%1").arg(m_noisedSignal.source().size()));
     m_wavelet.setLevel(cLevel);
     emit log("Levels " + QString("%1").arg(cLevel));
-    for (int curWavelet = Wavelet::First; curWavelet <= Wavelet::Daubechies2; curWavelet++) {
+    for (int curWavelet = Wavelet::Daubechies2; curWavelet <= Wavelet::Daubechies3; curWavelet++) {
         auto wavelet = static_cast<Wavelet::WaveletFunction>(curWavelet);
         log("\nWavelet " + Wavelet::toString(wavelet) + ":");
         m_wavelet.setWaveletFunction(wavelet);
@@ -43,7 +43,7 @@ QVector<double> SignalAnalyzer::findOptimalThresholds(const Audio::SignalsSource
 {
     auto thresholdedSignalVector = signalVector;
     QVector<double> result;
-    for (int i = signalVector.size()-1 ; i >= 0; i--) {
+    for (int64_t i = 0 ; i < signalVector.size(); i++) {
         emit log("Level " + QString("%1").arg(i));
         auto min = 0;
         auto max = Audio::maxAmplitude(signalVector.at(i));

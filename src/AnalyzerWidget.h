@@ -26,7 +26,16 @@ private slots:
 
     void on_cbWaveletType_currentIndexChanged(int index);
 
+    void on_pbSave_clicked();
+
+    void on_pbLoad_clicked();
+
 private:
+    struct AnalyzerData {
+        QString wavelet;
+        QVector<double> thresholds;
+    };
+
     void clearLog();
 
     Ui::AnalyzerWidget *ui;
@@ -38,4 +47,6 @@ private:
     SignalAnalyzer *m_analyzer;
     QThread *m_pAnalyzerThread;
     DiscretePeriodicWavelet m_wavelet;
+    QVector<AnalyzerData> m_analyzerData;
+
 };

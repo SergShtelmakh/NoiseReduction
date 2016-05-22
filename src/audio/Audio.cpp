@@ -46,7 +46,7 @@ double maxAmplitude(const SignalSource &signal)
 
 bool genenerateRandomEvent(double probability)
 {
-    const int maxRand = 1000;
+    const int64_t maxRand = 1000;
     return rand(0, maxRand) < probability * maxRand;
 }
 
@@ -64,17 +64,24 @@ SignalSource makeWhiteNoise(SignalSource &signal, double maxAmplitude, double pr
 
 SignalSource makeSignalDifference(const SignalSource &first, const SignalSource &second)
 {
+    qDebug() << QString("First size = %1; second size = %2").arg(first.size()).arg(second.size());
     auto size = qMin(first.size(), second.size());
     SignalSource result;
-    for (int i = 0 ; i < size; i++) {
+    for (int64_t i = 0 ; i < size; i++) {
+        //qDebug() << QString("i = %1; first = %2; second  = %3").arg(i).arg(first[i]).arg(second[i]);
+        if (qAbs(first[i] - second[i]) > 10000) {
+            qDebug() << QString("i = %1; first = %2; second  = %3").arg(i-1).arg(first[i-1]).arg(second[i-1]);
+            qDebug() << QString("i = %1; first = %2; second  = %3").arg(i).arg(first[i]).arg(second[i]);
+            qDebug() << QString("i = %1; first = %2; second  = %3").arg(i+1).arg(first[i+1]).arg(second[i+1]);
+        }
         result.push_back(first[i] - second[i]);
     }
     return result;
 }
 
-QString generateAudioFileName()
+QString generateAudioFileName(const QString &str)
 {
-    return qApp->applicationDirPath() + QString("/audio%1.wav").arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
+    return QString("%1audio%2.wav").arg(str).arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
 }
 
 SignalSource makeSignalDensity(const SignalSource &signal, bool positivePart)
@@ -84,11 +91,11 @@ SignalSource makeSignalDensity(const SignalSource &signal, bool positivePart)
         size_d = positivePart ? qMax(size_d, val) : qMin(size_d, val);
     }
 
-    auto size = static_cast<int>(positivePart ? size_d : -size_d);
+    auto size = static_cast<int64_t>(positivePart ? size_d : -size_d);
     QVector<double> result(size);
     for (auto val : signal) {
-        int val_t = trunc(val);
-        int index = -1;
+        int64_t val_t = trunc(val);
+        int64_t index = -1;
         if (val_t > 0 && positivePart) {
             index = val_t - 1;
         } else if (val_t < 0 && !positivePart) {
@@ -102,14 +109,14 @@ SignalSource makeSignalDensity(const SignalSource &signal, bool positivePart)
         }
     }
 
-    int sum = 0;
+    int64_t sum = 0;
     if (positivePart) {
-        for (int i = result.size() - 1; i >= 0; --i) {
+        for (int64_t i = result.size() - 1; i >= 0; --i) {
             sum += result[i];
             result[i] = sum;
         }
     } else {
-        for (int i = 0; i < result.size(); ++i) {
+        for (int64_t i = 0; i < result.size(); ++i) {
             sum += result[i];
             result[i] = sum;
         }
@@ -118,18 +125,18 @@ SignalSource makeSignalDensity(const SignalSource &signal, bool positivePart)
     return result;
 }
 
-SignalSource makeAmplitudeFrequency(const SignalSource &signal, bool positivePart, int step)
+SignalSource makeAmplitudeFrequency(const SignalSource &signal, bool positivePart, int64_t step)
 {
     double size_d = 0.0;
     for (auto val : signal) {
         size_d = positivePart ? qMax(size_d, val) : qMin(size_d, val);
     }
 
-    auto size = static_cast<int>(positivePart ? size_d : -size_d);
+    auto size = static_cast<int64_t>(positivePart ? size_d : -size_d);
     QVector<double> result(size);
     for (auto val : signal) {
-        int val_t = trunc(val);
-        int index = -1;
+        int64_t val_t = trunc(val);
+        int64_t index = -1;
         if (val_t > 0 && positivePart) {
             index = val_t - 1;
         } else if (val_t < 0 && !positivePart) {
@@ -143,10 +150,10 @@ SignalSource makeAmplitudeFrequency(const SignalSource &signal, bool positivePar
         }
     }
 
-    int stepCounter = 0;
-    int sum = 0;
+    int64_t stepCounter = 0;
+    int64_t sum = 0;
     QVector<double> compressedResult;
-    for (int i = 0; i < result.size(); i++) {
+    for (int64_t i = 0; i < result.size(); i++) {
         stepCounter++;
         sum += result[i];
         if (stepCounter == step) {
@@ -160,8 +167,8 @@ SignalSource makeAmplitudeFrequency(const SignalSource &signal, bool positivePar
     return compressedResult;
 }
 
-int overThresholdsAmlitudeCount(const SignalSource &signal, double amplitude, int maxCount) {
-    int count = 0;
+int64_t overThresholdsAmlitudeCount(const SignalSource &signal, double amplitude, int64_t maxCount) {
+    int64_t count = 0;
     for (auto signalItem : signal) {
         if (qAbs(signalItem) > amplitude ) {
             count++;

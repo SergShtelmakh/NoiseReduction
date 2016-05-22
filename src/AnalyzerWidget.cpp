@@ -3,6 +3,7 @@
 
 #include <src/PlotManager.h>
 #include <src/ThresholdsManager.h>
+#include <QFileDialog>
 
 namespace {
     const int cLevel = 5;
@@ -72,6 +73,7 @@ void AnalyzerWidget::onOptimalThresholdsFounded(const QString &func, const QVect
     QVariant data;
     data.setValue<QVector<double>>(thresholds);
     ui->cbWaveletType->addItem(func, data);
+    m_analyzerData.append({ func , thresholds });
 }
 
 void AnalyzerWidget::on_cbWaveletType_currentIndexChanged(int index)
@@ -100,5 +102,69 @@ void AnalyzerWidget::on_cbWaveletType_currentIndexChanged(int index)
             ui->wOutputSignalPlayer->setSignalSource(m_outputSignal->source());
             PlotManager::plot(ui->wOutputDifferencePlot, Audio::makeSignalDifference(m_noisedSignal->source(), m_outputSignal->source()));
         }
+    }
+}
+
+void AnalyzerWidget::on_pbSave_clicked()
+{
+    auto fileName = QFileDialog::getSaveFileName(this, tr("Save Analyzer data"), "", tr("Analyzer data (*.adat)"));
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+        return;
+    }
+    QTextStream out(&file);
+
+    auto inputFileName = qApp->applicationDirPath() + "/" + Audio::generateAudioFileName("input");
+    m_inputSignal->save(inputFileName);
+    out << inputFileName << "\n";
+
+    auto noisedFileName = qApp->applicationDirPath() + "/"  + Audio::generateAudioFileName("noised");
+    m_noisedSignal->save(noisedFileName);
+    out << noisedFileName << "\n";
+
+    for (AnalyzerData i : m_analyzerData) {
+        out << i.wavelet << "\n";
+        out << i.thresholds.size() << "\n";
+        for (auto j : i.thresholds) {
+            out << j << "\n";
+        }
+    }
+}
+
+void AnalyzerWidget::on_pbLoad_clicked()
+{
+    auto fileName = QFileDialog::getOpenFileName(this, tr("Open Analyzer data"), "", tr("Analyzer data (*.adat)"));
+    if (!QFileInfo(fileName).exists()) {
+        return;
+    }
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+        return;
+    }
+    QTextStream out(&file);
+
+    auto inputFileName = out.readLine();
+    m_inputSignal.reset(new AudioSignal(inputFileName));
+    ui->wInputSignalPlayer->setSignalSource(m_inputSignal->source());
+
+    auto noisedFileName = out.readLine();
+    m_noisedSignal.reset(new AudioSignal(noisedFileName));
+    ui->wNoisedIputSignalPlayer->setSignalSource(m_noisedSignal->source());
+    PlotManager::plot(ui->wInputDifferencePlot, Audio::makeSignalDifference(m_inputSignal->source(), m_noisedSignal->source()));
+
+    auto dataSize = out.readLine().toLongLong();
+    for (int64_t i = 0; i < dataSize; i++) {
+        auto wavelet = out.readLine();
+        auto thresholdsSize = out.readLine().toLongLong();
+        QVector<double> thresholdVector;
+        for (int64_t j = 0; j < thresholdsSize; j++) {
+            thresholdVector << out.readLine().toDouble();
+        }
+
+        QVariant data;
+        data.setValue<QVector<double>>(thresholdVector);
+        ui->cbWaveletType->addItem(wavelet, data);
+        m_analyzerData.append({ wavelet , thresholdVector });
     }
 }

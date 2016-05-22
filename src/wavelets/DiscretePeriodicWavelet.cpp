@@ -43,7 +43,7 @@ Audio::SignalsSourceVector DiscretePeriodicWavelet::transformedSignalVector() co
         auto currentSize = m_length[i];
         Audio::SignalSource currentSignal;
         end = begin + currentSize;
-        for (int j = begin; j < end; j++) {
+        for (int64_t j = begin; j < end; j++) {
             currentSignal.push_back(m_transformedSignal[j]);
         }
         decomposition.push_back(currentSignal);

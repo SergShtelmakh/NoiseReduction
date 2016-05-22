@@ -23,9 +23,9 @@ QString toString(ThresholdType type) {
     return thresholdsNameHash.value(type, "");
 }
 
-int nonZeroNeighborCount(const QVector<double> &data, int index) {
-    int count = 0;
-    for (int i = index - cFuzzyStep; i < index + cFuzzyStep; i++) {
+int64_t nonZeroNeighborCount(const QVector<double> &data, int64_t index) {
+    int64_t count = 0;
+    for (int64_t i = index - cFuzzyStep; i < index + cFuzzyStep; i++) {
         if (i >= 0 && i < data.size() && qAbs(data[i]) > 0) {
             count++;
         }
@@ -33,8 +33,8 @@ int nonZeroNeighborCount(const QVector<double> &data, int index) {
     return count;
 }
 
-bool nonZeroNeighborExist(const QVector<double> &data, int index) {
-    for (int i = index - cFuzzyStep; i < index + cFuzzyStep; i++) {
+bool nonZeroNeighborExist(const QVector<double> &data, int64_t index) {
+    for (int64_t i = index - cFuzzyStep; i < index + cFuzzyStep; i++) {
         if (i >= 0 && i < data.size() && qAbs(data[i]) > 0) {
             return true;
         }
@@ -81,7 +81,7 @@ QVector<double> ThresholdsManager::threshodedSignal(ThresholdsManager::Threshold
         for (auto signalItem : signal) {
             result.append(qMax(0.0, 1.0 - (threshod/ qAbs(signalItem + 0.0001))) * signalItem);
         }
-        for (int i = 0; i < result.size(); i++) {
+        for (int64_t i = 0; i < result.size(); i++) {
             if (qAbs(result[i]) > 0 && nonZeroNeighborCount(result, i) < cFuzzyStep) {
                 result[i] = 0;
             }
@@ -103,7 +103,7 @@ void ThresholdsManager::makeThreshold(const QVector<double> &thresholds)
     }
 
     m_thresholdedSignalsVector.clear();
-    for (int i = 0; i < thresholds.size(); ++i) {
+    for (int64_t i = 0; i < thresholds.size(); ++i) {
         m_thresholdedSignalsVector << threshodedSignal(m_signalsVector.at(i), thresholds[i]);
     }
 }

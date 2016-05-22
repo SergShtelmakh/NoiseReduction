@@ -6,7 +6,7 @@
 
 namespace {
     const QPen cThresholdLevelPen = QPen(QBrush(Qt::red), 1);
-    const int cAmplitudeFrequencyStep = 10;
+    const int64_t cAmplitudeFrequencyStep = 10;
 }
 
 ThresholdsWidget::ThresholdsWidget(QWidget *parent) :
