@@ -13,9 +13,10 @@ SignalAnalyzer::SignalAnalyzer(QObject *parent)
     qRegisterMetaType<QVector<double>>();
 }
 
-void SignalAnalyzer::setData(const AudioSignal &signal, double maxNoiseAmplitude)
+void SignalAnalyzer::setData(const AudioSignal &inputSignal, const AudioSignal &noisedSignal, double maxNoiseAmplitude)
 {
-    m_noisedSignal = signal;
+    m_inputSignal = inputSignal;
+    m_noisedSignal = noisedSignal;
     m_maxNoiseAmplitude = maxNoiseAmplitude;
 }
 
@@ -27,19 +28,26 @@ void SignalAnalyzer::start()
     emit log("Signal size " + QString("%1").arg(m_noisedSignal.source().size()));
     m_wavelet.setLevel(cLevel);
     emit log("Levels " + QString("%1").arg(cLevel));
-    for (int curWavelet = Wavelet::First; curWavelet <= Wavelet::Daubechies3; curWavelet++) {
+    for (int curWavelet = Wavelet::Daubechies3; curWavelet <= Wavelet::Daubechies3; curWavelet++) {
         auto wavelet = static_cast<Wavelet::WaveletFunction>(curWavelet);
         log("\nWavelet " + Wavelet::toString(wavelet) + ":");
         m_wavelet.setWaveletFunction(wavelet);
         m_wavelet.makeTransform();
 
-        auto thresholds = findOptimalThresholds(m_wavelet.transformedSignalVector());
-        emit optimalThresholdsFounded(Wavelet::toString(wavelet), thresholds);
+        double t = 5000;
+//        for (int i = 0; i < 3; i++) {
+//            t += 5000;
+//            log("T = " + QString("%1").arg(t));
+            auto thresholds = findOptimalThresholds(m_wavelet.transformedSignalVector(), t);
+            emit optimalThresholdsFounded(Wavelet::toString(wavelet), thresholds);
+            auto averageDiff = Audio::averageSignalDifference(m_inputSignal.source(), m_wavelet.outputSignal());
+            log("Average" + QString("%1").arg(averageDiff));
+//        }
     }
     emit finished();
 }
 
-QVector<double> SignalAnalyzer::findOptimalThresholds(const Audio::SignalsSourceVector &signalVector)
+QVector<double> SignalAnalyzer::findOptimalThresholds(const Audio::SignalsSourceVector &signalVector, double posibleOverthresholdsCount)
 {
     auto thresholdedSignalVector = signalVector;
     QVector<double> result;
@@ -55,7 +63,7 @@ QVector<double> SignalAnalyzer::findOptimalThresholds(const Audio::SignalsSource
             m_wavelet.setTransformedSignalVector(thresholdedSignalVector);
             m_wavelet.makeInverseTransform();
             auto diff = Audio::makeSignalDifference(m_noisedSignal.source(), m_wavelet.outputSignal());
-            if (Audio::overThresholdsAmlitudeCount(diff, m_maxNoiseAmplitude, 10000) < 10000) {
+            if (Audio::overThresholdsAmlitudeCount(diff, m_maxNoiseAmplitude, posibleOverthresholdsCount) < posibleOverthresholdsCount) {
                 min = val;
             } else {
                 max = val;

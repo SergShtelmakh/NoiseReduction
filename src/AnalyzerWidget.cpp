@@ -48,7 +48,7 @@ void AnalyzerWidget::on_pbProcess_clicked()
 
     m_noisedSignal.reset(new AudioSignal(m_inputSignal->source()));
     m_noisedSignal->makeWhiteNoise(ui->sbMaxNoiseAmplitude->value(), ui->dsbNoiseDensity->value());
-    m_analyzer->setData(*m_noisedSignal.data(), ui->sbMaxNoiseAmplitude->value());
+    m_analyzer->setData(*m_inputSignal.data(), *m_noisedSignal.data(), ui->sbMaxNoiseAmplitude->value());
     ui->wNoisedIputSignalPlayer->setSignalSource(m_noisedSignal->source());
     PlotManager::plot(ui->wInputDifferencePlot, Audio::makeSignalDifference(m_inputSignal->source(), m_noisedSignal->source()));
 
@@ -184,4 +184,9 @@ void AnalyzerWidget::on_pbLoad_clicked()
         ui->cbWaveletType->addItem(wavelet, data);
         m_analyzerData.append({ wavelet , thresholdVector });
     }
+}
+
+void AnalyzerWidget::on_pbSaveNoised_clicked()
+{
+    m_noisedSignal->save(QFileDialog::getSaveFileName(this, tr("Save Audio signal"), "", tr("Wave (*.wav)")));
 }

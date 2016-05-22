@@ -30,6 +30,8 @@ private slots:
 
     void on_pbLoad_clicked();
 
+    void on_pbSaveNoised_clicked();
+
 private:
     struct AnalyzerData {
         QString wavelet;

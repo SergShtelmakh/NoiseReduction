@@ -174,4 +174,14 @@ int64_t overThresholdsAmlitudeCount(const SignalSource &signal, double amplitude
     return count;
 }
 
+double averageSignalDifference(const SignalSource &first, const SignalSource &second)
+{
+    auto size = qMin(first.size(), second.size());
+    double sum;
+    for (int i = 0 ; i < size; i++) {
+        sum += qAbs(first[i] - second[i]);
+    }
+    return sum / size;
+}
+
 }

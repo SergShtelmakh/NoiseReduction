@@ -23,7 +23,7 @@ public:
     Audio::SignalSource source() const;
     int audioLength() const;
 
-    void makeWhiteNoise(double maxAmplitude = 10000, double density = 1.0);
+    void makeWhiteNoise(double maxAmplitude = 1000, double density = 1.0);
 
 private:
     Audio::SignalSource m_signalSource;

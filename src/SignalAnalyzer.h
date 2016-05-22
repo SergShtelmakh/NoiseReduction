@@ -10,7 +10,7 @@ class SignalAnalyzer : public QObject
 public:
     explicit SignalAnalyzer(QObject *parent = 0);
 
-    void setData(const AudioSignal &signal, double maxNoiseAmplitude);
+    void setData(const AudioSignal &inputSignal, const AudioSignal &noisedSignal, double maxNoiseAmplitude);
 
 signals:
     void log(const QString& str);
@@ -22,8 +22,9 @@ public slots:
     void start();
 
 private:
-    QVector<double> findOptimalThresholds(const Audio::SignalsSourceVector &signalVector);
+    QVector<double> findOptimalThresholds(const Audio::SignalsSourceVector &signalVector, double posibleOverthresholdsCount);
 
+    AudioSignal m_inputSignal;
     AudioSignal m_noisedSignal;
     AudioSignal m_outputSignal;
     DiscretePeriodicWavelet m_wavelet;
