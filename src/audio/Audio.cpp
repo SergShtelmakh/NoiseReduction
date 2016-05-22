@@ -55,7 +55,7 @@ SignalSource makeWhiteNoise(SignalSource &signal, double maxAmplitude, double pr
     SignalSource result;
     for (auto sample : signal) {
         if (genenerateRandomEvent(probability)) {
-            sample += rand(-maxAmplitude, maxAmplitude);
+            sample = sample + rand(-maxAmplitude, maxAmplitude);
         }
         result << sample;
     }
@@ -64,16 +64,9 @@ SignalSource makeWhiteNoise(SignalSource &signal, double maxAmplitude, double pr
 
 SignalSource makeSignalDifference(const SignalSource &first, const SignalSource &second)
 {
-    qDebug() << QString("First size = %1; second size = %2").arg(first.size()).arg(second.size());
     auto size = qMin(first.size(), second.size());
     SignalSource result;
     for (int64_t i = 0 ; i < size; i++) {
-        //qDebug() << QString("i = %1; first = %2; second  = %3").arg(i).arg(first[i]).arg(second[i]);
-        if (qAbs(first[i] - second[i]) > 10000) {
-            qDebug() << QString("i = %1; first = %2; second  = %3").arg(i-1).arg(first[i-1]).arg(second[i-1]);
-            qDebug() << QString("i = %1; first = %2; second  = %3").arg(i).arg(first[i]).arg(second[i]);
-            qDebug() << QString("i = %1; first = %2; second  = %3").arg(i+1).arg(first[i+1]).arg(second[i+1]);
-        }
         result.push_back(first[i] - second[i]);
     }
     return result;

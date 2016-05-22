@@ -114,14 +114,17 @@ void AnalyzerWidget::on_pbSave_clicked()
     }
     QTextStream out(&file);
 
-    auto inputFileName = qApp->applicationDirPath() + "/" + Audio::generateAudioFileName("input");
-    m_inputSignal->save(inputFileName);
-    out << inputFileName << "\n";
+    out << m_inputSignal->source().size() << "\n";
+    for (auto i : m_inputSignal->source()) {
+        out << i << "\n";
+    }
 
-    auto noisedFileName = qApp->applicationDirPath() + "/"  + Audio::generateAudioFileName("noised");
-    m_noisedSignal->save(noisedFileName);
-    out << noisedFileName << "\n";
+    out << m_noisedSignal->source().size() << "\n";
+    for (auto i : m_noisedSignal->source()) {
+        out << i << "\n";
+    }
 
+    out << m_analyzerData.size() << "\n";
     for (AnalyzerData i : m_analyzerData) {
         out << i.wavelet << "\n";
         out << i.thresholds.size() << "\n";
@@ -144,19 +147,33 @@ void AnalyzerWidget::on_pbLoad_clicked()
     }
     QTextStream out(&file);
 
-    auto inputFileName = out.readLine();
-    m_inputSignal.reset(new AudioSignal(inputFileName));
+    ui->cbWaveletType->clear();
+    m_analyzerData.clear();
+
+    Audio::SignalSource input;
+    auto inputFileSize = out.readLine().toInt();
+    for (int i = 0; i < inputFileSize; i++) {
+        input << out.readLine().toDouble();
+    }
+    m_inputSignal.reset(new AudioSignal(input));
     ui->wInputSignalPlayer->setSignalSource(m_inputSignal->source());
 
-    auto noisedFileName = out.readLine();
-    m_noisedSignal.reset(new AudioSignal(noisedFileName));
+    Audio::SignalSource noised;
+    auto noisedFileSize = out.readLine().toInt();
+    for (int i = 0; i < noisedFileSize; i++) {
+        noised << out.readLine().toDouble();
+    }
+    m_noisedSignal.reset(new AudioSignal(noised));
     ui->wNoisedIputSignalPlayer->setSignalSource(m_noisedSignal->source());
     PlotManager::plot(ui->wInputDifferencePlot, Audio::makeSignalDifference(m_inputSignal->source(), m_noisedSignal->source()));
 
-    auto dataSize = out.readLine().toLongLong();
+    m_wavelet.setSignal(m_noisedSignal->source());
+    m_wavelet.setLevel(cLevel);
+
+    auto dataSize = out.readLine().toInt();
     for (int64_t i = 0; i < dataSize; i++) {
         auto wavelet = out.readLine();
-        auto thresholdsSize = out.readLine().toLongLong();
+        auto thresholdsSize = out.readLine().toInt();
         QVector<double> thresholdVector;
         for (int64_t j = 0; j < thresholdsSize; j++) {
             thresholdVector << out.readLine().toDouble();
