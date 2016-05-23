@@ -4,7 +4,6 @@
 #include <src/PlotManager.h>
 #include <src/ThresholdsManager.h>
 #include <QFileDialog>
-
 namespace {
     const int cLevel = 5;
 }
@@ -14,6 +13,7 @@ AnalyzerWidget::AnalyzerWidget(QWidget *parent)
     , ui(new Ui::AnalyzerWidget)
     , m_analyzer(new SignalAnalyzer)
     , m_pAnalyzerThread(new QThread)
+    , m_animationWidget(new QCustomPlot)
 {
     ui->setupUi(this);
 
@@ -21,8 +21,11 @@ AnalyzerWidget::AnalyzerWidget(QWidget *parent)
     connect(m_pAnalyzerThread, &QThread::started, m_analyzer, &SignalAnalyzer::start);
     connect(m_analyzer, &SignalAnalyzer::finished, m_pAnalyzerThread, &QThread::quit);
     connect(m_analyzer, &SignalAnalyzer::optimalThresholdsFounded, this, &AnalyzerWidget::onOptimalThresholdsFounded);
+    connect(&m_animationTimer, &QTimer::timeout, this, &AnalyzerWidget::showNextFrame);
 
     m_analyzer->moveToThread(m_pAnalyzerThread);
+    m_animationTimer.setInterval(1000);
+    m_animationWidget->addGraph();
 }
 
 AnalyzerWidget::~AnalyzerWidget()
@@ -63,6 +66,13 @@ void AnalyzerWidget::clearLog()
     ui->teLog->clear();
 }
 
+void AnalyzerWidget::startAnimation()
+{
+//    m_currentFrame = -1;
+//    m_animationTimer.start();
+//    m_animationWidget->show();
+}
+
 void AnalyzerWidget::log(const QString &str)
 {
     ui->teLog->append(str);
@@ -94,7 +104,7 @@ void AnalyzerWidget::on_cbWaveletType_currentIndexChanged(int index)
 
             ThresholdsManager manager;
             manager.setSignalsVector(m_wavelet.transformedSignalVector());
-            manager.setThresholdType(ThresholdsManager::Soft);
+            manager.setThresholdType(ThresholdsManager::Fuzzy);
             manager.makeThreshold(vectorData);
             m_wavelet.setTransformedSignalVector(manager.thresholdedSignalsVector());
             m_wavelet.makeInverseTransform();
@@ -184,9 +194,42 @@ void AnalyzerWidget::on_pbLoad_clicked()
         ui->cbWaveletType->addItem(wavelet, data);
         m_analyzerData.append({ wavelet , thresholdVector });
     }
+
+    startAnimation();
 }
 
 void AnalyzerWidget::on_pbSaveNoised_clicked()
 {
     m_noisedSignal->save(QFileDialog::getSaveFileName(this, tr("Save Audio signal"), "", tr("Wave (*.wav)")));
+}
+
+void AnalyzerWidget::on_pbStop_clicked()
+{
+    m_analyzer->stop();
+}
+
+void AnalyzerWidget::showNextFrame()
+{
+    m_currentFrame++;
+    if (m_currentFrame > 0 && m_currentFrame < m_analyzerData.size()) {
+        m_wavelet.setWaveletFunction(Wavelet::fromString(m_analyzerData[m_currentFrame].wavelet));
+        m_wavelet.makeTransform();
+
+        ThresholdsManager manager;
+        manager.setSignalsVector(m_wavelet.transformedSignalVector());
+        manager.setThresholdType(ThresholdsManager::Fuzzy);
+        manager.makeThreshold(m_analyzerData[m_currentFrame].thresholds);
+        m_wavelet.setTransformedSignalVector(manager.thresholdedSignalsVector());
+        m_wavelet.makeInverseTransform();
+        m_outputSignal.reset(new AudioSignal(m_wavelet.outputSignal()));
+        PlotManager::plot(m_animationWidget, m_outputSignal->source());
+
+        m_animationWidget->xAxis2->setLabel(m_analyzerData[m_currentFrame].wavelet);
+        m_animationWidget->xAxis2->setLabelFont(QFont("Times", 24, QFont::Bold));
+        m_animationWidget->replot();
+        m_animationWidget->setGeometry(100,100,500,500);
+    }
+    if (!m_animationWidget->isVisible()) {
+        m_animationTimer.stop();
+    }
 }

@@ -27,7 +27,8 @@ SOURCES  += $$PWD/src/main.cpp\
             $$PWD/src/wavelets/DiscretePeriodicWavelet.cpp \
             $$PWD/src/wavelets/Wavelet.cpp \
             $$PWD/src/AnalyzerWidget.cpp \
-            $$PWD/src/SignalAnalyzer.cpp
+            $$PWD/src/SignalAnalyzer.cpp \
+    ThresholdTestWidget.cpp
 
 HEADERS  += $$PWD/src/mainwindow.h \
             $$PWD/src/DenoisingManager.h \
@@ -42,14 +43,16 @@ HEADERS  += $$PWD/src/mainwindow.h \
             $$PWD/src/wavelets/DiscretePeriodicWavelet.h \
             $$PWD/src/wavelets/Wavelet.h \
             $$PWD/src/AnalyzerWidget.h \
-            $$PWD/src/SignalAnalyzer.h
+            $$PWD/src/SignalAnalyzer.h \
+    ThresholdTestWidget.h
 
 FORMS    += $$PWD/src/mainwindow.ui \
             $$PWD/src/DenoisingWidget.ui \
             $$PWD/src/ThresholdsWidget.ui \
             $$PWD/src/audio/AudioPlayerWidget.ui \
             $$PWD/src/audio/AudioRecordWidget.ui \
-            $$PWD/src/AnalyzerWidget.ui
+            $$PWD/src/AnalyzerWidget.ui \
+    ThresholdTestWidget.ui
 
 LIBS     += $$PWD/libs/libAquila.a\
             $$PWD/libs/libfftw3-3.dll\

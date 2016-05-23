@@ -7,6 +7,7 @@
 namespace {
     const QPen cThresholdLevelPen = QPen(QBrush(Qt::red), 1);
     const int64_t cAmplitudeFrequencyStep = 10;
+    const int cNeighborhudCount = 30;
 }
 
 ThresholdsWidget::ThresholdsWidget(QWidget *parent) :
@@ -56,8 +57,13 @@ void ThresholdsWidget::setSignalSource(const Audio::SignalSource &signal)
     emit signalChanged(m_signalSource);
 
     setMaxThreshold(Audio::maxAmplitude(m_signalSource));
-    m_positiveDensity = Audio::makeAmplitudeFrequency(m_signalSource, true, cAmplitudeFrequencyStep);
-    m_negativeDensity = Audio::makeAmplitudeFrequency(m_signalSource, false, cAmplitudeFrequencyStep);
+    m_negativeDensity = Audio::overThresholdsAmplitudeSum(m_signalSource, 0, cNeighborhudCount);
+    m_positiveDensity = Audio::makeSignalDensity(m_negativeDensity, true);
+    auto den = Audio::findDerivative(m_positiveDensity, -1, 100);
+    qDebug() << den / cNeighborhudCount;
+    setThreshold(den / cNeighborhudCount);
+//    m_positiveDensity = Audio::makeAmplitudeFrequency(m_signalSource, true, cAmplitudeFrequencyStep);
+//    m_negativeDensity = Audio::makeAmplitudeFrequency(m_signalSource, false, cAmplitudeFrequencyStep);
     replotSignal();
     replotDensity();
 }
@@ -110,15 +116,17 @@ void ThresholdsWidget::replotThreshold()
     ui->wPlot->graph(2)->setData(m_signalPlotData.x, thresholdVector);
     ui->wPlot->replot();
 
-    QVector<double> posT_x = { m_threshold, m_threshold + 1 };
+    QVector<double> posT_x = { m_threshold * cNeighborhudCount, m_threshold * cNeighborhudCount + 1 };
     QVector<double> posT_y = { m_pdPlotData.minY, m_pdPlotData.maxY };
     ui->positiveDensityPlot->graph(1)->setData(posT_x, posT_y);
+    ui->positiveDensityPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
     ui->positiveDensityPlot->replot();
 
-    QVector<double> negT_x = { -m_threshold, -m_threshold + 1 };
-    QVector<double> negT_y = { m_ndPlotData.minY, m_ndPlotData.maxY };
-    ui->negativeDensityPlot->graph(1)->setData(negT_x, negT_y);
-    ui->negativeDensityPlot->replot();
+//    QVector<double> negT_x = { -m_threshold, -m_threshold + 1 };
+//    QVector<double> negT_y = { m_ndPlotData.minY, m_ndPlotData.maxY };
+//    ui->negativeDensityPlot->graph(1)->setData(negT_x, negT_y);
+//    ui->negativeDensityPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+//    ui->negativeDensityPlot->replot();
 }
 
 void ThresholdsWidget::replotDensity()
@@ -126,14 +134,14 @@ void ThresholdsWidget::replotDensity()
     m_pdPlotData = PlotManager::createPlotData(m_positiveDensity, 0, m_positiveDensity.size());
     ui->positiveDensityPlot->graph(0)->setData(m_pdPlotData.x, m_pdPlotData.y);
     ui->positiveDensityPlot->xAxis->setRange(m_pdPlotData.minX, m_pdPlotData.maxX);
-    ui->positiveDensityPlot->xAxis->setTickLabels(false);
+//    ui->positiveDensityPlot->xAxis->setTickLabels(false);
     ui->positiveDensityPlot->yAxis->setRange(m_pdPlotData.minY, m_pdPlotData.maxY);
     ui->positiveDensityPlot->replot();
 
     m_ndPlotData = PlotManager::createPlotData(m_negativeDensity, -m_negativeDensity.size(), 0);
     ui->negativeDensityPlot->graph(0)->setData(m_ndPlotData.x, m_ndPlotData.y);
     ui->negativeDensityPlot->xAxis->setRange(m_ndPlotData.minX, m_ndPlotData.maxX);
-    ui->negativeDensityPlot->xAxis->setTickLabels(false);
+//    ui->negativeDensityPlot->xAxis->setTickLabels(false);
     ui->negativeDensityPlot->yAxis->setRange(m_ndPlotData.minY, m_ndPlotData.maxY);
     ui->negativeDensityPlot->replot();
 }

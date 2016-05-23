@@ -7,7 +7,7 @@ namespace {
 using ThresholdType = ThresholdsManager::ThresholdType;
 using ThresholdTypeHash = QHash<ThresholdType, QString>;
 
-const int cFuzzyStep = 5;
+const int cFuzzyStep = 50;
 
 ThresholdTypeHash makeThresholdNameHash() {
     ThresholdTypeHash names;
@@ -81,8 +81,10 @@ QVector<double> ThresholdsManager::threshodedSignal(ThresholdsManager::Threshold
         for (auto signalItem : signal) {
             result.append(qMax(0.0, 1.0 - (threshod/ qAbs(signalItem + 0.0001))) * signalItem);
         }
+        auto sumVector = Audio::overThresholdsAmplitudeSum(signal, threshod, cFuzzyStep);
         for (int64_t i = 0; i < result.size(); i++) {
-            if (qAbs(result[i]) > 0 && nonZeroNeighborCount(result, i) < cFuzzyStep) {
+
+            if (qAbs(result[i]) > 0 && sumVector[i] < cFuzzyStep * 300) {
                 result[i] = 0;
             }
         }

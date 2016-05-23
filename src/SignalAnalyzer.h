@@ -20,6 +20,7 @@ signals:
 
 public slots:
     void start();
+    void stop();
 
 private:
     QVector<double> findOptimalThresholds(const Audio::SignalsSourceVector &signalVector, double posibleOverthresholdsCount);
@@ -29,5 +30,6 @@ private:
     AudioSignal m_outputSignal;
     DiscretePeriodicWavelet m_wavelet;
     double m_maxNoiseAmplitude = 1;
+    bool m_stoped = false;
 };
 

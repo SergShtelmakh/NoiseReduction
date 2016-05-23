@@ -4,7 +4,7 @@
 
 namespace {
     const int cLevel = 5;
-    const ThresholdsManager::ThresholdType  cThresholdsType = ThresholdsManager::Soft;
+    const ThresholdsManager::ThresholdType  cThresholdsType = ThresholdsManager::Fuzzy;
 }
 
 SignalAnalyzer::SignalAnalyzer(QObject *parent)
@@ -23,12 +23,13 @@ void SignalAnalyzer::setData(const AudioSignal &inputSignal, const AudioSignal &
 void SignalAnalyzer::start()
 {
     emit started();
+    m_stoped = false;
     emit log("Processing started:\n");
     m_wavelet.setSignal(m_noisedSignal.source());
     emit log("Signal size " + QString("%1").arg(m_noisedSignal.source().size()));
     m_wavelet.setLevel(cLevel);
     emit log("Levels " + QString("%1").arg(cLevel));
-    for (int curWavelet = Wavelet::Daubechies3; curWavelet <= Wavelet::Daubechies3; curWavelet++) {
+    for (int curWavelet = Wavelet::First; curWavelet <= Wavelet::Last; curWavelet++) {
         auto wavelet = static_cast<Wavelet::WaveletFunction>(curWavelet);
         log("\nWavelet " + Wavelet::toString(wavelet) + ":");
         m_wavelet.setWaveletFunction(wavelet);
@@ -40,11 +41,20 @@ void SignalAnalyzer::start()
 //            log("T = " + QString("%1").arg(t));
             auto thresholds = findOptimalThresholds(m_wavelet.transformedSignalVector(), t);
             emit optimalThresholdsFounded(Wavelet::toString(wavelet), thresholds);
+            if (m_stoped) {
+                emit finished();
+                return;
+            }
             auto averageDiff = Audio::averageSignalDifference(m_inputSignal.source(), m_wavelet.outputSignal());
             log("Average" + QString("%1").arg(averageDiff));
 //        }
     }
     emit finished();
+}
+
+void SignalAnalyzer::stop()
+{
+    m_stoped = true;
 }
 
 QVector<double> SignalAnalyzer::findOptimalThresholds(const Audio::SignalsSourceVector &signalVector, double posibleOverthresholdsCount)
@@ -57,6 +67,9 @@ QVector<double> SignalAnalyzer::findOptimalThresholds(const Audio::SignalsSource
         auto max = Audio::maxAmplitude(signalVector.at(i));
         auto val = min;
         while (qAbs(max - min) > 10) {
+            if (m_stoped) {
+                return result;
+            }
             val = (max + min) / 2;
             emit log(QString("Min %1, max %2, val = %3").arg(min).arg(max).arg(val));
             thresholdedSignalVector[i] = ThresholdsManager::threshodedSignal(cThresholdsType, signalVector.at(i), val);

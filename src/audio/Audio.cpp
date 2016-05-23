@@ -11,6 +11,28 @@ int rand(int min, int max) {
     return qrand() % ((max + 1) - min) + min;
 }
 
+double d_f(double x_1, double x_2, double x_3, double h) {
+    return (x_3 - x_1)/(2*h);
+}
+
+double d2_f(double x_1, double x_2, double x_3, double h) {
+    return (x_3 - 2*x_2 + x_1) / (h*h);
+}
+
+quint64 findDerivative(const Audio::SignalSource &source, double der, int h) {
+    //qDebug() << "first " << source.at(0);
+    for (int i = h; i < source.size() - h; i += h) {
+        auto d = d_f(source[i - h], source[i], source[i + h], h);
+        auto d2 = d2_f(source[i - h], source[i], source[i + h], h);
+        //qDebug() << "i = " << i << " d = " << d << "source[0]/source[i]  " << source[0]/source[i];
+        if ( der < d && source[0]/source[i] > 1.5 ) {
+            return i;
+        }
+    }
+    qDebug() << "Cannot find derivative";
+    return -1;
+}
+
 QAudioEncoderSettings encoderSettings() {
     QAudioEncoderSettings audioSettings;
     audioSettings.setCodec("audio/pcm");
@@ -77,7 +99,7 @@ QString generateAudioFileName(const QString &str)
     return QString("%1audio%2.wav").arg(str).arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
 }
 
-SignalSource makeSignalDensity(const SignalSource &signal, bool positivePart)
+SignalSource makeSignalDensity(const SignalSource &signal, bool positivePart, double max)
 {
     double size_d = 0.0;
     for (auto val : signal) {
@@ -85,6 +107,7 @@ SignalSource makeSignalDensity(const SignalSource &signal, bool positivePart)
     }
 
     auto size = static_cast<int64_t>(positivePart ? size_d : -size_d);
+    size = qMin(size, static_cast<int64_t>(max));
     QVector<double> result(size);
     for (auto val : signal) {
         int64_t val_t = trunc(val);
@@ -182,6 +205,21 @@ double averageSignalDifference(const SignalSource &first, const SignalSource &se
         sum += qAbs(first[i] - second[i]);
     }
     return sum / size;
+}
+
+QVector<double> overThresholdsAmplitudeSum(const SignalSource &signal, double threshold, int neighbourhood)
+{
+    QVector<double> result;
+    for (auto i = 0; i < signal.size(); i++) {
+        double sum = 0.0;
+        for (auto j = i - neighbourhood; j < i + neighbourhood; j++) {
+            if (j >= 0 && j < signal.size() && qAbs(signal[j]) > threshold) {
+                sum += qAbs(signal[j]) - threshold;
+            }
+        }
+        result << sum;
+    }
+    return result;
 }
 
 }

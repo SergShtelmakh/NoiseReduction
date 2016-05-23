@@ -3,7 +3,7 @@
 #include <QMainWindow>
 
 #include <src/audio/Audio.h>
-
+#include <ThresholdTestWidget.h>
 class AudioSignal;
 class AudioRecordWidget;
 class DenoisingWidget;
@@ -33,6 +33,10 @@ private slots:
 
     void on_pbRevert_clicked();
 
+    void on_pbThresholdsTest_clicked();
+
+    void on_pushButton_clicked();
+
 private:
     void updatePlot();
 
@@ -42,4 +46,5 @@ private:
     QScopedPointer<AudioRecordWidget> m_recordWidget;
     QScopedPointer<DenoisingWidget> m_denoisingWidget;
     QScopedPointer<AnalyzerWidget> m_analyzerWidget;
+    QScopedPointer<ThresholdTestWidget> m_thresholsdTestWidget;
 };

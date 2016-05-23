@@ -8,6 +8,7 @@
 #include <src/DenoisingWidget.h>
 #include <src/PlotManager.h>
 #include <src/AnalyzerWidget.h>
+#include <src/ThresholdsManager.h>
 
 namespace {
     const QString cTestFile  = "test.wav";
@@ -22,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_recordWidget(new AudioRecordWidget)
     , m_denoisingWidget(new DenoisingWidget)
     , m_analyzerWidget(new AnalyzerWidget)
+    , m_thresholsdTestWidget(new ThresholdTestWidget)
 {
     ui->setupUi(this);
     updatePlot();
@@ -56,8 +58,30 @@ void MainWindow::on_pbManualDenoising_clicked()
 
 void MainWindow::on_pbAutomaticDenoising_clicked()
 {
-    m_analyzerWidget->setSignal(*m_processedSignal.data());
-    m_analyzerWidget->show();
+    const auto level = 5;
+    const auto wavelet = Wavelet::Daubechies3;
+    const auto neighborhufCount = 30;
+
+    DiscretePeriodicWavelet wave;
+    wave.setSignal(m_processedSignal->source());
+    wave.setLevel(level);
+    wave.setWaveletFunction(wavelet);
+    wave.makeTransform();
+
+    auto vectorSignal = wave.transformedSignalVector();
+    Audio::SignalsSourceVector vect;
+    for (auto i : vectorSignal) {
+        auto t = Audio::overThresholdsAmplitudeSum(i, 0, neighborhufCount);
+        auto t2 = Audio::makeSignalDensity(t, true);
+        double tr = Audio::findDerivative(t2, -2, 100);
+        vect << ThresholdsManager::threshodedSignal(ThresholdsManager::Fuzzy, i, tr / neighborhufCount);
+    }
+
+    wave.setTransformedSignalVector(vect);
+    wave.makeInverseTransform();
+    m_processedSignal.reset(new AudioSignal(wave.outputSignal()));
+    updatePlot();
+
 }
 
 void MainWindow::updatePlot()
@@ -85,4 +109,16 @@ void MainWindow::on_pbRevert_clicked()
 {
     m_processedSignal.reset(new AudioSignal(m_sourceSignal->source()));
     updatePlot();
+}
+
+void MainWindow::on_pbThresholdsTest_clicked()
+{
+    m_thresholsdTestWidget->setSignal(*m_processedSignal.data());
+    m_thresholsdTestWidget->show();
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    m_analyzerWidget->setSignal(*m_processedSignal.data());
+    m_analyzerWidget->show();
 }
