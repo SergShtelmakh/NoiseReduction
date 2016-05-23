@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QWidget>
+#include <src/audio/AudioSignal.h>
 
 namespace Ui { class AudioRecordWidget; }
 
@@ -15,12 +16,8 @@ public:
     ~AudioRecordWidget();
 
 private slots:
-    void on_pbBrowse_clicked();
     void on_pbRecord_clicked();
-    void on_pbPlay_clicked();
     void on_pbStop_clicked();
-
-    void on_leFilePath_textChanged(const QString &arg1);
 
 private:
     enum class State {
@@ -34,5 +31,6 @@ private:
     QString m_fileName;
     QScopedPointer<QAudioRecorder> m_recorder;
     QScopedPointer<QAudioOutput> m_player;
-    State m_state;
+    State m_state = State::Stop;
+    QScopedPointer<AudioSignal> m_signal;
 };

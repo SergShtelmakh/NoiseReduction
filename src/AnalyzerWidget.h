@@ -63,4 +63,6 @@ private:
     QTimer m_animationTimer;
     int m_currentFrame = -1;
 
+    PlotManager::PlotData m_diffPlotData;
+
 };

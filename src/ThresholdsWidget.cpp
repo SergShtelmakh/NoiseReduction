@@ -33,13 +33,24 @@ ThresholdsWidget::ThresholdsWidget(QWidget *parent) :
     ui->negativeDensityPlot->addGraph(); // density
     ui->negativeDensityPlot->addGraph(); // threshold
     ui->negativeDensityPlot->graph(1)->setPen(cThresholdLevelPen);
-    ui->negativeDensityPlot->xAxis->setLabel("Amplitude");
-    ui->negativeDensityPlot->yAxis->setLabel("N");
+    ui->negativeDensityPlot->xAxis->setLabel("Time");
+    ui->negativeDensityPlot->yAxis->setLabel("Amplitude");
 }
 
 ThresholdsWidget::~ThresholdsWidget()
 {
     delete ui;
+
+    m_signalSource.clear();
+    m_x.clear();
+    m_positiveDensity.clear();
+    m_negativeDensity.clear();
+    m_signalPlotData.x.clear();
+    m_signalPlotData.y.clear();
+    m_pdPlotData.x.clear();
+    m_pdPlotData.y.clear();
+    m_ndPlotData.y.clear();
+    m_ndPlotData.x.clear();
 }
 
 Audio::SignalSource ThresholdsWidget::signalSource() const
@@ -66,6 +77,7 @@ void ThresholdsWidget::setSignalSource(const Audio::SignalSource &signal)
 //    m_negativeDensity = Audio::makeAmplitudeFrequency(m_signalSource, false, cAmplitudeFrequencyStep);
     replotSignal();
     replotDensity();
+    replotThreshold();
 }
 
 double ThresholdsWidget::maxThreshold() const
@@ -138,7 +150,7 @@ void ThresholdsWidget::replotDensity()
     ui->positiveDensityPlot->yAxis->setRange(m_pdPlotData.minY, m_pdPlotData.maxY);
     ui->positiveDensityPlot->replot();
 
-    m_ndPlotData = PlotManager::createPlotData(m_negativeDensity, -m_negativeDensity.size(), 0);
+    m_ndPlotData = PlotManager::createPlotData(m_negativeDensity, 0, m_negativeDensity.size());
     ui->negativeDensityPlot->graph(0)->setData(m_ndPlotData.x, m_ndPlotData.y);
     ui->negativeDensityPlot->xAxis->setRange(m_ndPlotData.minX, m_ndPlotData.maxX);
 //    ui->negativeDensityPlot->xAxis->setTickLabels(false);

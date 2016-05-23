@@ -6,25 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>380</width>
-    <height>136</height>
+    <width>764</width>
+    <height>375</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLineEdit" name="leFilePath"/>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pbBrowse">
-       <property name="text">
-        <string>Browse</string>
-       </property>
-      </widget>
+      <widget class="AudioPlayerWidget" name="wAudioPlayer" native="true"/>
      </item>
     </layout>
    </item>
@@ -34,13 +27,6 @@
       <widget class="QPushButton" name="pbRecord">
        <property name="text">
         <string>Record</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pbPlay">
-       <property name="text">
-        <string>Play</string>
        </property>
       </widget>
      </item>
@@ -55,6 +41,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>AudioPlayerWidget</class>
+   <extends>QWidget</extends>
+   <header>src/audio/Audioplayerwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

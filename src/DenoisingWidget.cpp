@@ -7,6 +7,7 @@
 #include <src/PlotManager.h>
 
 #include <QScrollArea>
+#include <QLayoutItem>
 
 namespace {
     const bool cShowThresholdsWidgetSeparately = false;
@@ -51,22 +52,13 @@ void DenoisingWidget::clearWidget()
 {
     while (!m_widgets.empty()) {
         auto w = m_widgets.takeFirst();
-        w->deleteLater();
+        delete w;
     }
 }
 
 void DenoisingWidget::on_pbPrepare_clicked()
 {
     clearWidget();
-
-    m_denoisingManager->setSignal(*m_inputAudioSignal.data());
-    m_denoisingManager->prepareToDenoising(ui->cbWaveletType->currentText(), ui->sbLevel->value());
-
-    PlotManager::plot(ui->inputTransformedSignalWidget, m_denoisingManager->transformedSignal());
-
-    auto decomposition = m_denoisingManager->transformedDecomposition();
-
-    m_itemsCount = decomposition.size();
 
     QLayout *layout;
     if (cShowThresholdsWidgetSeparately) {
@@ -90,6 +82,17 @@ void DenoisingWidget::on_pbPrepare_clicked()
 
         layout = ui->scrollAreaWidgetContents->layout();
     }
+
+    m_denoisingManager->setSignal(*m_inputAudioSignal.data());
+    m_denoisingManager->prepareToDenoising(ui->cbWaveletType->currentText(), ui->sbLevel->value());
+
+    PlotManager::plot(ui->inputTransformedSignalWidget, m_denoisingManager->transformedSignal());
+
+    auto decomposition = m_denoisingManager->transformedDecomposition();
+
+    m_itemsCount = decomposition.size();
+
+
 
     for (auto item : decomposition) {
         auto wdg = new ThresholdsWidget(this);

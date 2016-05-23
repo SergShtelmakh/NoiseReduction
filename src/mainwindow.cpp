@@ -59,7 +59,7 @@ void MainWindow::on_pbManualDenoising_clicked()
 void MainWindow::on_pbAutomaticDenoising_clicked()
 {
     const auto level = 5;
-    const auto wavelet = Wavelet::Daubechies3;
+    const auto wavelet = Wavelet::Daubechies2;
     const auto neighborhufCount = 30;
 
     DiscretePeriodicWavelet wave;
@@ -71,10 +71,10 @@ void MainWindow::on_pbAutomaticDenoising_clicked()
     auto vectorSignal = wave.transformedSignalVector();
     Audio::SignalsSourceVector vect;
     for (auto i : vectorSignal) {
-        auto t = Audio::overThresholdsAmplitudeSum(i, 0, neighborhufCount);
-        auto t2 = Audio::makeSignalDensity(t, true);
+        //auto t = Audio::overThresholdsAmplitudeSum(i, 0, neighborhufCount);
+        auto t2 = Audio::makeSignalDensity(i, true);
         double tr = Audio::findDerivative(t2, -2, 100);
-        vect << ThresholdsManager::threshodedSignal(ThresholdsManager::Fuzzy, i, tr / neighborhufCount);
+        vect << ThresholdsManager::threshodedSignal(ThresholdsManager::Fuzzy, i, tr /*/ neighborhufCount*/);
     }
 
     wave.setTransformedSignalVector(vect);

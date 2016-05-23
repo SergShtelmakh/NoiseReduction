@@ -26,6 +26,8 @@ AnalyzerWidget::AnalyzerWidget(QWidget *parent)
     m_analyzer->moveToThread(m_pAnalyzerThread);
     m_animationTimer.setInterval(1000);
     m_animationWidget->addGraph();
+    ui->wInputDifferencePlot->addGraph();
+    ui->wOutputDifferencePlot->addGraph();
 }
 
 AnalyzerWidget::~AnalyzerWidget()
@@ -53,7 +55,14 @@ void AnalyzerWidget::on_pbProcess_clicked()
     m_noisedSignal->makeWhiteNoise(ui->sbMaxNoiseAmplitude->value(), ui->dsbNoiseDensity->value());
     m_analyzer->setData(*m_inputSignal.data(), *m_noisedSignal.data(), ui->sbMaxNoiseAmplitude->value());
     ui->wNoisedIputSignalPlayer->setSignalSource(m_noisedSignal->source());
-    PlotManager::plot(ui->wInputDifferencePlot, Audio::makeSignalDifference(m_inputSignal->source(), m_noisedSignal->source()));
+
+    auto diff = Audio::makeSignalDifference(m_inputSignal->source(), m_noisedSignal->source());
+    m_diffPlotData = PlotManager::createPlotData(diff, 0, diff.size());
+    ui->wInputDifferencePlot->graph(0)->setData(m_diffPlotData.x, m_diffPlotData.y);
+    ui->wInputDifferencePlot->xAxis->setRange(m_diffPlotData.minX, m_diffPlotData.maxX);
+    ui->wInputDifferencePlot->yAxis->setRange(m_diffPlotData.minY, m_diffPlotData.maxY);
+    ui->wInputDifferencePlot->replot();
+
 
     m_pAnalyzerThread->start();
 
@@ -110,7 +119,11 @@ void AnalyzerWidget::on_cbWaveletType_currentIndexChanged(int index)
             m_wavelet.makeInverseTransform();
             m_outputSignal.reset(new AudioSignal(m_wavelet.outputSignal()));
             ui->wOutputSignalPlayer->setSignalSource(m_outputSignal->source());
-            PlotManager::plot(ui->wOutputDifferencePlot, Audio::makeSignalDifference(m_noisedSignal->source(), m_outputSignal->source()));
+
+            ui->wOutputDifferencePlot->graph(0)->setData(m_diffPlotData.x, Audio::makeSignalDifference(m_noisedSignal->source(), m_outputSignal->source()));
+            ui->wOutputDifferencePlot->xAxis->setRange(m_diffPlotData.minX, m_diffPlotData.maxX);
+            ui->wOutputDifferencePlot->yAxis->setRange(m_diffPlotData.minY, m_diffPlotData.maxY);
+            ui->wOutputDifferencePlot->replot();
         }
     }
 }
@@ -175,7 +188,13 @@ void AnalyzerWidget::on_pbLoad_clicked()
     }
     m_noisedSignal.reset(new AudioSignal(noised));
     ui->wNoisedIputSignalPlayer->setSignalSource(m_noisedSignal->source());
-    PlotManager::plot(ui->wInputDifferencePlot, Audio::makeSignalDifference(m_inputSignal->source(), m_noisedSignal->source()));
+
+    auto diff = Audio::makeSignalDifference(m_inputSignal->source(), m_noisedSignal->source());
+    m_diffPlotData = PlotManager::createPlotData(diff, 0, diff.size());
+    ui->wInputDifferencePlot->graph(0)->setData(m_diffPlotData.x, m_diffPlotData.y);
+    ui->wInputDifferencePlot->xAxis->setRange(m_diffPlotData.minX, m_diffPlotData.maxX);
+    ui->wInputDifferencePlot->yAxis->setRange(m_diffPlotData.minY, m_diffPlotData.maxY);
+    ui->wInputDifferencePlot->replot();
 
     m_wavelet.setSignal(m_noisedSignal->source());
     m_wavelet.setLevel(cLevel);
