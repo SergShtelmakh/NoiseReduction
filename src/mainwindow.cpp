@@ -86,7 +86,7 @@ void MainWindow::on_pbAutomaticDenoising_clicked()
 
 void MainWindow::updatePlot()
 {
-    ui->audioPlayerWidget->setSignalSource(m_processedSignal->source());
+    ui->audioPlayerWidget->setSignal(*m_processedSignal.data());
 }
 
 void MainWindow::on_actionOpen_triggered()

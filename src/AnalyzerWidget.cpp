@@ -39,7 +39,7 @@ AnalyzerWidget::~AnalyzerWidget()
 void AnalyzerWidget::setSignal(const AudioSignal &signal)
 {
     m_inputSignal.reset(new AudioSignal(signal.source()));
-    ui->wInputSignalPlayer->setSignalSource(m_inputSignal->source());
+    ui->wInputSignalPlayer->setSignal(*m_inputSignal.data());
 }
 
 void AnalyzerWidget::on_pbProcess_clicked()
@@ -54,7 +54,7 @@ void AnalyzerWidget::on_pbProcess_clicked()
     m_noisedSignal.reset(new AudioSignal(m_inputSignal->source()));
     m_noisedSignal->makeWhiteNoise(ui->sbMaxNoiseAmplitude->value(), ui->dsbNoiseDensity->value());
     m_analyzer->setData(*m_inputSignal.data(), *m_noisedSignal.data(), ui->sbMaxNoiseAmplitude->value());
-    ui->wNoisedIputSignalPlayer->setSignalSource(m_noisedSignal->source());
+    ui->wNoisedIputSignalPlayer->setSignal(*m_noisedSignal.data());
 
     auto diff = Audio::makeSignalDifference(m_inputSignal->source(), m_noisedSignal->source());
     m_diffPlotData = PlotManager::createPlotData(diff, 0, diff.size());
@@ -118,7 +118,7 @@ void AnalyzerWidget::on_cbWaveletType_currentIndexChanged(int index)
             m_wavelet.setTransformedSignalVector(manager.thresholdedSignalsVector());
             m_wavelet.makeInverseTransform();
             m_outputSignal.reset(new AudioSignal(m_wavelet.outputSignal()));
-            ui->wOutputSignalPlayer->setSignalSource(m_outputSignal->source());
+            ui->wOutputSignalPlayer->setSignal(m_outputSignal->source());
 
             ui->wOutputDifferencePlot->graph(0)->setData(m_diffPlotData.x, Audio::makeSignalDifference(m_noisedSignal->source(), m_outputSignal->source()));
             ui->wOutputDifferencePlot->xAxis->setRange(m_diffPlotData.minX, m_diffPlotData.maxX);
@@ -179,7 +179,7 @@ void AnalyzerWidget::on_pbLoad_clicked()
         input << out.readLine().toDouble();
     }
     m_inputSignal.reset(new AudioSignal(input));
-    ui->wInputSignalPlayer->setSignalSource(m_inputSignal->source());
+    ui->wInputSignalPlayer->setSignal(m_inputSignal->source());
 
     Audio::SignalSource noised;
     auto noisedFileSize = out.readLine().toInt();
@@ -187,7 +187,7 @@ void AnalyzerWidget::on_pbLoad_clicked()
         noised << out.readLine().toDouble();
     }
     m_noisedSignal.reset(new AudioSignal(noised));
-    ui->wNoisedIputSignalPlayer->setSignalSource(m_noisedSignal->source());
+    ui->wNoisedIputSignalPlayer->setSignal(m_noisedSignal->source());
 
     auto diff = Audio::makeSignalDifference(m_inputSignal->source(), m_noisedSignal->source());
     m_diffPlotData = PlotManager::createPlotData(diff, 0, diff.size());

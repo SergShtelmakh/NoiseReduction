@@ -1,5 +1,6 @@
 #include "AudioSignal.h"
 #include <QVector>
+#include <QDebug>
 
 namespace {
 
@@ -42,20 +43,20 @@ void AudioSignal::load(const QString &str)
     m_file = new Aquila::WaveFile(QString(str).toStdString(), Aquila::StereoChannel::LEFT);
 
     m_signalSource = makeSignal(m_file);
+    m_sampleFrequency = m_file->getSampleFrequency();
 }
 
 void AudioSignal::save(const QString &str)
 {
-    auto frequency = m_file ? m_file->getSampleFrequency() : Audio::defaultSampleFrequency();
     for (auto i = 1; i < m_signalSource.size() - 1; i++) {
         if (m_signalSource[i] >= INT16_MAX) {
             m_signalSource[i] = m_signalSource[i - 1];
         }
         if (m_signalSource[i] <= INT16_MIN) {
-           m_signalSource[i] = m_signalSource[i - 1];
+            m_signalSource[i] = m_signalSource[i - 1];
         }
     }
-    Aquila::WaveFile::save(Aquila::SignalSource(m_signalSource.toStdVector(), frequency), QString(str).toStdString());
+    Aquila::WaveFile::save(Aquila::SignalSource(m_signalSource.toStdVector(), m_sampleFrequency), QString(str).toStdString());
 }
 
 Audio::SignalSource AudioSignal::source() const
@@ -71,4 +72,9 @@ int AudioSignal::audioLength() const
 void AudioSignal::makeWhiteNoise(double maxAmplitude, double density)
 {
     m_signalSource = Audio::makeWhiteNoise(m_signalSource, maxAmplitude, density);
+}
+
+double AudioSignal::sampleFrequency() const
+{
+    return m_sampleFrequency;
 }

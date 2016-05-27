@@ -25,6 +25,8 @@ public:
 
     void makeWhiteNoise(double maxAmplitude = 1000, double density = 1.0);
 
+    double sampleFrequency() const;
+
 private:
     Audio::SignalSource m_signalSource;
     Aquila::WaveFile *m_file = nullptr;

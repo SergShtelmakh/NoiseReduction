@@ -32,10 +32,10 @@ DenoisingWidget::~DenoisingWidget()
 void DenoisingWidget::setSignal(const AudioSignal &signal)
 {
     m_inputAudioSignal.reset(new AudioSignal(signal.source()));
-    ui->inputSignalPlayerWidget->setSignalSource(m_inputAudioSignal->source());
+    ui->inputSignalPlayerWidget->setSignal(m_inputAudioSignal->source());
 
     m_outputAudioSignal.reset(new AudioSignal(signal.source()));
-    ui->outputSignalPlayerWidget->setSignalSource(m_outputAudioSignal->source());
+    ui->outputSignalPlayerWidget->setSignal(m_outputAudioSignal->source());
 }
 
 QVector<double> DenoisingWidget::thresholdsData() const
@@ -109,6 +109,6 @@ void DenoisingWidget::on_pbProcess_clicked()
     m_denoisingManager->denoising(ui->cbThresholdType->currentText(), thresholdsData());
 
     PlotManager::plot(ui->outputTransformedSignalWidget, m_denoisingManager->thresholdedSignal());
-    ui->outputSignalPlayerWidget->setSignalSource(m_denoisingManager->outputSignal());
+    ui->outputSignalPlayerWidget->setSignal(m_denoisingManager->outputSignal());
     PlotManager::createPlot(Audio::makeSignalDifference(m_inputAudioSignal->source(), m_denoisingManager->outputSignal()));
 }

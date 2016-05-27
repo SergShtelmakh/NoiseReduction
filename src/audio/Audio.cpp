@@ -222,4 +222,15 @@ QVector<double> overThresholdsAmplitudeSum(const SignalSource &signal, double th
     return result;
 }
 
+int MSE(const SignalSource &signal1, const SignalSource &signal2)
+{
+    double sum = 0;
+    auto size = qMin(signal1.size(), signal2.size());
+    for (auto i = 0; i < size; i++) {
+        sum += (signal1[i] - signal2[i])*(signal1[i] - signal2[i]);
+    }
+
+    return sum / size;
+}
+
 }

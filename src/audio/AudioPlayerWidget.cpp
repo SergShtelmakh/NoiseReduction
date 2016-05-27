@@ -40,9 +40,9 @@ void AudioPlayerWidget::setFileName(const QString &fileName)
     updateTimeLinePlot();
 }
 
-void AudioPlayerWidget::setSignalSource(const Audio::SignalSource &signalSource)
+void AudioPlayerWidget::setSignal(const AudioSignal &signal)
 {
-    m_signal.reset(new AudioSignal(signalSource));
+    m_signal.reset(new AudioSignal(signal.source(), signal.sampleFrequency()));
     auto fileName = qApp->applicationDirPath() + "/" + Audio::generateAudioFileName();
     m_signal->save(fileName);
     m_player->setMedia(QUrl::fromLocalFile(fileName));
