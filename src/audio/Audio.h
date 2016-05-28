@@ -25,7 +25,9 @@ SignalSource makeSignalDensity(const SignalSource &signal, bool positivePart, do
 SignalSource makeAmplitudeFrequency(const SignalSource &signal, bool positivePart, int64_t step = 1);
 int64_t overThresholdsAmlitudeCount(const SignalSource &signal, double amplitude, int64_t maxCount = -1);
 QVector<double> overThresholdsAmplitudeSum(const SignalSource &signal, double threshold, int neighbourhood);
-int MSE(const SignalSource &signal1, const SignalSource &signal2);
+double MSE(const SignalSource &signal1, const SignalSource &signal2);
+QVector<double> averagePowers(const SignalSource &signal, int step, bool cleaning);
+double intervalMSE(const SignalSource &signal1, const SignalSource &signal2, int step);
 
 QString generateAudioFileName(const QString &str = "");
 }

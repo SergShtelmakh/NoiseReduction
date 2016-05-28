@@ -9,6 +9,7 @@
 #include <src/PlotManager.h>
 #include <src/AnalyzerWidget.h>
 #include <src/ThresholdsManager.h>
+#include <QDebug>
 
 namespace {
     const QString cTestFile  = "test.wav";
@@ -46,13 +47,14 @@ void MainWindow::on_pbShowSourceSignal_clicked()
 
 void MainWindow::on_pbMakeWhiteNoise_clicked()
 {
-    m_processedSignal->makeWhiteNoise();
+    m_processedSignal->makeWhiteNoise(1000, 0.1);
     updatePlot();
 }
 
 void MainWindow::on_pbManualDenoising_clicked()
 {
     m_denoisingWidget->setSignal(*m_processedSignal.data());
+    m_denoisingWidget->setOriginalSignal(*m_sourceSignal.data());
     m_denoisingWidget->show();
 }
 
@@ -81,6 +83,7 @@ void MainWindow::on_pbAutomaticDenoising_clicked()
     wave.makeInverseTransform();
     m_processedSignal.reset(new AudioSignal(wave.outputSignal()));
     updatePlot();
+    qDebug() << "MSE " << Audio::MSE(m_sourceSignal->source(), m_processedSignal->source());
 
 }
 

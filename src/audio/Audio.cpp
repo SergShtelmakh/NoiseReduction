@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QTime>
 #include <QDebug>
+#include <math.h>
 
 namespace Audio {
 
@@ -17,6 +18,21 @@ double d_f(double x_1, double x_2, double x_3, double h) {
 
 double d2_f(double x_1, double x_2, double x_3, double h) {
     return (x_3 - 2*x_2 + x_1) / (h*h);
+}
+
+double gauss(double x) {
+    const auto e = 2.718281;
+    const auto a = 1.0;
+    const auto b = 0.0;
+    const auto c = 20.0;
+    auto result = a*pow(e,-((x-b)*(x-b)/(2*c*c)));
+    qDebug() << "Gauss func x =" << x << " resutl " << result;
+    return result;
+}
+
+double inv_func(double x) {
+    const double a = 100.0;
+    return a/(a + x);
 }
 
 quint64 findDerivative(const Audio::SignalSource &source, double der, int h) {
@@ -222,15 +238,50 @@ QVector<double> overThresholdsAmplitudeSum(const SignalSource &signal, double th
     return result;
 }
 
-int MSE(const SignalSource &signal1, const SignalSource &signal2)
+double MSE(const SignalSource &signal1, const SignalSource &signal2)
 {
-    double sum = 0;
+    long double sum = 0;
     auto size = qMin(signal1.size(), signal2.size());
     for (auto i = 0; i < size; i++) {
-        sum += (signal1[i] - signal2[i])*(signal1[i] - signal2[i]);
+        qDebug() << QString("%1 %2").arg(signal1[i]).arg(signal2[i]);
+        auto s1 = gauss(signal1[i]);
+        auto s2 = gauss(signal2[i]);
+        auto g = (s1-s2)*(s1-s2);
+        qDebug() << g;
+        sum += g;
     }
 
     return sum / size;
 }
+
+QVector<double> averagePowers(const SignalSource &signal, int step, bool cleaning)
+{
+    int curItem = 0;
+    QVector<double> result;
+    long double sum = 0.0;
+    for (double i : signal) {
+        sum += qAbs(i);
+        curItem++;
+        if (curItem == step) {
+            curItem = 0;
+            auto val = sum/static_cast<double>(step);
+//            qDebug() << "val " << static_cast<double>(val) << "   cleaning " << cleaning;
+            val = ( val < 100 && cleaning) ? 0 : val;
+//            qDebug() << "val " << static_cast<double>(val);
+            result.append(val);
+            sum = 0;
+        }
+    }
+    return result;
+}
+
+double intervalMSE(const SignalSource &signal1, const SignalSource &signal2, int step)
+{
+    qDebug() << "create interval MSE";
+    auto aver1 = averagePowers(signal1, step, false);
+    auto aver2 = averagePowers(signal2, step, false);
+    return MSE(aver1, aver2);
+}
+
 
 }

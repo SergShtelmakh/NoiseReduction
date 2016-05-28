@@ -17,6 +17,7 @@ signals:
     void started();
     void finished();
     void optimalThresholdsFounded(const QString &func, const QVector<double> &thresholds);
+    void mseCalculated(const QVector<double> &mseVector);
 
 public slots:
     void start();
@@ -24,6 +25,8 @@ public slots:
 
 private:
     QVector<double> findOptimalThresholds(const Audio::SignalsSourceVector &signalVector, double posibleOverthresholdsCount);
+    double calculateMSE(const Audio::SignalsSourceVector &ssv, int level, double val);
+    void testMSE(const Audio::SignalsSourceVector &signalVector, double count);
 
     AudioSignal m_inputSignal;
     AudioSignal m_noisedSignal;

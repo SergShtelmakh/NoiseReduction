@@ -1,4 +1,5 @@
 #include "DenoisingManager.h"
+#include <QDebug>
 
 DenoisingManager::DenoisingManager()
     : m_wavelet(new DiscretePeriodicWavelet())

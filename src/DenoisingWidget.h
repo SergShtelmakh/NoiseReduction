@@ -18,6 +18,7 @@ public:
     ~DenoisingWidget();
 
     void setSignal(const AudioSignal& signal);
+    void setOriginalSignal(const AudioSignal& signal);
 
 private slots:
     void on_pbPrepare_clicked();
@@ -32,5 +33,7 @@ private:
     QScopedPointer<DenoisingManager> m_denoisingManager;
     QScopedPointer<AudioSignal> m_inputAudioSignal;
     QScopedPointer<AudioSignal> m_outputAudioSignal;
+
+    QScopedPointer<AudioSignal> m_originalAudioSignal;
     int m_itemsCount = 0;
 };

@@ -31,7 +31,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pbStop">
+      <widget class="QPushButton" name="pbStopRecord">
        <property name="text">
         <string>Stop</string>
        </property>

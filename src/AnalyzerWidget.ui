@@ -40,7 +40,7 @@
              <number>100000</number>
             </property>
             <property name="value">
-             <number>1000</number>
+             <number>3000</number>
             </property>
            </widget>
           </item>
@@ -70,7 +70,7 @@
              <double>0.001000000000000</double>
             </property>
             <property name="value">
-             <double>0.100000000000000</double>
+             <double>0.010000000000000</double>
             </property>
            </widget>
           </item>
@@ -212,15 +212,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>AudioPlayerWidget</class>
-   <extends>QWidget</extends>
-   <header>src/audio/Audioplayerwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>QCustomPlot</class>
    <extends>QWidget</extends>
    <header>qcustomplot/qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AudioPlayerWidget</class>
+   <extends>QWidget</extends>
+   <header>src/audio/Audioplayerwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

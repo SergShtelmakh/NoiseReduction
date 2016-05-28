@@ -17,7 +17,8 @@ public:
 
 private slots:
     void on_pbRecord_clicked();
-    void on_pbStop_clicked();
+
+    void on_pbStopRecord_clicked();
 
 private:
     enum class State {

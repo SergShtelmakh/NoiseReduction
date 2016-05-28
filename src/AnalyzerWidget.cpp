@@ -22,6 +22,7 @@ AnalyzerWidget::AnalyzerWidget(QWidget *parent)
     connect(m_analyzer, &SignalAnalyzer::finished, m_pAnalyzerThread, &QThread::quit);
     connect(m_analyzer, &SignalAnalyzer::optimalThresholdsFounded, this, &AnalyzerWidget::onOptimalThresholdsFounded);
     connect(&m_animationTimer, &QTimer::timeout, this, &AnalyzerWidget::showNextFrame);
+    connect(m_analyzer, &SignalAnalyzer::mseCalculated, this, [](const QVector<double> &vec){PlotManager::createPlot(vec);});
 
     m_analyzer->moveToThread(m_pAnalyzerThread);
     m_animationTimer.setInterval(1000);

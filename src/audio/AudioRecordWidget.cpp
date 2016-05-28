@@ -19,7 +19,7 @@ AudioRecordWidget::AudioRecordWidget(QWidget *parent)
     m_recorder->setEncodingSettings(Audio::encoderSettings());
     ui->wAudioPlayer->setEnabled(false);
     ui->pbRecord->setEnabled(true);
-    ui->pbStop->setEnabled(false);
+    ui->pbStopRecord->setEnabled(false);
 }
 
 AudioRecordWidget::~AudioRecordWidget()
@@ -29,28 +29,38 @@ AudioRecordWidget::~AudioRecordWidget()
 
 void AudioRecordWidget::on_pbRecord_clicked()
 {
+    qDebug() << "Record clicked";
     if (m_state == State::Record) {
+        qDebug() << "Already recorded";
         return;
     }
-    m_fileName = Audio::generateAudioFileName();
-    m_recorder->setOutputLocation(qApp->applicationDirPath() + "/" + m_fileName);
+    auto output = QUrl::fromLocalFile(Audio::generateAudioFileName());
+    m_fileName = output.toString();
+    qDebug() << "Recorded to " << m_fileName;
+    m_recorder->setOutputLocation(output);
     m_state = State::Record;
 
     ui->pbRecord->setEnabled(false);
-    ui->pbStop->setEnabled(true);
+    ui->pbStopRecord->setEnabled(true);
     m_recorder->record();
 }
 
-void AudioRecordWidget::on_pbStop_clicked()
+void AudioRecordWidget::on_pbStopRecord_clicked()
 {
+    qDebug() << "Stop clicked";
     if (m_state == State::Stop) {
+        qDebug() << "Already stopped";
         return;
     }
-
+    qDebug() << "Recorder state" << m_recorder->state();
+    qDebug() << "toString" << m_recorder->actualLocation().toString();
+    qDebug() << "toLocalFile" << m_recorder->actualLocation().toLocalFile();
+    qDebug() << "toDisplayString" << m_recorder->actualLocation().toDisplayString();
+    qDebug() << "audio input" << m_recorder->audioInput();
     m_recorder->stop();
     m_state = State::Stop;
-    m_signal.reset(new AudioSignal(m_fileName));
+    m_signal.reset(new AudioSignal(m_recorder->actualLocation().toLocalFile()));
     ui->wAudioPlayer->setEnabled(true);
     ui->pbRecord->setEnabled(true);
-    ui->pbStop->setEnabled(false);
+    ui->pbStopRecord->setEnabled(false);
 }

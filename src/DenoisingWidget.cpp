@@ -38,6 +38,11 @@ void DenoisingWidget::setSignal(const AudioSignal &signal)
     ui->outputSignalPlayerWidget->setSignal(m_outputAudioSignal->source());
 }
 
+void DenoisingWidget::setOriginalSignal(const AudioSignal &signal)
+{
+    m_originalAudioSignal.reset(new AudioSignal(signal.source()));
+}
+
 QVector<double> DenoisingWidget::thresholdsData() const
 {
     QVector<double> result;
@@ -110,5 +115,12 @@ void DenoisingWidget::on_pbProcess_clicked()
 
     PlotManager::plot(ui->outputTransformedSignalWidget, m_denoisingManager->thresholdedSignal());
     ui->outputSignalPlayerWidget->setSignal(m_denoisingManager->outputSignal());
-    PlotManager::createPlot(Audio::makeSignalDifference(m_inputAudioSignal->source(), m_denoisingManager->outputSignal()));
+    PlotManager::createPlot(Audio::makeSignalDifference(m_originalAudioSignal->source(), m_denoisingManager->outputSignal()));
+    auto avp1 = Audio::averagePowers(m_originalAudioSignal->source(), 1000, true);
+    auto avp2 = Audio::averagePowers(m_denoisingManager->outputSignal(), 1000, false);
+    PlotManager::createPlot(avp1);
+    PlotManager::createPlot(avp2);
+    qDebug() << avp1;
+    qDebug() << avp2;
+    qDebug() << "MSE " << Audio::MSE(avp1, avp2);
 }
